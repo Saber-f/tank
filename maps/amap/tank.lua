@@ -926,7 +926,7 @@ local function on_player_changed_position(event)
       game_over()
     end
     if this.reset_time % 600==0 then
-      game.print({'amap.reset_time',this.reset_time/60})
+      game.print({'amap.reset_time',this.reset_time/60, color = {255, 0, 0}})
     end
     this.reset_time=this.reset_time-60
   end

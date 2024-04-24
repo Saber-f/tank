@@ -1107,7 +1107,7 @@ local function spawn_unit_group()
     unit_group_pos.positions[unit_group.group_number] = {position = unit_group.position, index = 0}
     -- local average_unit_group_size = WD.get('average_unit_group_size')
     -- local group_size = math_floor(average_unit_group_size * group_size_modifier_raffle[math_random(1, group_size_modifier_raffle_size)])
-    local group_size = 8;
+    local group_size = 16;
     for _ = 1, group_size, 1 do
         local biter = spawn_biter(surface)
         if not biter then
@@ -1228,13 +1228,13 @@ local function set_next_wave()
 
         wave_number = wave_number - global.StarWave
         if wave_number<=25 then
-            WD.set('next_wave', game.tick + 60*20)
+            WD.set('next_wave', game.tick + 60*15)
         elseif wave_number<=50 then
-            WD.set('next_wave', game.tick + 60*16)
-        elseif wave_number<=200 then
             WD.set('next_wave', game.tick + 60*12)
-        elseif wave_number<=500 then
+        elseif wave_number<=200 then
             WD.set('next_wave', game.tick + 60*8)
+        elseif wave_number<=500 then
+            WD.set('next_wave', game.tick + 60*5)
         else
             WD.set('next_wave', game.tick + 60*4)
         end

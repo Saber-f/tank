@@ -49,7 +49,7 @@ local player_loader = {
 local function removeElement(tbl, element)
   local newTbl = {}
   for i, v in ipairs(tbl) do
-      if v.valid and v.position.x ~= element.position.x and v.position.y ~= element.position.y then
+      if v.valid and element.valid and v.position.x ~= element.position.x and v.position.y ~= element.position.y then
           table.insert(newTbl, v)
       end
   end
@@ -57,12 +57,12 @@ local function removeElement(tbl, element)
 end
 
 -- 获取距离目标最近的虫子
-local get_nearest_biter = function(biters, target)
+local get_nearest_biter = function(biters, target_pos)
   local nearest_biter = nil
   local nearest_distance = 100000000
   for _, biter in pairs(biters) do
     if biter.valid  then
-      local distance = (biter.position.x - target.position.x)^2 + (biter.position.y - target.position.y)^2
+      local distance = (biter.position.x - target_pos.x)^2 + (biter.position.y - target_pos.y)^2
 
       -- 优先攻击血量大于1w的虫子
       if biter.prototype.max_health < 10000 then distance = distance + 10000 end
@@ -84,18 +84,20 @@ local last_hit = function(data)
   local damage = data.damage
   local player = data.player
 
-
   damage = damage * num -- 伤害
   if biter and biter.valid then
     -- data.player.print("最后一击伤害:"..damage)
   else
     return
   end
+  
 
   if biter.force.name == "enemy" then
     -- if biter.valid then
     --   biter.damage(damage, 'player', 'physical', player.character)  -- 物理
     -- end
+    player.surface.create_entity({name = "flying-text", position = biter.position, text = math.floor(damage).."!", color = {255, 0, 0}})
+    
     if biter.valid then
       biter.damage(damage, 'player', 'laser', player.character) -- 激光
     end
@@ -120,9 +122,9 @@ local last_hit = function(data)
   end
 
   -- 致命一击
-  if biter.valid and math.random() < 0.0004 * num then
-    game.print(player.name.."对"..biter.name.."发动了致命一击!造成1000万亿物理伤害!!!",{r=1,g=0,b=0})
-    raw_print(player.name.."对"..biter.name.."发动了致命一击!造成1000万亿物理伤害!!!")
+  if biter.valid and biter.force.name == "enemy" and math.random() < 0.0004 * num then
+    game.print(player.name.."秒杀了"..biter.name,{r=1,g=0,b=0})
+    raw_print(player.name.."秒杀了"..biter.name)
     local d = 2
     for i = 1,100  do
       -- 创建位置是半径为32的圆上的均匀分布的点
@@ -135,13 +137,13 @@ local last_hit = function(data)
         position = pos,
         force = 'player',
         source = pos,
-        target = biter,
+        target = biter.position,
         player = player,
         duration = 90,
       })
     end
     biter.surface.create_entity({name = 'big-explosion', position = biter.position})
-    if biter.force.name == "enemy" then biter.damage(10^15, 'player', 'physical') end
+    biter.die()
   end
 end
 
@@ -158,46 +160,52 @@ local lightning_func = function(data)
   local source = data.source  -- 闪电链起点
   local damage = data.damage  -- 闪电链伤害
   local target = data.target  -- 闪电链目标
-  local biter = data.biter    -- 伤害的虫子
   local biters = data.biters  -- 上次搜索到的虫子
+
+  local target_pos = target
+  if target.position then
+    target_pos = target.position
+  end
 
   -- 如果有伤害目标
 
-  if biter and biter.valid then
-    if biter.force.name == "enemy" then
+  if target and target.valid then
+    if target.force.name == "enemy" then
       -- if biter.valid then
       --   biter.damage(damage, 'player', 'physical', player.character)  -- 物理
       -- end
-      if biter.valid then
-        biter.damage(damage, 'player', 'laser', player.character) -- 激光
+      
+		  player.surface.create_entity({name = "flying-text", position = target.position, text = ""..math.floor(damage), color = {150, 150, 150}})
+
+      if target.valid then
+        target.damage(damage, 'player', 'laser', player.character) -- 激光
       end
       -- if biter.valid then
       --   biter.damage(damage, 'player', 'plasma', player.character)  -- 等离子
       -- end
-      if biter.valid then
-        biter.damage(damage, 'player', 'poison', player.character)  -- 毒素
+      if target.valid then
+        target.damage(damage, 'player', 'poison', player.character)  -- 毒素
       end
-      if biter.valid then
-        biter.damage(damage, 'player', 'acid', player.character) -- 酸蚀
+      if target.valid then
+        target.damage(damage, 'player', 'acid', player.character) -- 酸蚀
       end
-      if biter.valid then
-        biter.damage(damage, 'player', 'electric', player.character) -- 电击
+      if target.valid then
+        target.damage(damage, 'player', 'electric', player.character) -- 电击
       end
-      if biter.valid then
-        biter.damage(damage, 'player', 'explosion', player.character) -- 爆炸
+      if target.valid then
+        target.damage(damage, 'player', 'explosion', player.character) -- 爆炸
       end
-      if biter.valid then
-        biter.damage(damage, 'player', 'fire', player.character)  -- 火焰
+      if target.valid then
+        target.damage(damage, 'player', 'fire', player.character)  -- 火焰
       end
     end
 
     
-    -- game.players.sabet.surface.create_entity({name = 'big-explosion', position = game.players.sabet.position})
 
     -- 致命一击
-    if biter.valid and math.random() < 0.0004 then
-      game.print(player.name.."对"..biter.name.."发动了致命一击!造成1000万亿物理伤害!!!",{r=1,g=0,b=0})
-      raw_print(player.name.."对"..biter.name.."发动了致命一击!造成1000万亿物理伤害!!!")
+    if target.valid and target.force.name == "enemy" and math.random() < 0.0004 then
+      game.print(player.name.."秒杀了"..target.name,{r=1,g=0,b=0})
+      raw_print(player.name.."秒杀了"..target.name)
       local d = 2
       for i = 1,100  do
         -- 创建位置是半径为32的圆上的均匀分布的点
@@ -210,26 +218,37 @@ local lightning_func = function(data)
           position = pos,
           force = 'player',
           source = pos,
-          target = biter.position,
+          target = target.position,
           player = player,
           duration = 90,
         })
       end
-      biter.surface.create_entity({name = 'big-explosion', position = biter.position})
-      if biter.force.name == "enemy" then biter.damage(10^15, 'player', 'physical') end
+      target.surface.create_entity({name = 'big-explosion', position = target.position})
+      target.die()
     end
 
-    if data.first and biter.valid then
+    if data.first and target.valid then
       data.first = false
       local times = data.times  -- 闪电链次数
 
+      local data2 = {
+        biter = target,
+        times = times,
+        damage = damage,
+        player = player
+      }
+      local t_pos = target.position
+      local target2 = target.position
+      last_hit(data2)
+
+      if target and target.valid then target2 = target end
+
       local d = 10
-      
       local rv = math.random(1, 2000) / 1000 * PI;
       local rv2 = math.random(1, 2000) / 1000 * PI;
       for i = 1,data.times  do
         -- 创建位置是半径为32的圆上的均匀分布的点
-        local source = biter.position
+        local source = t_pos
         local pos = {source.x + d * math.cos(i * 2 * PI / times + rv), source.y + 0.33 * d * math.sin(i * 2 * PI / times + rv2) - 50}
           
         for i = 1,3 do
@@ -239,69 +258,72 @@ local lightning_func = function(data)
             position = pos,
             force = 'player',
             source = pos,
-            target = biter,
+            target = target2,
             player = player,
             duration = 20,
           })
         end
       end
-      local data2 = {
-        biter = biter,
-        times = times,
-        damage = damage,
-        player = player
-      }
-
-      local ticks = 1
-      Task.set_timeout_in_ticks(ticks, Public.last_hit, data2)
     end
   end
 
-  
-  data.times = data.times - 1
-  if data.times < 0 then
-    return
-  elseif target == nil then
-    return
-  end
-
-  
 
   -- 创建飞行物
-  local source2 = source
-  if biter and biter.valid then
-    source2 = biter
+  local source_pos = source
+  if source.position then
+    source_pos = source.position
   end
-  for i = 1,6 do
+  local source2 = source
+  if source.valid then
+    source2 = source
+  elseif source.position then
+    source2 = source.position
+  end
+
+  local target2 = target_pos
+  if target and target.valid then
+    target2 = target
+  end
+  for i = 1,4 do
     player.surface.create_entity(
     {
       name ='electric-beam',
-      position = source,
+      position = source_pos,
       force = 'player',
       source = source2,
-      target = target,
+      target = target2,
       player = player,
       duration = 20,
     })
   end
  
+  data.times = data.times - 1
+  if data.times <= 0 then
+    return
+  end
 
   if #biters < 2 then
-    biters = player.surface.find_entities_filtered{position = target.position, radius = 64, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.enemy}
+    biters = player.surface.find_entities_filtered{position = target_pos, radius = 64, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.enemy}
   end
 
   biters = removeElement(biters, target) 
   
   if #biters < 1 then
-    biters = player.surface.find_entities_filtered{position = target.position, radius = 64, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.enemy}
+    biters = player.surface.find_entities_filtered{position = target_pos, radius = 64, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.enemy}
   end
 
 
-  data.target = get_nearest_biter(biters, target)
-
+  data.target = get_nearest_biter(biters, target_pos)
+  if data.target == nil then
+    return
+  end
   data.biters = biters
-  data.source = target.position
-  data.biter = target
+  if target and target.valid then
+    data.source = target
+  else 
+    data.source = target_pos
+  end
+
   Task.set_timeout_in_ticks(1, Public.lightning, data) -- 一帧后执行
 end
 
@@ -341,12 +363,11 @@ function Public.lightning_chain(position, surface,player,times)
   player.print("次数:"..times.." 伤害:"..(1+lastNum*0.01).."(永久加加成)x"..(1+t2).."(本局加成)x"..(1+laser).."(激光伤害科技)x100")
 
 
-  local player_pos = {}
-  player_pos.position = position
+  local biter = get_nearest_biter(biters, position)
   local data = {
     source = position,
     damage = damage,
-    target = get_nearest_biter(biters, player_pos),
+    target = biter,
     times = times,
     player = player,
     first = true,
@@ -354,7 +375,7 @@ function Public.lightning_chain(position, surface,player,times)
   }
 
   
-  Task.set_timeout_in_ticks(1, Public.lightning, data) -- 一帧后执行
+  Task.set_timeout_in_ticks(0, Public.lightning, data) -- 一帧后执行
   return true
 end
 
