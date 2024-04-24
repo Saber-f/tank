@@ -49,7 +49,7 @@ local player_loader = {
 local function removeElement(tbl, element)
   local newTbl = {}
   for i, v in ipairs(tbl) do
-      if v.position.x ~= element.position.x and v.position.y ~= element.position.y then
+      if v.valid and v.position.x ~= element.position.x and v.position.y ~= element.position.y then
           table.insert(newTbl, v)
       end
   end
@@ -135,7 +135,7 @@ local last_hit = function(data)
         position = pos,
         force = 'player',
         source = pos,
-        target = biter.position,
+        target = biter,
         player = player,
         duration = 90,
       })
@@ -239,7 +239,7 @@ local lightning_func = function(data)
             position = pos,
             force = 'player',
             source = pos,
-            target = biter.position,
+            target = biter,
             player = player,
             duration = 20,
           })
@@ -266,15 +266,20 @@ local lightning_func = function(data)
   end
 
   
+
   -- 创建飞行物
+  local source2 = source
+  if biter and biter.valid then
+    source2 = biter
+  end
   for i = 1,6 do
     player.surface.create_entity(
     {
       name ='electric-beam',
       position = source,
       force = 'player',
-      source = source,
-      target = target.position,
+      source = source2,
+      target = target,
       player = player,
       duration = 20,
     })
@@ -286,6 +291,11 @@ local lightning_func = function(data)
   end
 
   biters = removeElement(biters, target) 
+  
+  if #biters < 1 then
+    biters = player.surface.find_entities_filtered{position = target.position, radius = 64, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.enemy}
+  end
+
 
   data.target = get_nearest_biter(biters, target)
 
