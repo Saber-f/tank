@@ -161,8 +161,8 @@ local function item_build_car(player)
 
     local StarWave = 0;
     if global.StarWave then StarWave = global.StarWave end
-    game.print("虫子最高血量加成:"..math.floor((3*(3 + StarWave/100))^2).."倍",{r=1,g=0,b=0})
-    raw_print("虫子最高血量加成:"..math.floor((3*(3 + StarWave/100))^2).."倍")
+    game.print("虫子最高血量加成:"..math.floor((3*(3 + StarWave/100))^2*10).."倍",{r=1,g=0,b=0})
+    raw_print("虫子最高血量加成:"..math.floor((3*(3 + StarWave/100))^2*10).."倍")
 
   end
 end

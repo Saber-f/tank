@@ -429,7 +429,7 @@ local function set_enemy_evolution()
     --     biter_h_boost = math_round(biter_h_boost + (threat - 5000) * 0.000044, 3)
     -- end
     -- 威胁加血量
-    biter_h_boost = math_floor(threat * 0.0001)
+    biter_h_boost = math_floor(threat * 0.00001)
     if biter_h_boost <= 1 then
         biter_h_boost = 1
     end
@@ -838,11 +838,19 @@ local function spawn_big_biter(surface, N, unit_group)
             biter.ai_settings.do_separation = true
 
             
-            local increase_health_per_wave = WD.get('increase_health_per_wave')
+            local map=diff.get()
+            local boosted_health = BiterHealthBooster.get('biter_health_boost')
+            local increase_boss_health_per_wave = WD.get('increase_boss_health_per_wave')
+            if increase_boss_health_per_wave then
+                local modified_boss_unit_health = WD.get('modified_boss_unit_health')
+                BiterHealthBooster.add_boss_unit(biter, modified_boss_unit_health, 0.55)
+            else
+                local buff_k = 10
+                local wave_number = WD.get('wave_number')
+                if wave_number>=2000 and map.final_wave then buff_k = 15 end
+                local sum = boosted_health * buff_k
 
-            if increase_health_per_wave  then
-                local modified_unit_health = WD.get('modified_unit_health')
-                BiterHealthBooster.add_unit(biter, modified_unit_health.current_value)
+                BiterHealthBooster.add_boss_unit(biter, sum, 0.55)
             end
 
             unit_group.add_member(biter)
