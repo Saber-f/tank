@@ -261,7 +261,7 @@ function Public.reset_map()
   -- game.forces.player.technologies["rampant-arsenal-technology-rocket-turret-damage-7"].enabled = false  -- 火箭
 
   game.forces.player.character_trash_slot_count = 200           -- 回收区
-  game.forces.player.character_inventory_slots_bonus = 80     -- 背包
+  game.forces.player.character_inventory_slots_bonus = 100     -- 背包
 
   -- 高爆
   -- game.forces.player.technologies["rampant-arsenal-technology-he-bullets"].enabled = false
@@ -281,7 +281,7 @@ function Public.reset_map()
   game.forces.player.recipes["Oem-linked-chest"].enabled = true
   -- game.forces.player.recipes["linked-pipe-input"].enabled = true 
   -- game.forces.player.recipes["linked-pipe-output"].enabled = true 
-  -- game.forces.player.technologies["modules-combine"].researched = true -- 天空插件
+  -- game.forces.player.technologies["modules-combine"].researched = true -- 天空插
 
 
   game.forces.player.set_spawn_position({0, 0}, surface)
@@ -310,6 +310,22 @@ local on_init = function()
 
   WD.set("BigWave",0)
   WD.set("BaoLei",0)
+
+
+  -- print("虫子血量排序::")
+  -- local nameHp = {}
+  -- for _, entity in pairs(game.entity_prototypes) do
+  --   if entity.max_health > 0 and entity.type == "unit" and entity.name ~= "compilatron" then
+  --     table.insert(nameHp,{entity.name,entity.max_health})
+  --   end
+  -- end
+  -- table.sort(nameHp, function(a,b) return a[2] < b[2] end)
+  -- for k,v in pairs(nameHp) do
+  --   -- print(v[1]..","..v[2])
+  --   print("["..k.."]".." = \""..v[1].."\","....v[2])
+  -- end
+  
+
 
 
   game.forces.player.research_queue_enabled = true

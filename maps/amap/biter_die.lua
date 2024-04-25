@@ -202,7 +202,9 @@ local dieAddExp = function(entity)
     -- elseif wave_number > 300 then
     --   name = "medium-worm-turret"
     -- end
-    surface.create_entity({name = name, position = {x=0,y=70}, force = 'neutral'})
+    local biter = surface.create_entity({name = name, position = {x=0,y=70}, force = 'neutral'})
+    local modified_unit_health = WD.get('modified_unit_health')
+    BiterHealthBooster.add_unit(biter, modified_unit_health.current_value)
     game.print('跳波沙虫已生成，击杀直接跳25波[gps=' .. 0 .. ',' .. 70 .. ',' .. surface.name .. ']',{r=1,g=0,b=0})
   end
 

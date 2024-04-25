@@ -429,7 +429,7 @@ local function set_enemy_evolution()
     --     biter_h_boost = math_round(biter_h_boost + (threat - 5000) * 0.000044, 3)
     -- end
     -- 威胁加血量
-    biter_h_boost = math_round(threat * 0.00001 , 3)
+    biter_h_boost = math_floor(threat * 0.0001)
     if biter_h_boost <= 1 then
         biter_h_boost = 1
     end
@@ -497,267 +497,381 @@ local function get_active_unit_groups_count()
     return count
 end
 
+local all_enemies = {
+    [1] = "small-spitter",
+    [2] = "small-biter",
+    [3] = "medium-spitter",
+    [4] = "medium-biter",
+    [5] = "big-spitter",
+    [6] = "brutal-small-biter",
+    [7] = "big-biter",
+    [8] = "brutal-medium-biter",
+    [9] = "behemoth-spitter",
+    [10] = "tc_fake_human_machine_gunner_1",
+    [11] = "tc_fake_human_laser_1",
+    [12] = "tc_fake_human_melee_1",
+    [13] = "tc_fake_human_nuke_rocket_1",
+    [14] = "tc_fake_human_grenade_1",
+    [15] = "tc_fake_human_cluster_grenade_1",
+    [16] = "tc_fake_human_electric_1",
+    [17] = "tc_fake_human_erocket_1",
+    [18] = "tc_fake_human_cannon_explosive_1",
+    [19] = "tc_fake_human_pistol_gunner_1",
+    [20] = "tc_fake_human_rocket_1",
+    [21] = "tc_fake_human_cannon_1",
+    [22] = "tc_fake_human_sniper_1",
+    [23] = "behemoth-biter",
+    [24] = "tc_fake_human_cluster_grenade_2",
+    [25] = "tc_fake_human_sniper_2",
+    [26] = "tc_fake_human_melee_2",
+    [27] = "tc_fake_human_nuke_rocket_2",
+    [28] = "tc_fake_human_erocket_2",
+    [29] = "tc_fake_human_laser_2",
+    [30] = "tc_fake_human_electric_2",
+    [31] = "tc_fake_human_pistol_gunner_2",
+    [32] = "tc_fake_human_rocket_2",
+    [33] = "tc_fake_human_grenade_2",
+    [34] = "tc_fake_human_machine_gunner_2",
+    [35] = "tc_fake_human_cannon_2",
+    [36] = "tc_fake_human_cannon_explosive_2",
+    [37] = "tc_fake_human_sniper_3",
+    [38] = "tc_fake_human_erocket_3",
+    [39] = "tc_fake_human_melee_3",
+    [40] = "tc_fake_human_grenade_3",
+    [41] = "tc_fake_human_electric_3",
+    [42] = "tc_fake_human_machine_gunner_3",
+    [43] = "tc_fake_human_nuke_rocket_3",
+    [44] = "tc_fake_human_cannon_3",
+    [45] = "tc_fake_human_rocket_3",
+    [46] = "tc_fake_human_pistol_gunner_3",
+    [47] = "tc_fake_human_cannon_explosive_3",
+    [48] = "tc_fake_human_laser_3",
+    [49] = "tc_fake_human_cluster_grenade_3",
+    [50] = "brutal-big-biter",
+    [51] = "tc_fake_human_grenade_4",
+    [52] = "tc_fake_human_sniper_4",
+    [53] = "tc_fake_human_electric_4",
+    [54] = "tc_fake_human_cluster_grenade_4",
+    [55] = "tc_fake_human_cannon_4",
+    [56] = "tc_fake_human_cannon_explosive_4",
+    [57] = "tc_fake_human_erocket_4",
+    [58] = "tc_fake_human_rocket_4",
+    [59] = "tc_fake_human_pistol_gunner_4",
+    [60] = "tc_fake_human_melee_4",
+    [61] = "tc_fake_human_machine_gunner_4",
+    [62] = "tc_fake_human_nuke_rocket_4",
+    [63] = "tc_fake_human_laser_4",
+    [64] = "tc_fake_human_nuke_rocket_5",
+    [65] = "tc_fake_human_cannon_explosive_5",
+    [66] = "tc_fake_human_cluster_grenade_5",
+    [67] = "tc_fake_human_electric_5",
+    [68] = "tc_fake_human_pistol_gunner_5",
+    [69] = "tc_fake_human_melee_5",
+    [70] = "tc_fake_human_cannon_5",
+    [71] = "tc_fake_human_laser_5",
+    [72] = "tc_fake_human_erocket_5",
+    [73] = "tc_fake_human_grenade_5",
+    [74] = "tc_fake_human_rocket_5",
+    [75] = "tc_fake_human_sniper_5",
+    [76] = "tc_fake_human_machine_gunner_5",
+    [77] = "tc_fake_human_laser_6",
+    [78] = "tc_fake_human_grenade_6",
+    [79] = "tc_fake_human_pistol_gunner_6",
+    [80] = "tc_fake_human_cannon_explosive_6",
+    [81] = "tc_fake_human_nuke_rocket_6",
+    [82] = "tc_fake_human_cluster_grenade_6",
+    [83] = "tc_fake_human_electric_6",
+    [84] = "tc_fake_human_rocket_6",
+    [85] = "tc_fake_human_machine_gunner_6",
+    [86] = "tc_fake_human_sniper_6",
+    [87] = "tc_fake_human_melee_6",
+    [88] = "tc_fake_human_cannon_6",
+    [89] = "tc_fake_human_erocket_6",
+    [90] = "tc_fake_human_pistol_gunner_7",
+    [91] = "tc_fake_human_cannon_7",
+    [92] = "tc_fake_human_sniper_7",
+    [93] = "tc_fake_human_cannon_explosive_7",
+    [94] = "tc_fake_human_erocket_7",
+    [95] = "tc_fake_human_laser_7",
+    [96] = "tc_fake_human_rocket_7",
+    [97] = "tc_fake_human_machine_gunner_7",
+    [98] = "tc_fake_human_cluster_grenade_7",
+    [99] = "tc_fake_human_melee_7",
+    [100] = "tc_fake_human_nuke_rocket_7",
+    [101] = "tc_fake_human_grenade_7",
+    [102] = "tc_fake_human_electric_7",
+    [103] = "tc_fake_human_melee_8",
+    [104] = "tc_fake_human_electric_8",
+    [105] = "tc_fake_human_pistol_gunner_8",
+    [106] = "tc_fake_human_cluster_grenade_8",
+    [107] = "tc_fake_human_rocket_8",
+    [108] = "tc_fake_human_cannon_explosive_8",
+    [109] = "tc_fake_human_grenade_8",
+    [110] = "tc_fake_human_sniper_8",
+    [111] = "tc_fake_human_laser_8",
+    [112] = "tc_fake_human_nuke_rocket_8",
+    [113] = "tc_fake_human_machine_gunner_8",
+    [114] = "tc_fake_human_cannon_8",
+    [115] = "tc_fake_human_erocket_8",
+    [116] = "tc_fake_human_pistol_gunner_9",
+    [117] = "tc_fake_human_laser_9",
+    [118] = "tc_fake_human_cluster_grenade_9",
+    [119] = "tc_fake_human_machine_gunner_9",
+    [120] = "tc_fake_human_grenade_9",
+    [121] = "tc_fake_human_electric_9",
+    [122] = "tc_fake_human_erocket_9",
+    [123] = "tc_fake_human_cannon_explosive_9",
+    [124] = "tc_fake_human_cannon_9",
+    [125] = "tc_fake_human_rocket_9",
+    [126] = "tc_fake_human_sniper_9",
+    [127] = "tc_fake_human_melee_9",
+    [128] = "tc_fake_human_nuke_rocket_9",
+    [129] = "tc_fake_human_pistol_gunner_10",
+    [130] = "tc_fake_human_electric_10",
+    [131] = "tc_fake_human_erocket_10",
+    [132] = "tc_fake_human_nuke_rocket_10",
+    [133] = "tc_fake_human_grenade_10",
+    [134] = "tc_fake_human_melee_10",
+    [135] = "tc_fake_human_rocket_10",
+    [136] = "tc_fake_human_laser_10",
+    [137] = "tc_fake_human_machine_gunner_10",
+    [138] = "tc_fake_human_cannon_10",
+    [139] = "tc_fake_human_sniper_10",
+    [140] = "tc_fake_human_cluster_grenade_10",
+    [141] = "tc_fake_human_cannon_explosive_10",
+    [142] = "brutal-behemoth-biter",
+    [143] = "maf-boss-acid-spitter-1",
+    [144] = "maf-boss-biter-1",
+    [145] = "tc_fake_human_boss_cluster_grenade_1",
+    [146] = "tc_fake_human_boss_erocket_1",
+    [147] = "tc_fake_human_boss_machine_gunner_1",
+    [148] = "tc_fake_human_boss_pistol_gunner_1",
+    [149] = "tc_fake_human_boss_electric_1",
+    [150] = "tc_fake_human_boss_sniper_1",
+    [151] = "tc_fake_human_boss_rocket_1",
+    [152] = "tc_fake_human_boss_grenade_1",
+    [153] = "tc_fake_human_boss_cannon_explosive_1",
+    [154] = "tc_fake_human_boss_laser_1",
+    [155] = "tc_fake_human_boss_nuke_rocket_1",
+    [156] = "maf-boss-acid-spitter-2",
+    [157] = "tc_fake_human_boss_grenade_2",
+    [158] = "tc_fake_human_boss_machine_gunner_2",
+    [159] = "tc_fake_human_boss_rocket_2",
+    [160] = "tc_fake_human_boss_pistol_gunner_2",
+    [161] = "maf-boss-biter-2",
+    [162] = "tc_fake_human_boss_erocket_2",
+    [163] = "tc_fake_human_boss_cannon_explosive_2",
+    [164] = "tc_fake_human_boss_laser_2",
+    [165] = "tc_fake_human_boss_nuke_rocket_2",
+    [166] = "tc_fake_human_boss_electric_2",
+    [167] = "tc_fake_human_boss_sniper_2",
+    [168] = "tc_fake_human_boss_cluster_grenade_2",
+    [169] = "biterzilla21",
+    [170] = "tc_fake_human_boss_nuke_rocket_3",
+    [171] = "tc_fake_human_boss_cluster_grenade_3",
+    [172] = "tc_fake_human_boss_grenade_3",
+    [173] = "tc_fake_human_boss_laser_3",
+    [174] = "tc_fake_human_boss_erocket_3",
+    [175] = "tc_fake_human_boss_pistol_gunner_3",
+    [176] = "tc_fake_human_boss_cannon_explosive_3",
+    [177] = "tc_fake_human_boss_sniper_3",
+    [178] = "tc_fake_human_boss_electric_3",
+    [179] = "tc_fake_human_boss_rocket_3",
+    [180] = "tc_fake_human_boss_machine_gunner_3",
+    [181] = "maf-giant-acid-spitter1",
+    [182] = "biterzilla11",
+    [183] = "maf-giant-fire-spitter1",
+    [184] = "bm-motherbiterzilla1",
+    [185] = "biterzilla31",
+    [186] = "maf-boss-acid-spitter-3",
+    [187] = "tc_fake_human_boss_erocket_4",
+    [188] = "tc_fake_human_boss_grenade_4",
+    [189] = "tc_fake_human_boss_nuke_rocket_4",
+    [190] = "tc_fake_human_boss_cluster_grenade_4",
+    [191] = "tc_fake_human_boss_cannon_explosive_4",
+    [192] = "tc_fake_human_boss_machine_gunner_4",
+    [193] = "tc_fake_human_boss_laser_4",
+    [194] = "tc_fake_human_boss_pistol_gunner_4",
+    [195] = "tc_fake_human_boss_sniper_4",
+    [196] = "tc_fake_human_boss_electric_4",
+    [197] = "tc_fake_human_boss_rocket_4",
+    [198] = "maf-boss-biter-3",
+    [199] = "tc_fake_human_boss_electric_5",
+    [200] = "tc_fake_human_boss_cannon_explosive_5",
+    [201] = "tc_fake_human_boss_rocket_5",
+    [202] = "tc_fake_human_boss_erocket_5",
+    [203] = "tc_fake_human_boss_grenade_5",
+    [204] = "tc_fake_human_boss_laser_5",
+    [205] = "tc_fake_human_boss_cluster_grenade_5",
+    [206] = "tc_fake_human_boss_pistol_gunner_5",
+    [207] = "tc_fake_human_boss_machine_gunner_5",
+    [208] = "tc_fake_human_boss_sniper_5",
+    [209] = "tc_fake_human_boss_nuke_rocket_5",
+    [210] = "biterzilla22",
+    [211] = "tc_fake_human_boss_electric_6",
+    [212] = "tc_fake_human_boss_machine_gunner_6",
+    [213] = "tc_fake_human_boss_cannon_explosive_6",
+    [214] = "tc_fake_human_boss_cluster_grenade_6",
+    [215] = "tc_fake_human_boss_rocket_6",
+    [216] = "tc_fake_human_boss_laser_6",
+    [217] = "tc_fake_human_boss_erocket_6",
+    [218] = "tc_fake_human_boss_sniper_6",
+    [219] = "tc_fake_human_boss_grenade_6",
+    [220] = "tc_fake_human_boss_nuke_rocket_6",
+    [221] = "tc_fake_human_boss_pistol_gunner_6",
+    [222] = "maf-boss-acid-spitter-4",
+    [223] = "tc_fake_human_boss_cluster_grenade_7",
+    [224] = "tc_fake_human_boss_cannon_explosive_7",
+    [225] = "tc_fake_human_boss_laser_7",
+    [226] = "tc_fake_human_boss_rocket_7",
+    [227] = "tc_fake_human_boss_electric_7",
+    [228] = "tc_fake_human_boss_pistol_gunner_7",
+    [229] = "tc_fake_human_boss_sniper_7",
+    [230] = "tc_fake_human_boss_machine_gunner_7",
+    [231] = "tc_fake_human_boss_nuke_rocket_7",
+    [232] = "tc_fake_human_boss_erocket_7",
+    [233] = "tc_fake_human_boss_grenade_7",
+    [234] = "biterzilla32",
+    [235] = "maf-giant-fire-spitter2",
+    [236] = "bm-motherbiterzilla2",
+    [237] = "maf-giant-acid-spitter2",
+    [238] = "biterzilla12",
+    [239] = "maf-boss-biter-4",
+    [240] = "tc_fake_human_boss_cannon_explosive_8",
+    [241] = "tc_fake_human_boss_rocket_8",
+    [242] = "tc_fake_human_boss_sniper_8",
+    [243] = "tc_fake_human_boss_erocket_8",
+    [244] = "tc_fake_human_boss_pistol_gunner_8",
+    [245] = "tc_fake_human_boss_laser_8",
+    [246] = "tc_fake_human_boss_grenade_8",
+    [247] = "tc_fake_human_boss_electric_8",
+    [248] = "tc_fake_human_boss_machine_gunner_8",
+    [249] = "tc_fake_human_boss_cluster_grenade_8",
+    [250] = "tc_fake_human_boss_nuke_rocket_8",
+    [251] = "tc_fake_human_boss_nuke_rocket_9",
+    [252] = "tc_fake_human_boss_machine_gunner_9",
+    [253] = "tc_fake_human_boss_sniper_9",
+    [254] = "tc_fake_human_boss_cannon_explosive_9",
+    [255] = "tc_fake_human_boss_laser_9",
+    [256] = "tc_fake_human_boss_pistol_gunner_9",
+    [257] = "tc_fake_human_boss_rocket_9",
+    [258] = "tc_fake_human_boss_grenade_9",
+    [259] = "tc_fake_human_boss_erocket_9",
+    [260] = "tc_fake_human_boss_electric_9",
+    [261] = "tc_fake_human_boss_cluster_grenade_9",
+    [262] = "tc_fake_human_boss_electric_10",
+    [263] = "tc_fake_human_boss_rocket_10",
+    [264] = "tc_fake_human_boss_erocket_10",
+    [265] = "tc_fake_human_boss_sniper_10",
+    [266] = "tc_fake_human_boss_nuke_rocket_10",
+    [267] = "tc_fake_human_boss_cluster_grenade_10",
+    [268] = "tc_fake_human_boss_machine_gunner_10",
+    [269] = "tc_fake_human_boss_laser_10",
+    [270] = "tc_fake_human_boss_pistol_gunner_10",
+    [271] = "tc_fake_human_boss_cannon_explosive_10",
+    [272] = "tc_fake_human_boss_grenade_10",
+    [273] = "biterzilla23",
+    [274] = "maf-boss-acid-spitter-5",
+    [275] = "maf-boss-biter-5",
+    [276] = "biterzilla33",
+    [277] = "maf-boss-acid-spitter-6",
+    [278] = "maf-giant-acid-spitter3",
+    [279] = "maf-giant-fire-spitter3",
+    [280] = "biterzilla13",
+    [281] = "bm-motherbiterzilla3",
+    [282] = "maf-boss-biter-6",
+    [283] = "biterzilla24",
+    [284] = "tc_fake_human_ultimate_boss_cannon_20",
+    [285] = "maf-boss-acid-spitter-7",
+    [286] = "maf-boss-biter-7",
+    [287] = "biterzilla34",
+    [288] = "maf-boss-acid-spitter-8",
+    [289] = "biterzilla25",
+    [290] = "maf-giant-acid-spitter4",
+    [291] = "bm-motherbiterzilla4",
+    [292] = "biterzilla14",
+    [293] = "maf-giant-fire-spitter4",
+    [294] = "maf-boss-biter-8",
+    [295] = "maf-boss-acid-spitter-9",
+    [296] = "biterzilla35",
+    [297] = "maf-boss-biter-9",
+    [298] = "maf-boss-acid-spitter-10",
+    [299] = "biterzilla15",
+    [300] = "bm-motherbiterzilla5",
+    [301] = "maf-giant-fire-spitter5",
+    [302] = "maf-giant-acid-spitter5",
+    [303] = "maf-boss-biter-10",
+}
+
+-- N = 1- 60
+local function getBiterName(N)
+    if N > 60 then N = 60 end
+    if N < 1 then N = 1 end
+    local index
+    if N == 1 then
+        index = math_random(1,2)
+    elseif N == 2 then
+        index = math_random(3,4)
+    elseif N < 10 then
+        index = math_random(N+1,N+5)
+    elseif N < 20 then
+        index = math_random(N+5,N+60)
+    elseif N < 30 then
+        index = math_random(N+60,N+120)
+    elseif N < 40 then
+        index = math_random(N+120,N+180)
+    elseif N < 50 then
+        index = math_random(N+180,N+220)        -- 50
+    else
+        index = math_random(N+220,N+243)
+    end
+    if index > 303 then index = 303 end
+    return all_enemies[index]
+end
+
 -- 生成大怪兽
 local function spawn_big_biter(surface, N, unit_group)
-    -- fake_human_machine_gunner=怀里揣着冲锋枪的靓仔
-    -- fake_human_melee=拿⛏镐的靓仔
-    -- fake_human_pistol_gunner=怀里揣着手枪的靓仔
-    -- fake_human_sniper=怀里揣着狙击枪的靓仔
-    -- fake_human_laser=怀里揣着激光枪的靓仔
-    -- fake_human_electric=怀里揣着电磁枪的靓仔
-    -- fake_human_erocket=怀里揣着火箭发射器的靓仔
-    -- fake_human_rocket=怀里揣着火箭发射器的靓仔
-    -- fake_human_grenade=怀里揣着手榴弹的靓仔 代号穿山甲
-    -- fake_human_cluster_grenade=怀里揣着集束手榴弹的靓仔
-    -- fake_human_nuke_rocket=怀里揣着核弹的靓仔
-    -- fake_human_cannon=怀里揣着加农炮的靓仔
-    -- fake_human_cannon_explosive=怀里揣着大炮的靓仔
-
-    -- fake_human_boss_machine_gunner=怀里揣着冲锋枪的大魔王
-    -- fake_human_boss_pistol_gunner=怀里揣着手枪的大魔王
-    -- fake_human_boss_sniper=怀里揣着狙击枪的大魔王
-    -- fake_human_boss_laser=怀里揣着激光枪的大魔王
-    -- fake_human_boss_electric=怀里揣着电磁枪的大魔王
-    -- fake_human_boss_erocket=怀里揣着机枪的大魔王
-    -- fake_human_boss_rocket=怀里揣着机枪的大魔王
-    -- fake_human_boss_grenade=怀里揣着手榴弹的大魔王
-    -- fake_human_boss_cluster_grenade=怀里揣着集束手榴弹的大魔王
-    -- fake_human_boss_nuke_rocket=怀里揣着核弹的大魔王
-    -- fake_human_boss_cannon_explosive=怀里揣着高爆加农炮的大魔王
-
-    -- fake_human_ultimate_boss_cannon=超级加农炮大魔王
-
-    local nname = "";
-    -- 靓仔和魔王
-    local liangzai = {
-        [1] = 'tc_fake_human_machine_gunner_',
-        [2] = 'tc_fake_human_melee_',
-        [3] = 'tc_fake_human_pistol_gunner_',
-        [4] = 'tc_fake_human_sniper_',
-        [5] = 'tc_fake_human_laser_',
-        [6] = 'tc_fake_human_electric_',
-        [7] = 'tc_fake_human_erocket_',
-        [8] = 'tc_fake_human_rocket_',
-        [9] = 'tc_fake_human_grenade_',
-        [10] = 'tc_fake_human_cluster_grenade_',
-        [11] = 'tc_fake_human_nuke_rocket_',
-        [12] = 'tc_fake_human_cannon_',
-        [13] = 'tc_fake_human_cannon_explosive_',
-
-    }
     
-    local mowang = {
-        [1] = 'tc_fake_human_boss_machine_gunner_',
-        [2] = 'tc_fake_human_boss_pistol_gunner_',
-        [3] = 'tc_fake_human_boss_sniper_',
-        [4] = 'tc_fake_human_boss_laser_',
-        [5] = 'tc_fake_human_boss_electric_',
-        [6] = 'tc_fake_human_boss_erocket_',
-        [7] = 'tc_fake_human_boss_rocket_',
-        [8] = 'tc_fake_human_boss_grenade_',
-        [9] = 'tc_fake_human_boss_cluster_grenade_',
-        [10] = 'tc_fake_human_boss_nuke_rocket_',
-        [11] = 'tc_fake_human_boss_cannon_explosive_',
-    }
+    local M = 6
 
+    if N < 0 then 
+        N = -N;
+    else
+        N = N + 10
+    end
+    local name = getBiterName(N)
 
-    local function func(name)
-        if nname == ""  or math_random(1, 200) < 100 then
-            nname = name
-        end
-        if (surface ~= nil and unit_group ~= nil) then
+    if (surface ~= nil and unit_group ~= nil) then
+        for i = 1,M  do
             local position = get_spawn_pos()
             local biter = surface.create_entity({name = name, position = position, force = 'enemy'})
             biter.ai_settings.allow_destroy_when_commands_fail = false
             biter.ai_settings.allow_try_return_to_spawner = true
             biter.ai_settings.do_separation = true
+
+            local map=diff.get()
+            local boosted_health = BiterHealthBooster.get('biter_health_boost')
+            local increase_boss_health_per_wave = WD.get('increase_boss_health_per_wave')
+            if increase_boss_health_per_wave then
+                local modified_boss_unit_health = WD.get('modified_boss_unit_health')
+                BiterHealthBooster.add_boss_unit(biter, modified_boss_unit_health, 0.55)
+            else
+                local buff_k = 10
+                local wave_number = WD.get('wave_number')
+                if wave_number>=2000 and map.final_wave then buff_k = 15 end
+                local sum = boosted_health * buff_k
+
+                BiterHealthBooster.add_boss_unit(biter, sum, 0.55)
+            end
+
             unit_group.add_member(biter)
         end
     end
 
-    local rd = 1
 
-    -- 人类
-    local function get_hm(lv,fg)
-        -- 4个靓仔
-        if not fg then
-            rd = math_random(1, 13)
-            func(liangzai[rd]..lv)
-        end
-
-        -- 1个魔王
-        if fg then
-            rd = math_random(1, 11)
-            func(mowang[rd]..lv)
-        end
-    end
-
-
-    if N == 1 then
-        func('maf-boss-biter-1') 
-    elseif N == 2 then
-        func('maf-boss-acid-spitter-1') 
-    elseif N == 3 then
-        func('maf-boss-biter-2') 
-    elseif N == 4 then
-        func('maf-boss-acid-spitter-2') 
-    elseif N == 5 then
-        func('maf-boss-biter-3')         
-    elseif N == 6 then
-        func('maf-boss-acid-spitter-3')
-    elseif N == 7 then
-        func('maf-boss-biter-4')  
-    elseif N == 8 then
-        func('maf-boss-acid-spitter-4')
-    elseif N == 9 then
-        func('maf-boss-biter-5') 
-    elseif N == 10 then
-        func('maf-boss-acid-spitter-5')
-    elseif N == 11 then
-        func('maf-boss-biter-6')
-    elseif N == 12 then
-        func('maf-boss-acid-spitter-6')
-    elseif N == 13 then
-        func('maf-boss-biter-7')
-    elseif N == 14 then
-        func('maf-boss-acid-spitter-7')
-    elseif N == 15 then
-        func('maf-boss-biter-8')
-    elseif N == 16 then
-        func('maf-boss-acid-spitter-8')
-    elseif N == 17 then
-        func('maf-boss-biter-9')
-    elseif N == 18 then
-        func('maf-boss-acid-spitter-9')
-    elseif N == 19 then
-        func('maf-boss-biter-10')
-    elseif N == 20 then
-        func('maf-boss-acid-spitter-10')
-    elseif N == 21 then
-        func('biterzilla21')
-    elseif N == 22 then
-        func('biterzilla22')
-    elseif N == 23 then
-        func('biterzilla11')
-    elseif N == 24 then
-        func('biterzilla23')
-    elseif N == 25 then
-        func('biterzilla12')
-    elseif N == 26 then
-        func('biterzilla31')
-    elseif N == 27 then
-        func('biterzilla24')
-    elseif N == 28 then
-        func('biterzilla13')
-    elseif N == 29 then
-        get_hm('1',false)
-        func('biterzilla32')
-    elseif N == 30 then
-        get_hm('2',false)
-        func('biterzilla25')
-    elseif N == 31 then
-        get_hm('3',false)
-        func('biterzilla14')
-    elseif N == 32 then
-        get_hm('4',false)
-        func('biterzilla33')
-    elseif N == 33 then
-        get_hm('5',false)
-        func('biterzilla15')
-    elseif N == 34 then
-        get_hm('6',false)
-        func('biterzilla34')
-    elseif N == 35 then
-        get_hm('7',false)
-        func('biterzilla35')
-    elseif N == 36 then
-        get_hm('8',false)
-        func('maf-giant-acid-spitter1')
-    elseif N == 37 then
-        get_hm('9',false)
-        func('bm-motherbiterzilla1')
-    elseif N == 38 then
-        get_hm('10',false)
-        func('maf-giant-fire-spitter1')
-    elseif N == 39 then
-        get_hm('1',true)
-        func('maf-giant-acid-spitter2')
-    elseif N == 40 then
-        get_hm('2',true)
-        func('bm-motherbiterzilla2')
-    elseif N == 41 then
-        get_hm('3',true)
-        func('maf-giant-fire-spitter2')
-    elseif N == 42 then
-        get_hm('4',true)
-        func('maf-giant-acid-spitter3')
-    elseif N == 43 then
-        get_hm('5',true)
-        func('bm-motherbiterzilla3')
-    elseif N == 44 then
-        get_hm('6',true)
-        func('maf-giant-fire-spitter3')
-    elseif N == 45 then
-        get_hm('6',true)
-        func('maf-giant-acid-spitter4')
-    elseif N == 46 then
-        get_hm('7',true)
-        func('bm-motherbiterzilla4')
-    elseif N == 47 then
-        get_hm('8',true)
-        func('maf-giant-fire-spitter4')
-    elseif N == 48 then
-        get_hm('9',true)
-        func('maf-giant-acid-spitter5')
-    elseif N == 49 then
-        get_hm('10',true)
-        func('bm-motherbiterzilla5')
-    elseif N == 50 then
-        func('maf-giant-fire-spitter5')
-        func('tc_fake_human_ultimate_boss_cannon_20')
-    elseif N > 50 then
-        -- N = N-50
-        -- N = N * N
-        -- game.print("挑战开始！大怪兽倍数:"..N,{r = 1, g = 0, b = 0})
-        -- for i = 1, N do
-            get_hm('10',true)
-            func('maf-boss-biter-10')
-            func('maf-boss-acid-spitter-10')
-            func('biterzilla15')
-            func('biterzilla25')
-            func('biterzilla35')
-            func('bm-motherbiterzilla5')
-            func('maf-giant-fire-spitter5')
-            func('tc_fake_human_ultimate_boss_cannon_20')
-        -- end
-    end
-
-    return nname
+    return name
 end
 
-
-
-local function wave_defense_roll_spitter_name()
-    local wave_number = WD.get("wave_number") - global.StarWave;
-    if wave_number <= 50 then return 'small-spitter' end
-    if wave_number <= 100 then return 'medium-spitter' end
-    if wave_number <= 150 then return 'big-spitter' end
-    if wave_number <= 200 then return 'behemoth-spitter' end
-    N = math_floor((wave_number - 200)/ 55) + 1
-    return spawn_big_biter(nil, N, nil)
-end
-
-
-local function wave_defense_roll_biter_name()
-    local wave_number = WD.get("wave_number") - global.StarWave;
-
-    if wave_number <= 50 then return 'small-biter' end
-    if wave_number <= 100 then return 'medium-biter' end
-    if wave_number <= 150 then return 'big-biter' end
-    if wave_number <= 200 then return 'behemoth-biter' end
-    N = math_floor((wave_number - 200)/ 55) + 1
-    return spawn_big_biter(nil, N, nil)
-end
 
 
 local function spawn_biter(surface, is_boss_biter)
@@ -767,16 +881,15 @@ local function spawn_biter(surface, is_boss_biter)
         end
     end
 
-    local boosted_health = BiterHealthBooster.get('biter_health_boost')
 
-    local name
-    if math_random(1, 100) > 73 then
-        name = wave_defense_roll_spitter_name()
-    else
-        name = wave_defense_roll_biter_name()
-    end
+    local wave_number = WD.get("wave_number") - global.StarWave;
+    if wave_number >= global.StarWave then wave_number = wave_number - global.StarWave end;
+    local N = math_floor(wave_number/ 50) + 1
+    local name = spawn_big_biter(nil, -N, nil)
+
     local position = get_spawn_pos()
 
+    -- print("生成虫子::"..name)
     local biter = surface.create_entity({name = name, position = position, force = 'enemy'})
     biter.ai_settings.allow_destroy_when_commands_fail = true
     biter.ai_settings.allow_try_return_to_spawner = true
@@ -789,6 +902,7 @@ local function spawn_biter(surface, is_boss_biter)
         BiterHealthBooster.add_unit(biter, modified_unit_health.current_value)
     end
     local map=diff.get()
+    local boosted_health = BiterHealthBooster.get('biter_health_boost')
     if is_boss_biter then
         local increase_boss_health_per_wave = WD.get('increase_boss_health_per_wave')
         if increase_boss_health_per_wave then
@@ -1077,15 +1191,15 @@ local function spawn_unit_group()
     end
     
     -- 每50波加入大怪兽
-    local N = math.floor(WN / 50) 
+    local N = math.floor(WN/ 50) 
     -- N = 60
-    if WD.get("BigWave") < N then
+    if WD.get("BigWave") < N and WN > StarWave then
         WD.set("BigWave", WD.get("BigWave") + 1)
         local M = 1
         if N > 50 then
             M = N - 50
         end
-        game.print('第'..N..'波大怪兽来袭！[gps=' .. position.x .. ',' .. position.y .. ',' .. surface.name .. ']全体开局技能点+1')
+        game.print('第'..N..'波大怪兽来袭！[gps=' .. position.x .. ',' .. position.y .. ',' .. surface.name .. ']全体开局技能点+1,炮塔伤害+1%')
 
         global.RPG_POINT.total = global.RPG_POINT.total + 1
 
@@ -1120,17 +1234,18 @@ local function spawn_unit_group()
 
     local boss_wave = WD.get('boss_wave')
     if boss_wave then
-        local count = math_random(1, math_floor(wave_number * 0.01) + 2)
-        if count > 8 then
-            count = 8
-        end
-        if count <= 1 then
-            count = 4
-        end
-        local map=diff.get()
-        if map.final_wave and count <= 12 then
-          count=12
-        end
+        local count = 8
+        -- local count = math_random(1, math_floor(wave_number * 0.01) + 2)
+        -- if count > 8 then
+        --     count = 8
+        -- end
+        -- if count <= 1 then
+        --     count = 4
+        -- end
+        -- local map=diff.get()
+        -- if map.final_wave and count <= 12 then
+        --   count=12
+        -- end
         for _ = 1, count, 1 do
             local biter = spawn_biter(surface, true)
             if not biter then
@@ -1160,7 +1275,6 @@ local function set_next_wave()
         return
     end
     -- get_new_arty()
-    spawn_unit_group()
     local wave_number = WD.get('wave_number')
     if wave_number < global.StarWave then
         wave_number = global.StarWave - 1
@@ -1176,6 +1290,7 @@ local function set_next_wave()
         game.print("还有500波结束，坚持住！",{r = 1, g = 0, b = 0})
     end
     WD.set('wave_number', wave_number + 1)
+    spawn_unit_group()
     wave_number = WD.get('wave_number')
 
     -- local threat_gain_multiplier = WD.get('threat_gain_multiplier')
