@@ -383,12 +383,16 @@ local function clear_corpses(cmd)
 
     local radius = {{x = (pos.x + -param), y = (pos.y + -param)}, {x = (pos.x + param), y = (pos.y + param)}}
 
-    for _, entity in pairs(player.surface.find_entities_filtered {area = radius, type = 'corpse'}) do
-        if entity.corpse_expires then
+    for _, entity in pairs(player.surface.find_entities_filtered {area = radius, type = {'corpse', 'character-corpse', 'item-entity'}}) do
+        if entity.name == "item-on-ground" then
+            entity.destroy()
+            i = i + 1
+        elseif (entity.type == "corpse" or entity.type == "character-corpse")  then
             entity.destroy()
             i = i + 1
         end
     end
+    
     local corpse = 'corpse'
 
     if i > 1 then

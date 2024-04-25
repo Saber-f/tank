@@ -139,6 +139,11 @@ local function item_build_car(player)
     local point = math.round(global.RPG_POINT.total) + global.RPG_POINT[player.index]
     local rpg_t = RPG.get('rpg_t')
     rpg_t[player.index].points_left = rpg_t[player.index].points_left + point + 10
+    
+    game.print("机枪炮塔和激光炮塔伤害+"..global.RPG_POINT.total .. "%",{r=0,g=1,b=0})
+    game.forces.player.set_turret_attack_modifier("gun-turret", global.RPG_POINT.total * 0.01)
+    game.forces.player.set_turret_attack_modifier("laser-turret", global.RPG_POINT.total * 0.01)
+    raw_print("机枪炮塔和激光炮塔伤害::+"..global.RPG_POINT.total .. "%")
     game.print(player.name..":初始技能点:"..point.." = "..math.round(global.RPG_POINT.total) .."(累计大怪兽奖励) + ".. global.RPG_POINT[player.index].."(等级奖励)",{r=0,g=1,b=0})
     raw_print(player.name..":初始技能点:"..point.." = "..math.round(global.RPG_POINT.total) .."(累计大怪兽奖励) + ".. global.RPG_POINT[player.index].."(等级奖励)")
     -- game.print("上局打到第"..k.."波大怪兽,杀敌科研速度+"..((k*0.02)).."("..k.."/50),当前速度:"..(global.DieExp),{r=0,g=1,b=0})
@@ -156,8 +161,8 @@ local function item_build_car(player)
 
     local StarWave = 0;
     if global.StarWave then StarWave = global.StarWave end
-    game.print("虫子最高血量加成:"..((3*(3 + StarWave/100))^2 * 10).."倍",{r=1,g=0,b=0})
-    raw_print("虫子最高血量加成:"..((3*(3 + StarWave/100))^2 * 10).."倍")
+    game.print("虫子最高血量加成:"..math.floor((3*(3 + StarWave/100))^2).."倍",{r=1,g=0,b=0})
+    raw_print("虫子最高血量加成:"..math.floor((3*(3 + StarWave/100))^2).."倍")
 
   end
 end
@@ -925,8 +930,8 @@ local function on_player_changed_position(event)
     if this.reset_time<= 0 then
       game_over()
     end
-    if this.reset_time % 600==0 then
-      game.print({'amap.reset_time',this.reset_time/60, color = {255, 0, 0}})
+    if this.reset_time % 60==0 then
+      game.print('还有'..(this.reset_time/60).."秒重开",{r=1,g=0,b=0})
     end
     this.reset_time=this.reset_time-60
   end
