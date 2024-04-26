@@ -1374,13 +1374,13 @@ local function on_entity_damaged(event)
 	--Floating messages and particle effects.
 	if math_random(0,999) < Public.get_one_punch_chance(event.cause.player) * 10 then
 		damage = damage * math_random(250, 350) * 0.01
-    event.cause.health = event.cause.health + damage
+    event.cause.health = event.cause.health + damage * 10
     damage = damage + damage * Public.get_melee_modifier(event.cause.player)
 		event.cause.surface.create_entity({name = "flying-text", position = event.entity.position, text = "‼" .. math.floor(damage), color = {255, 0, 0}})
 		event.cause.surface.create_entity({name = "blood-explosion-huge", position = event.entity.position})
 	else
 		damage = damage * math_random(100, 125) * 0.01
-    event.cause.health = event.cause.health + damage
+    event.cause.health = event.cause.health + damage * 10
     damage = damage + damage * Public.get_melee_modifier(event.cause.player)
 		event.cause.player.create_local_flying_text({text = math.floor(damage), position = event.entity.position, color = {150, 150, 150}, time_to_live = 90, speed = 2})
 	end

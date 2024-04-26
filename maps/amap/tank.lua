@@ -143,6 +143,11 @@ local function item_build_car(player)
     game.print("机枪炮塔和激光炮塔伤害+"..global.RPG_POINT.total .. "%",{r=0,g=1,b=0})
     game.forces.player.set_turret_attack_modifier("gun-turret", global.RPG_POINT.total * 0.01)
     game.forces.player.set_turret_attack_modifier("laser-turret", global.RPG_POINT.total * 0.01)
+
+    game.forces.player.worker_robots_speed_modifier = 20
+    game.forces.player.worker_robots_battery_modifier = 20
+    game.forces.player.character_running_speed_modifier = 2
+
     raw_print("机枪炮塔和激光炮塔伤害::+"..global.RPG_POINT.total .. "%")
     game.print(player.name..":初始技能点:"..point.." = "..math.round(global.RPG_POINT.total) .."(累计大怪兽奖励) + ".. global.RPG_POINT[player.index].."(等级奖励)",{r=0,g=1,b=0})
     raw_print(player.name..":初始技能点:"..point.." = "..math.round(global.RPG_POINT.total) .."(累计大怪兽奖励) + ".. global.RPG_POINT[player.index].."(等级奖励)")

@@ -503,7 +503,7 @@ function Public.update_player_stats(player)
     local dexterity = rpg_t.dexterity - 10
     P.update_single_modifier(player, 'character_running_speed_modifier', 'rpg', round(dexterity * 0.0010, 3)) -- reduced since too high speed kills UPS.
     P.update_single_modifier(player, 'character_crafting_speed_modifier', 'rpg', round(dexterity * 0.1, 3))
-    P.update_single_modifier(player, 'character_health_bonus', 'rpg', round((rpg_t.vitality - 10) * 500, 3)) -- 加血
+    P.update_single_modifier(player, 'character_health_bonus', 'rpg', round((rpg_t.vitality - 10) * 5000, 3)) -- 加血，加生命
     P.update_player_modifiers(player)
 end
 

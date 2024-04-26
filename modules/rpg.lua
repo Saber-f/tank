@@ -149,7 +149,7 @@ local function update_player_stats(player)
 	player_modifiers[player.index].character_running_speed_modifier["rpg"] = math.round(dexterity * 0.002, 3)
 	player_modifiers[player.index].character_crafting_speed_modifier["rpg"] = math.round(dexterity * 0.1, 3)
 
-	player_modifiers[player.index].character_health_bonus["rpg"] = math.round((rpg_t[player.index].vitality - 10) * 500, 3)
+	player_modifiers[player.index].character_health_bonus["rpg"] = math.round((rpg_t[player.index].vitality - 10) * 5000, 3)
 
 	P.update_player_modifiers(player)
 end
