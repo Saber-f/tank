@@ -274,7 +274,6 @@ local lightning_func = function(data)
   end
  
 
-  for _ = 1,2 do
     data.times = data.times - 1
     if data.times <= 0 then
       return
@@ -302,8 +301,7 @@ local lightning_func = function(data)
       data.source = target_pos
     end
 
-    Task.set_timeout_in_ticks(10, Public.lightning, data) -- 10帧后执行
-  end
+    Task.set_timeout_in_ticks(1, Public.lightning, data) -- 1帧后执行
 end
 
 Public.lightning = Token.register(lightning_func)   -- 注册闪电链函数
