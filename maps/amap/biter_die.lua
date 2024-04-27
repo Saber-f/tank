@@ -5,6 +5,7 @@ local BiterRolls = require 'modules.wave_defense.biter_rolls'
 local Token = require 'utils.token'
 local Task = require 'utils.task'
 local WaveDefense = require 'modules.wave_defense.main'
+local BiterHealthBooster = require 'modules.biter_health_booster_v2'
 
 local entity_types = {
   ['unit'] = true,
@@ -176,7 +177,7 @@ local dieAddExp = function(entity)
   if (entity.force.name == "neutral" and entity.type == "turret") then
 
     if WD.get().next_wave == game.tick then return end
-    for i = 1, 24 do
+    for i = 1, 4 do
       WaveDefense.set_next_wave()
     end
     WD.set().next_wave = game.tick
@@ -205,7 +206,7 @@ local dieAddExp = function(entity)
     local biter = surface.create_entity({name = name, position = {x=0,y=70}, force = 'neutral'})
     local modified_unit_health = WD.get('modified_unit_health')
     BiterHealthBooster.add_unit(biter, modified_unit_health.current_value)
-    game.print('跳波沙虫已生成，击杀直接跳25波[gps=' .. 0 .. ',' .. 70 .. ',' .. surface.name .. ']',{r=1,g=0,b=0})
+    game.print('跳波沙虫已生成，击杀直接跳5波[gps=' .. 0 .. ',' .. 70 .. ',' .. surface.name .. ']',{r=1,g=0,b=0})
   end
 
 

@@ -1501,7 +1501,7 @@ local function on_player_used_capsule(event)
           [10] = 'tc_fake_human_boss_nuke_rocket_',
           [11] = 'tc_fake_human_boss_cannon_explosive_',
         }
-        local entityName = mowang[math.random(1, 12)]..10
+        local entityName = mowang[math.random(1, 12)]..math.random(1, 10)
 
         surface.create_entity({name = entityName, position = position, force = force})
         -- pet.biter_pets_tame_unit(player, unit)

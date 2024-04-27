@@ -122,18 +122,20 @@ local last_hit = function(data)
   end
 
   -- 致命一击
-  if biter.valid and biter.force.name == "enemy" and math.random() < 0.0004 * num then
+  local value = 0.0004 * num
+  if value > 0.05 then value = 0.05 end
+  if biter.valid and biter.force.name == "enemy" and math.random() < value then
     game.print(player.name.."秒杀了"..biter.name,{r=1,g=0,b=0})
     raw_print(player.name.."秒杀了"..biter.name)
     local d = 2
-    for i = 1,100  do
+    for i = 1,50  do
       -- 创建位置是半径为32的圆上的均匀分布的点
       local source = player.character.position
-      local pos = {source.x + d * math.cos(i * 2 * PI / 100), -4 + source.y + d * math.sin(i * 2 * PI / 100)}
+      local pos = {source.x + d * math.cos(i * 2 * PI / 50), -4 + source.y + d * math.sin(i * 2 * PI / 50)}
         
       player.surface.create_entity(
       {
-        name ='electric-beam',
+        name ='laser-beam',
         position = pos,
         force = 'player',
         source = pos,
@@ -175,7 +177,7 @@ local lightning_func = function(data)
       --   biter.damage(damage, 'player', 'physical', player.character)  -- 物理
       -- end
       
-		  player.surface.create_entity({name = "flying-text", position = target.position, text = ""..math.floor(damage), color = {150, 150, 150}})
+		  -- player.surface.create_entity({name = "flying-text", position = target.position, text = ""..math.floor(damage), color = {150, 150, 150}})
 
       if target.valid then
         target.damage(damage, 'player', 'laser', player.character) -- 激光
@@ -200,32 +202,6 @@ local lightning_func = function(data)
       end
     end
 
-    
-
-    -- 致命一击
-    if target.valid and target.force.name == "enemy" and math.random() < 0.0004 then
-      game.print(player.name.."秒杀了"..target.name,{r=1,g=0,b=0})
-      raw_print(player.name.."秒杀了"..target.name)
-      local d = 2
-      for i = 1,100  do
-        -- 创建位置是半径为32的圆上的均匀分布的点
-        local source = player.character.position
-        local pos = {source.x + d * math.cos(i * 2 * PI / 100), -4 + source.y + d * math.sin(i * 2 * PI / 100)}
-          
-        player.surface.create_entity(
-        {
-          name ='electric-beam',
-          position = pos,
-          force = 'player',
-          source = pos,
-          target = target.position,
-          player = player,
-          duration = 90,
-        })
-      end
-      target.surface.create_entity({name = 'big-explosion', position = target.position})
-      target.die()
-    end
 
     if data.first and target.valid then
       data.first = false
@@ -243,13 +219,13 @@ local lightning_func = function(data)
 
       if target and target.valid then target2 = target end
 
-      local d = 10
+      local d = 8
       local rv = math.random(1, 2000) / 1000 * PI;
       local rv2 = math.random(1, 2000) / 1000 * PI;
       for i = 1,data.times  do
         -- 创建位置是半径为32的圆上的均匀分布的点
         local source = t_pos
-        local pos = {source.x + d * math.cos(i * 2 * PI / times + rv), source.y + 0.33 * d * math.sin(i * 2 * PI / times + rv2) - 50}
+        local pos = {source.x + d * math.cos(i * 2 * PI / times + rv), source.y + 0.33 * d * math.sin(i * 2 * PI / times + rv2) - 40}
           
         for i = 1,3 do
           player.surface.create_entity(
@@ -297,34 +273,37 @@ local lightning_func = function(data)
     })
   end
  
-  data.times = data.times - 1
-  if data.times <= 0 then
-    return
-  end
 
-  if #biters < 2 then
-    biters = player.surface.find_entities_filtered{position = target_pos, radius = 64, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.enemy}
-  end
+  for _ = 1,2 do
+    data.times = data.times - 1
+    if data.times <= 0 then
+      return
+    end
 
-  biters = removeElement(biters, target) 
-  
-  if #biters < 1 then
-    biters = player.surface.find_entities_filtered{position = target_pos, radius = 64, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.enemy}
-  end
+    if #biters < 2 then
+      biters = player.surface.find_entities_filtered{position = target_pos, radius = 64, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.enemy}
+    end
+
+    biters = removeElement(biters, target) 
+    
+    if #biters < 1 then
+      biters = player.surface.find_entities_filtered{position = target_pos, radius = 64, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.enemy}
+    end
 
 
-  data.target = get_nearest_biter(biters, target_pos)
-  if data.target == nil then
-    return
-  end
-  data.biters = biters
-  if target and target.valid then
-    data.source = target
-  else 
-    data.source = target_pos
-  end
+    data.target = get_nearest_biter(biters, target_pos)
+    if data.target == nil then
+      return
+    end
+    data.biters = biters
+    if target and target.valid then
+      data.source = target
+    else 
+      data.source = target_pos
+    end
 
-  Task.set_timeout_in_ticks(1, Public.lightning, data) -- 一帧后执行
+    Task.set_timeout_in_ticks(10, Public.lightning, data) -- 10帧后执行
+  end
 end
 
 Public.lightning = Token.register(lightning_func)   -- 注册闪电链函数
@@ -361,6 +340,25 @@ function Public.lightning_chain(position, surface,player,times)
   laser = math.floor(laser * 10) * 0.1
   local damage = (1 + lastNum*0.01) * (1 + t2) * (1+laser)*100     -- 闪电链伤害
   player.print("次数:"..times.." 伤害:"..(1+lastNum*0.01).."(永久加加成)x"..(1+t2).."(本局加成)x"..(1+laser).."(激光伤害科技)x100")
+
+
+  -- local d = 8
+  -- for i = 1,times  do
+  --   -- 创建位置是半径为32的圆上的均匀分布的点
+  --   local source = position
+  --   local pos = {source.x + d * math.cos(i * 2 * PI / times), source.y + d * math.sin(i * 2 * PI / times)}
+      
+  --   player.surface.create_entity(
+  --   {
+  --     name ='electric-beam',
+  --     position = pos,
+  --     force = 'player',
+  --     source = pos,
+  --     target = source,
+  --     player = player,
+  --     duration = 30,
+  --   })
+  -- end
 
 
   local biter = get_nearest_biter(biters, position)
