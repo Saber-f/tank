@@ -838,20 +838,27 @@ local function spawn_big_biter(surface, N, unit_group)
             biter.ai_settings.do_separation = true
 
             
-            local map=diff.get()
-            local boosted_health = BiterHealthBooster.get('biter_health_boost')
-            local increase_boss_health_per_wave = WD.get('increase_boss_health_per_wave')
-            if increase_boss_health_per_wave then
-                local modified_boss_unit_health = WD.get('modified_boss_unit_health')
-                BiterHealthBooster.add_boss_unit(biter, modified_boss_unit_health, 0.55)
-            else
-                local buff_k = 10
-                local wave_number = WD.get('wave_number')
-                if wave_number>=2000 and map.final_wave then buff_k = 15 end
-                local sum = boosted_health * buff_k
+            local increase_health_per_wave = WD.get('increase_health_per_wave')
 
-                BiterHealthBooster.add_boss_unit(biter, sum, 0.55)
+            if increase_health_per_wave and not is_boss_biter then
+                local modified_unit_health = WD.get('modified_unit_health')
+                BiterHealthBooster.add_unit(biter, modified_unit_health.current_value)
             end
+
+            -- local map=diff.get()
+            -- local boosted_health = BiterHealthBooster.get('biter_health_boost')
+            -- local increase_boss_health_per_wave = WD.get('increase_boss_health_per_wave')
+            -- if increase_boss_health_per_wave then
+            --     local modified_boss_unit_health = WD.get('modified_boss_unit_health')
+            --     BiterHealthBooster.add_boss_unit(biter, modified_boss_unit_health, 0.55)
+            -- else
+            --     local buff_k = 10
+            --     local wave_number = WD.get('wave_number')
+            --     if wave_number>=2000 and map.final_wave then buff_k = 15 end
+            --     local sum = boosted_health * buff_k
+
+            --     BiterHealthBooster.add_boss_unit(biter, sum, 0.55)
+            -- end
 
             unit_group.add_member(biter)
         end
@@ -1180,7 +1187,7 @@ local function spawn_unit_group()
     end
     
     -- 每50波加入大怪兽
-    local N = math.floor(WN/ 50) 
+    local N = math.floor((WN - global.StarWave) / 50) 
     -- N = 60
     if WD.get("BigWave") < N and WN > StarWave + 40 then
         WD.set("BigWave", WD.get("BigWave") + 1)
