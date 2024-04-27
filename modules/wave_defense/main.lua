@@ -1195,6 +1195,18 @@ local function spawn_unit_group()
         if N > 50 then
             M = N - 50
         end
+
+        game.forces.enemy.set_ammo_damage_modifier("rocket",N*N*0.05)
+        game.forces.enemy.set_ammo_damage_modifier("grenade",N*N*0.05)
+        game.forces.enemy.set_ammo_damage_modifier("landmine",N*N*0.05)
+        game.forces.enemy.set_ammo_damage_modifier("bullet",N*N*0.05)
+        game.forces.enemy.set_ammo_damage_modifier("cannon-shell",N*N*0.05)
+        game.forces.enemy.set_ammo_damage_modifier("laser",N*N*0.05)
+        game.forces.enemy.set_ammo_damage_modifier("electric",N*N*0.05)
+        game.forces.enemy.set_ammo_damage_modifier("beam",N*N*0.05)
+
+
+
         game.print('第'..N..'波大怪兽来袭！[gps=' .. position.x .. ',' .. position.y .. ',' .. surface.name .. ']全体开局技能点+1,炮塔伤害+1%')
 
         global.RPG_POINT.total = global.RPG_POINT.total + 1
