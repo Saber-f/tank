@@ -301,7 +301,7 @@ local lightning_func = function(data)
       data.source = target_pos
     end
 
-    Task.set_timeout_in_ticks(1, Public.lightning, data) -- 1帧后执行
+    Task.set_timeout_in_ticks(global.ssn, Public.lightning, data) -- 1帧后执行
 end
 
 Public.lightning = Token.register(lightning_func)   -- 注册闪电链函数
@@ -370,6 +370,9 @@ function Public.lightning_chain(position, surface,player,times)
     biters = {},
   }
 
+  if global.ssn == nil then
+    global.ssn = 0
+  end
   
   Task.set_timeout_in_ticks(0, Public.lightning, data) -- 一帧后执行
   return true
