@@ -131,7 +131,7 @@ local last_hit = function(data)
     for i = 1,50  do
       -- 创建位置是半径为32的圆上的均匀分布的点
       local source = player.character.position
-      local pos = {source.x + d * math.cos(i * 2 * PI / 50), -4 + source.y + d * math.sin(i * 2 * PI / 50)}
+      local pos = {source.x + d * math.cos(i * 2 * PI / 50), source.y + d * math.sin(i * 2 * PI / 50)}
         
       player.surface.create_entity(
       {
@@ -217,7 +217,7 @@ local lightning_func = function(data)
       local target2 = target.position
       last_hit(data2)
 
-      if target and target.valid then target2 = target end
+      -- if target and target.valid then target2 = target end
 
       local d = 8
       local rv = math.random(1, 2000) / 1000 * PI;
@@ -257,9 +257,9 @@ local lightning_func = function(data)
   end
 
   local target2 = target_pos
-  if target and target.valid then
-    target2 = target
-  end
+  -- if target and target.valid then
+  --   target2 = target
+  -- end
   for i = 1,4 do
     player.surface.create_entity(
     {
@@ -329,35 +329,16 @@ function Public.lightning_chain(position, surface,player,times)
   end
 
   local t2 = times - 10
-  -- if times > 50 then
-  --   t2 = (times - 50) * 2 + 41
-  --   times = 50
-  -- end
+  local t3 = 1
+  if times > 100 then
+    t3 = 1 + (times - 100) * 0.01
+    times = 100
+  end
   -- times = 100
   local laser = game.forces.player.get_ammo_damage_modifier("laser") -- 激光伤害加成
   laser = math.floor(laser * 10) * 0.1
-  local damage = (1 + lastNum*0.01) * (1 + t2) * (1+laser)*100     -- 闪电链伤害
-  player.print("次数:"..times.." 伤害:"..(1+lastNum*0.01).."(永久加加成)x"..(1+t2).."(本局加成)x"..(1+laser).."(激光伤害科技)x100")
-
-
-  -- local d = 8
-  -- for i = 1,times  do
-  --   -- 创建位置是半径为32的圆上的均匀分布的点
-  --   local source = position
-  --   local pos = {source.x + d * math.cos(i * 2 * PI / times), source.y + d * math.sin(i * 2 * PI / times)}
-      
-  --   player.surface.create_entity(
-  --   {
-  --     name ='electric-beam',
-  --     position = pos,
-  --     force = 'player',
-  --     source = pos,
-  --     target = source,
-  --     player = player,
-  --     duration = 30,
-  --   })
-  -- end
-
+  local damage = (1 + lastNum*0.01) * (1 + t2) * t3 * (1+laser)*100     -- 闪电链伤害
+  player.print("次数:"..times.." 伤害:"..(1+lastNum*0.01).."(永久加加成)x"..((1+t2)*t3).."(本局加成)x"..(1+laser).."(激光伤害科技)x100")
 
   local biter = get_nearest_biter(biters, position)
   local data = {
@@ -371,7 +352,7 @@ function Public.lightning_chain(position, surface,player,times)
   }
 
   if global.ssn == nil then
-    global.ssn = 0
+    global.ssn = 1
   end
   
   Task.set_timeout_in_ticks(0, Public.lightning, data) -- 一帧后执行

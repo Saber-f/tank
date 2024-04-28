@@ -262,19 +262,19 @@ local function refresh_active_unit_threat()
         ghost.destroy()
     end
 
-    local active_biter_threat = WD.get('active_biter_threat')
-    local active_biters = WD.get('active_biters')
+    -- local active_biter_threat = WD.get('active_biter_threat')
+    -- local active_biters = WD.get('active_biters')
 
-    local biter_threat = 0
-    for k, biter in pairs(active_biters) do
-        if valid(biter.entity) then
-            biter_threat = biter_threat + threat_values[biter.entity.name]
-        else
-            active_biters[k] = nil
-        end
-    end
-    local biter_health_boost = BiterHealthBooster.get('biter_health_boost')
-    WD.set('active_biter_threat', math_round(biter_threat * biter_health_boost, 2))
+    -- local biter_threat = 0
+    -- for k, biter in pairs(active_biters) do
+    --     if valid(biter.entity) then
+    --         biter_threat = biter_threat + threat_values[biter.entity.name]
+    --     else
+    --         active_biters[k] = nil
+    --     end
+    -- end
+    -- local biter_health_boost = BiterHealthBooster.get('biter_health_boost')
+    -- WD.set('active_biter_threat', math_round(biter_threat * biter_health_boost, 2))
 
 end
 

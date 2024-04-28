@@ -622,9 +622,11 @@ local on_research_finished = function(event)
       force.research_queue = {event.research}
     end
     -- table.insert(force.research_queue, event.research)
+    raw_print(event.research.name.."等级:"..event.research.level.."研究完成")
+  else
+    raw_print(event.research.name.."研究完成")
   end
 
-  raw_print(event.research.name.."研究完成")
   game.forces.player.recipes["rocket-silo"].enabled = false -- 火箭发射台不可用
 end
 
