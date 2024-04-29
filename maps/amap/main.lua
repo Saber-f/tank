@@ -173,7 +173,7 @@ function Public.reset_map()
     WD.set('_BigWave', BigWave) -- 上局次数
     global.DieExp = global.DieExp + (BigWave * 0.02)
   end
-  WD.set('BigWave', math.round(global.StarWave)) -- 大怪兽起始
+  WD.set('BigWave', 0) -- 大怪兽起始
   WD.set('BLnum', 0)    -- 核弹发射进度
   WD.set("BaoLei",0)
 
