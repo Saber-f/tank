@@ -126,15 +126,6 @@ local function item_build_car(player)
   if BigWave then
     local k = BigWave
 
-    -- if k > 0 then
-    --   game.print("上局打了"..k.."波大怪兽,额外获得"..k.."份物资",{r=255,b=0,g=0})
-    --   raw_print("上局打了"..k.."波大怪兽,额外获得"..k.."份物资")
-    --   -- player.insert({name = 'rfw-small-antimatter-rocket', count = k}) -- 小型反物质
-    --   player.insert({name = 'speed-beacon-2', count = k}) -- 速度插件塔2
-    --   player.insert({name = 'pure-productivity-module-2', count = k*8}) -- 产能插件2
-    --   player.insert({name = 'pure-speed-module-2', count = k*8})  -- 速度插件2
-    -- end
-
     -- 额外技能点
     local point = math.round(global.RPG_POINT.total) + global.RPG_POINT[player.index]
     local rpg_t = RPG.get('rpg_t')
@@ -151,12 +142,8 @@ local function item_build_car(player)
     raw_print("机枪炮塔和激光炮塔伤害::+"..global.RPG_POINT.total .. "%")
     game.print(player.name..":初始技能点:"..point.." = "..math.round(global.RPG_POINT.total) .."(累计大怪兽奖励) + ".. global.RPG_POINT[player.index].."(等级奖励)",{r=0,g=1,b=0})
     raw_print(player.name..":初始技能点:"..point.." = "..math.round(global.RPG_POINT.total) .."(累计大怪兽奖励) + ".. global.RPG_POINT[player.index].."(等级奖励)")
-    -- game.print("上局打到第"..k.."波大怪兽,杀敌科研速度+"..((k*0.02)).."("..k.."/50),当前速度:"..(global.DieExp),{r=0,g=1,b=0})
-    -- raw_print("上局打到第"..k.."波大怪兽,杀敌科研速度+"..((k*0.02)).."("..k.."/50),当前速度:"..(global.DieExp))
-    game.print("***************当前起始波"..global.StarWave..",坚持到"..(global.StarWave+3000).."波取得胜利!!!***************",{r=0,g=1,b=0})
-    raw_print("***************当前起始波"..global.StarWave..",坚持到"..(global.StarWave+3000).."波取得胜利!!!***************")
-    -- game.print((global.StarWave+300).."波后杀虫加科研",{r=1,g=0,b=0})
-    -- raw_print((global.StarWave+300).."波后杀虫加科研")
+    game.print("***************当前难度：N"..global.StarWave..",坚持到"..(3000).."波取得胜利!!!***************",{r=0,g=1,b=0})
+    raw_print("***************当前难度：N"..global.StarWave..",坚持到"..(3000).."波取得胜利!!!***************")
 
     
     game.permissions.get_group('Default').set_allows_action(defines.input_action.open_blueprint_library_gui, false)
@@ -166,8 +153,8 @@ local function item_build_car(player)
 
     local StarWave = 0;
     if global.StarWave then StarWave = global.StarWave end
-    game.print("虫子最高血量加成:"..math.floor((3*(3 + StarWave/100))^2*10).."倍",{r=1,g=0,b=0})
-    raw_print("虫子最高血量加成:"..math.floor((3*(3 + StarWave/100))^2*10).."倍")
+    game.print("虫子最高血量加成:"..math.floor((3*(3 + StarWave/2))^2*10).."倍",{r=1,g=0,b=0})
+    raw_print("虫子最高血量加成:"..math.floor((3*(3 + StarWave/2))^2*10).."倍")
 
   end
 end
@@ -469,9 +456,6 @@ function game_over()
     for _, p in pairs(game.connected_players) do
       Alert.alert_player(p, 25, msg)
     end
-    -- if global.StarWave >= 100 then
-    --   global.StarWave = global.StarWave - 100
-    -- end
     Server.to_discord_embed(table.concat({'** we lost the game ! Record is ', wave_number, ' **'}),{r=1,g=0,b=0})
   else
     Server.to_discord_embed(table.concat({'** we win the game ! Record is ', wave_number, ' **'}),{r=0,g=1,b=0})

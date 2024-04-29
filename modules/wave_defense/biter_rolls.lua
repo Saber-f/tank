@@ -3,7 +3,7 @@ local Event = require 'utils.event'
 local Public = {}
 
 function Public.wave_defense_roll_biter_name()
-    local wave_number = WD.get("wave_number") - global.StarWave;
+    local wave_number = WD.get("wave_number");
 
     if wave_number <= 50 then return 'small-biter' end
     if wave_number <= 100 then return 'medium-biter' end
@@ -26,7 +26,7 @@ function Public.wave_defense_roll_biter_name()
 end
 
 function Public.wave_defense_roll_spitter_name()
-    local wave_number = WD.get("wave_number") - global.StarWave;
+    local wave_number = WD.get("wave_number");
 
     if wave_number <= 50 then return 'small-spitter' end
     if wave_number <= 100 then return 'medium-spitter' end

@@ -862,8 +862,7 @@ local function spawn_biter(surface, is_boss_biter)
     end
 
 
-    local wave_number = WD.get("wave_number") - global.StarWave;
-    if wave_number >= global.StarWave then wave_number = wave_number - global.StarWave end;
+    local wave_number = WD.get("wave_number");
     local N = math_floor(wave_number/ 50) + 1
     local name = spawn_big_biter(nil, -N, nil)
 
@@ -1153,15 +1152,14 @@ local function spawn_unit_group()
 
     local unit_group_pos = WD.get('unit_group_pos')
 
-    local StarWave = global.StarWave
-    if WN - StarWave < 4 then
+    if WN < 4 then
         game.print('虫子出现了！[gps=' .. position.x .. ',' .. position.y .. ',' .. surface.name .. ']')
     end
     
     -- 每50波加入大怪兽
-    local N = math.floor((WN - global.StarWave) / 50) 
+    local N = math.floor(WN / 50) 
     -- N = 60
-    if WD.get("BigWave") < N and WN > StarWave + 40 then
+    if WD.get("BigWave") < N and WN > 40 then
         WD.set("BigWave", WD.get("BigWave") + 1)
         local M = 1
         if N > 50 then
@@ -1256,17 +1254,11 @@ local function set_next_wave()
     end
     -- get_new_arty()
     local wave_number = WD.get('wave_number')
-    if wave_number < global.StarWave then
-        wave_number = global.StarWave - 1
-    -- elseif wave_number >= global.StarWave + 300 and wave_number < global.StarWave + 303 then
-    --     game.print("好消息！好消息！现在杀虫子可以加科研了！",{r = 1, g = 0, b = 0})
-    --     game.print("好消息！好消息！现在杀虫子可以加科研了！",{r = 1, g = 0, b = 0})
-    --     game.print("好消息！好消息！现在杀虫子可以加科研了！",{r = 1, g = 0, b = 0})
-    elseif wave_number == global.StarWave + 1000 then
+    if wave_number ==  1000 then
         game.print("还有2000波结束，加油！",{r = 1, g = 0, b = 0})
-    elseif wave_number == global.StarWave + 2000 then
+    elseif wave_number == 2000 then
         game.print("还有1000波结束，加油！",{r = 1, g = 0, b = 0})
-    elseif wave_number == global.StarWave + 2500 then
+    elseif wave_number == 2500 then
         game.print("还有500波结束，坚持住！",{r = 1, g = 0, b = 0})
     end
     WD.set('wave_number', wave_number + 1)
@@ -1281,7 +1273,7 @@ local function set_next_wave()
     -- 设置威胁值
     local StarWave = 0;
     if global.StarWave then StarWave = global.StarWave end
-    local threat_gain = (wave_number*(3 + StarWave/100))^2
+    local threat_gain = (wave_number*(3 + StarWave/2))^2
     local map=diff.get()
     local boss_interval = 25
     if wave_number>=2000 then boss_interval = 5 end
@@ -1313,7 +1305,7 @@ local function set_next_wave()
     -- local wave_interval = WD.get('wave_interval')
     -- if not wave_enforced then
         WD.set('last_wave', next_wave)
-        raw_print("当前波次:"..wave_number.."/"..(global.StarWave+3000))
+        raw_print("当前波次:"..wave_number.."/"..(3000))
         
         -- WD.set('next_wave', game.tick + 60*30)-- 30s一波
 
@@ -1321,7 +1313,6 @@ local function set_next_wave()
         -- local surface = game.surfaces[surface_index]
         -- surface.clear_pollution()
 
-        wave_number = wave_number - global.StarWave
         if wave_number<=25 then
             WD.set('next_wave', game.tick + 60*15)
         elseif wave_number<=50 then
@@ -1342,7 +1333,7 @@ local function set_next_wave()
     if wave_number >= 3000 then
         game.print("*****************恭喜！挑战成功！*****************",{r = 1, g = 0, b = 0})
         game.print("*****************60s后开始下一局*****************",{r = 1, g = 0, b = 0})
-        global.StarWave = -global.StarWave - 50
+        global.StarWave = -global.StarWave - 1       -- 难度+1
         WD.set('next_wave', game.tick + 60*60)-- 60s
         -- game.forces["enemy"].kill_all_units()
     end

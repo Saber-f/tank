@@ -82,7 +82,7 @@ local function update_gui(player)
     local enable_threat_log = WD.get('enable_threat_log')
 
     gui.label.caption = {'wave_defense.gui_2'}
-    gui.wave_number.caption = wave_number.."/"..(global.StarWave+3000)
+    gui.wave_number.caption = wave_number.."/"..(3000)
     if wave_number == 0 then
         gui.label.caption = {'wave_defense.gui_1'}
         gui.wave_number.caption = math.floor((next_wave - game.tick) / 60) + 1

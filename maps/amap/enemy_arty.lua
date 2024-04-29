@@ -284,7 +284,7 @@ function Public.get_new_arty()
 
   local wave_number = WD.get('wave_number')
   local NN = 300
-  if wave_number < global.StarWave + NN then return end    -- 300波之前不生成堡垒
+  if wave_number < NN then return end    -- 300波之前不生成堡垒
   local wave_defense_table = WD.get_table()
   if not wave_defense_table.target  then return end
   if not wave_defense_table.target.valid  then return end
@@ -292,7 +292,7 @@ function Public.get_new_arty()
   local surface=target.surface
 
   -- 每25波加入堡垒
-  local WN = wave_number - global.StarWave - NN + 25
+  local WN = wave_number -  NN + 25
   local N = math.floor(WN / 25)
   if WD.get("BaoLei") >= N then
     return

@@ -184,7 +184,10 @@ local dieAddExp = function(entity)
    
     local surface=entity.surface
     local wave_number = WD.get('wave_number')
-    if wave_number > global.StarWave + 3000 - 100 then return end
+    if wave_number > 3000 - 100 then
+      game.print('最后100波不能跳',{r=1,g=0,b=0})
+      return
+    end
 
     local name = "bm-worm-boss-fire-shooter"
     -- local name = "small-worm-turret"
@@ -208,34 +211,6 @@ local dieAddExp = function(entity)
     BiterHealthBooster.add_unit(biter, modified_unit_health.current_value)
     game.print('跳波沙虫已生成，击杀直接跳5波[gps=' .. 0 .. ',' .. 70 .. ',' .. surface.name .. ']',{r=1,g=0,b=0})
   end
-
-
-  -- local wave_number = WD.get('wave_number')
-  -- if wave_number < global.StarWave + 300 then return end
-  -- if wave_number > 2000 then wave_number = 2000 end
-  
-  -- local max_health = entity.prototype.max_health
-
-  -- -- 当前波数
-  -- if global.DieCeo == nil then
-  --   global.DieCeo = 0.01 -- 2000波4亿血2M武器研究
-  -- end
-
-  -- if global.DieExp == nil then
-  --   global.DieExp = 1
-  -- end
-
-  -- local current_research = game.forces.player.current_research
-  -- if current_research == nil then return end
-
-  -- local research_progress = game.forces.player.research_progress  -- 研究进度
-  -- local exp = (wave_number * 0.001)^2 * global.DieExp * wave_number * max_health * global.DieCeo / (current_research.research_unit_energy * current_research.research_unit_count)
-
-  
-  -- research_progress = research_progress + exp
-
-  -- if research_progress > 1 then research_progress = 1 end
-  -- game.forces.player.research_progress = research_progress
 
 end
 
