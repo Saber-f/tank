@@ -808,19 +808,25 @@ local function getBiterName(N)
     if N > 60 then N = 60 end
     if N < 1 then N = 1 end
     local index
-    if N < 3 then
-        index = math_random(2*N - 1, 2*N)
-    else
-        index = math_random(4.9*N - 9.7,4.9*N+9)
+
+    while  true do
+        if N < 3 then   
+            index = math_random(2*N - 1, 2*N)
+        else
+            index = math_random(4.9*N - 9.7,4.9*N+9)
+        end
+        if index > 303 then index = 303 end
+        local name = all_enemies[index]
+        if name == "tc_fake_human_ultimate_boss_cannon_20" or string.sub(name, 1, 2) ~= "tc" or math_random(1,100) <= 10 then
+            return name
+        end
     end
-    if index > 303 then index = 303 end
-    return all_enemies[index]
 end
 
 -- 生成大怪兽
 local function spawn_big_biter(surface, N, unit_group)
     
-    local M = 6
+    local M = 8
 
     if N < 0 then 
         N = -N;
@@ -837,29 +843,7 @@ local function spawn_big_biter(surface, N, unit_group)
             biter.ai_settings.allow_try_return_to_spawner = true
             biter.ai_settings.do_separation = true
 
-            
-            local increase_health_per_wave = WD.get('increase_health_per_wave')
-
-            if increase_health_per_wave and not is_boss_biter then
-                local modified_unit_health = WD.get('modified_unit_health')
-                BiterHealthBooster.add_unit(biter, modified_unit_health.current_value)
-            end
-
-            -- local map=diff.get()
-            -- local boosted_health = BiterHealthBooster.get('biter_health_boost')
-            -- local increase_boss_health_per_wave = WD.get('increase_boss_health_per_wave')
-            -- if increase_boss_health_per_wave then
-            --     local modified_boss_unit_health = WD.get('modified_boss_unit_health')
-            --     BiterHealthBooster.add_boss_unit(biter, modified_boss_unit_health, 0.55)
-            -- else
-            --     local buff_k = 10
-            --     local wave_number = WD.get('wave_number')
-            --     if wave_number>=2000 and map.final_wave then buff_k = 15 end
-            --     local sum = boosted_health * buff_k
-
-            --     BiterHealthBooster.add_boss_unit(biter, sum, 0.55)
-            -- end
-
+            BiterHealthBooster.add_boss_unit(biter, 0.1*N + 2, 0.55)
             unit_group.add_member(biter)
         end
     end
@@ -897,21 +881,9 @@ local function spawn_biter(surface, is_boss_biter)
         local modified_unit_health = WD.get('modified_unit_health')
         BiterHealthBooster.add_unit(biter, modified_unit_health.current_value)
     end
-    local map=diff.get()
-    local boosted_health = BiterHealthBooster.get('biter_health_boost')
     if is_boss_biter then
-        local increase_boss_health_per_wave = WD.get('increase_boss_health_per_wave')
-        if increase_boss_health_per_wave then
-            local modified_boss_unit_health = WD.get('modified_boss_unit_health')
-            BiterHealthBooster.add_boss_unit(biter, modified_boss_unit_health, 0.55)
-        else
-            local buff_k = 10
-            local wave_number = WD.get('wave_number')
-            if wave_number>=2000 and map.final_wave then buff_k = 15 end
-            local sum = boosted_health * buff_k
-
-            BiterHealthBooster.add_boss_unit(biter, sum, 0.55)
-        end
+        
+        BiterHealthBooster.add_boss_unit(biter, 0.1*N+2, 0.55)
     end
 
     WD.set('active_biters')[biter.unit_number] = {entity = biter, spawn_tick = game.tick}
