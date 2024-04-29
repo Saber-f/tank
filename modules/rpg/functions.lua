@@ -244,9 +244,13 @@ local lightning_func = function(data)
     source_pos = source.position
   end
   local source2 = source
-  if source.valid then
-    source2 = source
-  elseif source.position then
+  -- if source.valid then
+  --   source2 = source
+  -- elseif source.position then
+  --   source2 = source.position
+  -- end
+
+  if source.position then
     source2 = source.position
   end
 
