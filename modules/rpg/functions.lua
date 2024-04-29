@@ -65,7 +65,7 @@ local get_nearest_biter = function(biters, target_pos)
       local distance = (biter.position.x - target_pos.x)^2 + (biter.position.y - target_pos.y)^2
 
       -- 优先攻击血量大于1w的虫子
-      if biter.prototype.max_health < 10000 then distance = distance + 10000 end
+      -- if biter.prototype.max_health < 10000 then distance = distance + 10000 end
 
       if distance < nearest_distance then
         nearest_distance = distance
@@ -98,27 +98,24 @@ local last_hit = function(data)
     -- end
     player.surface.create_entity({name = "flying-text", position = biter.position, text = math.floor(damage).."!", color = {255, 0, 0}})
     
-    if biter.valid then
-      biter.damage(damage, 'player', 'laser', player.character) -- 激光
-    end
     -- if biter.valid then
-    --   biter.damage(damage, 'player', 'plasma', player.character)  -- 等离子
+    --   biter.damage(damage, 'player', 'laser', player.character) -- 激光
     -- end
-    if biter.valid then
-      biter.damage(damage, 'player', 'poison', player.character)  -- 毒素
-    end
-    if biter.valid then
-      biter.damage(damage, 'player', 'acid', player.character) -- 酸蚀
-    end
+    -- if biter.valid then
+    --   biter.damage(damage, 'player', 'poison', player.character)  -- 毒素
+    -- end
+    -- if biter.valid then
+    --   biter.damage(damage, 'player', 'acid', player.character) -- 酸蚀
+    -- end
     if biter.valid then
       biter.damage(damage, 'player', 'electric', player.character) -- 电击
     end
-    if biter.valid then
-      biter.damage(damage, 'player', 'explosion', player.character) -- 爆炸
-    end
-    if biter.valid then
-      biter.damage(damage, 'player', 'fire', player.character)  -- 火焰
-    end
+    -- if biter.valid then
+    --   biter.damage(damage, 'player', 'explosion', player.character) -- 爆炸
+    -- end
+    -- if biter.valid then
+    --   biter.damage(damage, 'player', 'fire', player.character)  -- 火焰
+    -- end
   end
 
   -- 致命一击
@@ -179,27 +176,24 @@ local lightning_func = function(data)
       
 		  -- player.surface.create_entity({name = "flying-text", position = target.position, text = ""..math.floor(damage), color = {150, 150, 150}})
 
-      if target.valid then
-        target.damage(damage, 'player', 'laser', player.character) -- 激光
-      end
-      -- if biter.valid then
-      --   biter.damage(damage, 'player', 'plasma', player.character)  -- 等离子
+      -- if target.valid then
+      --   target.damage(damage, 'player', 'laser', player.character) -- 激光
       -- end
-      if target.valid then
-        target.damage(damage, 'player', 'poison', player.character)  -- 毒素
-      end
-      if target.valid then
-        target.damage(damage, 'player', 'acid', player.character) -- 酸蚀
-      end
+      -- if target.valid then
+      --   target.damage(damage, 'player', 'poison', player.character)  -- 毒素
+      -- end
+      -- if target.valid then
+      --   target.damage(damage, 'player', 'acid', player.character) -- 酸蚀
+      -- end
       if target.valid then
         target.damage(damage, 'player', 'electric', player.character) -- 电击
       end
-      if target.valid then
-        target.damage(damage, 'player', 'explosion', player.character) -- 爆炸
-      end
-      if target.valid then
-        target.damage(damage, 'player', 'fire', player.character)  -- 火焰
-      end
+      -- if target.valid then
+      --   target.damage(damage, 'player', 'explosion', player.character) -- 爆炸
+      -- end
+      -- if target.valid then
+      --   target.damage(damage, 'player', 'fire', player.character)  -- 火焰
+      -- end
     end
 
 
@@ -335,10 +329,10 @@ function Public.lightning_chain(position, surface,player,times)
     times = 100
   end
   -- times = 100
-  local laser = game.forces.player.get_ammo_damage_modifier("laser") -- 激光伤害加成
-  laser = math.floor(laser * 10) * 0.1
-  local damage = (1 + lastNum*0.01) * (1 + t2) * t3 * (1+laser)*100     -- 闪电链伤害
-  player.print("次数:"..times.." 伤害:"..(1+lastNum*0.01).."(永久加加成)x"..((1+t2)*t3).."(本局加成)x"..(1+laser).."(激光伤害科技)x100")
+  local electric = game.forces.player.get_ammo_damage_modifier("electric") -- 激光伤害加成
+  electric = math.floor(electric * 10) * 0.1
+  local damage = (1 + lastNum*0.01) * (1 + t2) * t3 * (1+electric)*100     -- 闪电链伤害
+  player.print("次数:"..times.." 伤害:"..(1+lastNum*0.01).."(永久加加成)x"..((1+t2)*t3).."(本局加成)x"..(1+electric).."(激光伤害科技)x100")
 
   local biter = get_nearest_biter(biters, position)
   local data = {
@@ -462,10 +456,10 @@ local function create_manabar(player, size)
 end
 
 local function set_bar(min, max, id, mana)
-  local m = min / max
-  if not rendering.is_valid(id) then
+  if not rendering.is_valid(id) or max <= 0 then
     return
   end
+  local m = min / max
   local x_scale = rendering.get_y_scale(id) * 8
   rendering.set_x_scale(id, x_scale * m)
   if not mana then
