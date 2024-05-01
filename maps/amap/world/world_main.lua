@@ -10,6 +10,7 @@ local world_quarter=require 'maps.amap.world.world_function'.quarter
 local world_winter=require 'maps.amap.world.world_function'.winter
 -- local world_water=require 'maps.amap.world.world_function'.water
 -- local world_water_dungle=require 'maps.amap.world.world_function'.water_dungle
+local BiterHealthBooster = require 'modules.biter_health_booster_v2'
 
 require "maps.amap.rocks_yield_ore"
 require "modules.rocks_broken_paint_tiles"
@@ -35,21 +36,91 @@ local function move_away_things(surface, area)
   end
 end
 
+local mowang = {
+  [1] = 'tc_fake_human_boss_machine_gunner_',
+  [2] = 'tc_fake_human_boss_pistol_gunner_',
+  [3] = 'tc_fake_human_boss_sniper_',
+  [4] = 'tc_fake_human_boss_laser_',
+  [5] = 'tc_fake_human_boss_electric_',
+  [6] = 'tc_fake_human_boss_erocket_',
+  [7] = 'tc_fake_human_boss_rocket_',
+  [8] = 'tc_fake_human_boss_grenade_',
+  [9] = 'tc_fake_human_boss_cluster_grenade_',
+  [10] = 'tc_fake_human_boss_nuke_rocket_',
+  [11] = 'tc_fake_human_boss_cannon_explosive_',
+}
 
 local function build_base(surface,maxs,event,position)
-  if position.x>-4 and position.x<4 then
-    if position.y>1 and position.y<5 then
-      surface.set_tiles({{name = "water", position = position}})
-    end
-  end
-  -- if maxs <= 65   then
-  --   if maxs == 56  then
-  --     move_away_things(surface, event.area)
-  --     if surface.can_place_entity{name = "stone-wall", position = {x=position.x,y=position.y}, force=game.forces.player} then
-  --       surface.create_entity{name = "stone-wall", position = {x=position.x,y=position.y}, force=game.forces.player}
-  --     end
+  -- if position.x>-4 and position.x<4 then
+  --   if position.y>1 and position.y<5 then
+  --     surface.set_tiles({{name = "water", position = position}})
   --   end
   -- end
+
+
+  local x = position.x;
+  local y = position.y;
+
+  if x>=240 and x<=260 then
+    if y>=-50 and y<=50 then
+      surface.set_tiles({{name = "lab-white", position = position}})
+      return
+    end
+  end
+
+  
+
+  if x>=80 and x<=400 then
+    if y>-300 and y<300 then
+      surface.set_tiles({{name = "lab-dark-2", position = position}})
+      return
+    end
+  end
+
+  if x>=-128 and x<80 then
+    if y>=-64 and y<64 then
+      surface.set_tiles({{name = "grass-1", position = position}})
+      return
+    end
+  end
+
+  
+  surface.set_tiles({{name = "water", position = position}})
+  
+  x = math.abs(x)
+  y = math.abs(y)
+  if x >= 192 or y >= 128 then
+    if math.fmod(x,8) < 1 and math.fmod(y,8) < 1 then
+      local n = math.abs(position.x + 64)
+      if (y > n) then n = y end
+      n = (n - 128 + 8) / 8
+      local m = 2
+      if (n > 10) then
+        m = 2^(n-9)
+        n = 10
+      end
+      local name = mowang[math.random(1,11)]..n
+      local x2 = position.x - 0.5
+      if position.x < 0 then
+        x2 = position.x + 0.5
+      end
+      local y2 = position.y 
+      if position.y < 0 then
+        y2 = position.y + 0.5
+      end
+
+
+      local biter = surface.create_entity({name = name, position = {x2, y2}, force = 'enemy'})
+      if x == 224 and y == 0 then
+        game.print("x:"..x2.." y:"..y2.." n:"..n.." m:"..m)
+      end
+      BiterHealthBooster.add_boss_unit(biter, m, 0.55)
+    end
+  else
+  end
+
+
+  
 end
 
 local function rand_box(surface, position)
@@ -103,32 +174,34 @@ local function on_chunk_generated(event)
       local maxs =math.abs(q+w)+math.abs(q-w)
 
 
-      if maxs<64 then
-        build_base(surface,maxs,event,position)
-      end
+      build_base(surface,maxs,event,position)
+      -- if maxs<64 then
+      --   build_base(surface,maxs,event,position)
+      -- end
 
       if maxs>=170 then
 
-        local rand_k=math_random(1,20000)
+        -- local rand_k=math_random(1,20000)
 
-        if rand_k <= weight_shop then
-          rand_shop(surface,position)
-        end
+        -- if rand_k <= weight_shop then
+        --   rand_shop(surface,position)
+        -- end
 
-        if weight_shop<rand_k and rand_k<= weight_shop+weight_build then
-          if this.enable_wild_factorio then
-          rand_building(surface,maxs,position)
-        end
-        end
+        -- if weight_shop<rand_k and rand_k<= weight_shop+weight_build then
+        --   if this.enable_wild_factorio then
+        --     rand_building(surface,maxs,position)
+        --   end
+        -- end
 
-        if  weight_shop+weight_build<rand_k and rand_k <= weight_shop+weight_build+weight_box then
+        -- 不要箱子
+        -- if  weight_shop+weight_build<rand_k and rand_k <= weight_shop+weight_build+weight_box then
 
-          rand_box(surface, position)
-        end
+        --   rand_box(surface, position)
+        -- end
 
-        if  weight_shop+weight_build+weight_box <rand_k and rand_k <= weight_shop+weight_build+weight_box+weight_worm then
-          rand_worm(surface, position)
-        end
+        -- if  weight_shop+weight_build+weight_box <rand_k and rand_k <= weight_shop+weight_build+weight_box+weight_worm then
+        --   rand_worm(surface, position)
+        -- end
       end
       if maxs>=64 then
 
@@ -147,11 +220,11 @@ local function on_chunk_generated(event)
         -- world_water_dungle(surface,position,seed)  // 不要水
         end
       --   if map.world == 5 then
-     --   winter(surface,event,seed)
+        --   winter(surface,event,seed)
       --   end
         if map.world ~= 4 then
-        -- world_cave(surface,position,seed,get_tile,set_tiles,event)
-      end
+          -- world_cave(surface,position,seed,get_tile,set_tiles,event)
+        end
       end
 
     end
