@@ -150,7 +150,7 @@ end
 
 function Public.market(surface)
   local this = WPT.get()
-  local market = surface.create_entity{name = "market", position = {x=0, y=-5}, force=game.forces.player}
+  local market = surface.create_entity{name = "market", position = {x=10, y=0}, force=game.forces.player}
 
   this.shop=market
   market.destructible = false

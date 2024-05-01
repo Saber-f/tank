@@ -489,7 +489,7 @@ function Public.conjure_items()
         force = 'player',
         level = 1,
         type = 'special',
-        mana_cost = 500,
+        mana_cost = 0,
         tick = 2000,
         enabled = true,
         sprite = 'virtual-signal/signal-L'

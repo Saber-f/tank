@@ -177,7 +177,7 @@ end
 
 -- 获取虫子生成点
 local function get_spawn_pos()
-    return {x = 250 + math.random(-10, 10), y = math.random(-50, 50)}
+    return {x = 250 + math.random(-10, 10), y = math.random(-30, 30)}
 
 
     -- local surface_index = WD.get('surface_index')

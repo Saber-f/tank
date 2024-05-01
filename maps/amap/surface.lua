@@ -143,7 +143,7 @@ function Public.create_surface()
     map_gen_settings.width= global.MapWidth 
 
     if not global.MapHeight then
-      global.MapHeight = 128 - 2
+      global.MapHeight = 20000
     end
     map_gen_settings.height= global.MapHeight
 
