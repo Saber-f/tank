@@ -119,8 +119,8 @@ local last_hit = function(data)
   end
 
   -- 致命一击
-  local value = 0.0004 * num
-  if value > 0.05 then value = 0.05 end
+  local value = 0.00001 * num
+  if value > 0.001 then value = 0.001 end
   if biter.valid and biter.force.name == "enemy" and math.random() < value then
     game.print(player.name.."秒杀了"..biter.name,{r=1,g=0,b=0})
     raw_print(player.name.."秒杀了"..biter.name)
@@ -309,9 +309,9 @@ Public.lightning = Token.register(lightning_func)   -- 注册闪电链函数
 function Public.lightning_chain(position, surface,player,times)
 
   local biters = surface.find_entities_filtered{position = position, radius = 128, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.enemy}
-  if #biters == 0 then
-    biters= surface.find_entities_filtered{position = position, radius = 128, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.neutral}
-  end
+  -- if #biters == 0 then
+  --   biters= surface.find_entities_filtered{position = position, radius = 128, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.neutral}
+  -- end
 
   -- 没有虫子,直接返回
   if #biters == 0 then

@@ -177,7 +177,7 @@ end
 
 -- 获取虫子生成点
 local function get_spawn_pos()
-    return {x = 250 + math.random(-10, 10), y = math.random(-50, 50)}
+    return {x = 250 + math.random(-10, 10), y = math.random(-30, 30)}
 
 
     -- local surface_index = WD.get('surface_index')
@@ -1313,16 +1313,29 @@ local function set_next_wave()
         -- local surface = game.surfaces[surface_index]
         -- surface.clear_pollution()
 
+        -- if wave_number<=25 then
+        --     WD.set('next_wave', game.tick + 60*15)
+        -- elseif wave_number<=50 then
+        --     WD.set('next_wave', game.tick + 60*12)
+        -- elseif wave_number<=200 then
+        --     WD.set('next_wave', game.tick + 60*8)
+        -- elseif wave_number<=500 then
+        --     WD.set('next_wave', game.tick + 60*5)
+        -- else
+        --     WD.set('next_wave', game.tick + 60*4)
+        -- end
+
+        
         if wave_number<=25 then
-            WD.set('next_wave', game.tick + 60*15)
+            WD.set('next_wave', game.tick + 60*20)
         elseif wave_number<=50 then
-            WD.set('next_wave', game.tick + 60*12)
+            WD.set('next_wave', game.tick + 60*16)
         elseif wave_number<=200 then
-            WD.set('next_wave', game.tick + 60*8)
+            WD.set('next_wave', game.tick + 60*12)
         elseif wave_number<=500 then
-            WD.set('next_wave', game.tick + 60*5)
+            WD.set('next_wave', game.tick + 60*8)
         else
-            WD.set('next_wave', game.tick + 60*4)
+            WD.set('next_wave', game.tick + 60*6)
         end
 
         
