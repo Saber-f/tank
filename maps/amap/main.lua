@@ -261,7 +261,7 @@ function Public.reset_map()
   -- game.forces.player.technologies["rampant-arsenal-technology-rocket-turret-damage-7"].enabled = false  -- 火箭
 
   game.forces.player.character_trash_slot_count = 200           -- 回收区
-  game.forces.player.character_inventory_slots_bonus = 100     -- 背包
+  game.forces.player.character_inventory_slots_bonus = 500     -- 背包
 
   -- 高爆
   -- game.forces.player.technologies["rampant-arsenal-technology-he-bullets"].enabled = false
