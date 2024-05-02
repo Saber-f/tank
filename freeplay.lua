@@ -176,44 +176,66 @@ local on_cutscene_cancelled = function(event)
     player.zoom = 1.5
 end
 
-local freeplay_interface = {
-    get_created_items = function()
-        return this.created_items
-    end,
+-- local freeplay_interface = {
+--     get_created_items = function()
+--         return this.created_items
+--     end,
+--     set_created_items = function(map)
+--         this.created_items = map or error("Remote call parameter to freeplay set created items can't be nil.")
+--     end,
+--     get_respawn_items = function()
+--         return this.respawn_items
+--     end,
+--     set_respawn_items = function(map)
+--         this.respawn_items = map or error("Remote call parameter to freeplay set respawn items can't be nil.")
+--     end,
+--     set_skip_intro = function(bool)
+--         this.skip_intro = bool
+--     end,
+--     set_chart_distance = function(value)
+--         this.chart_distance = tonumber(value) or error('Remote call parameter to freeplay set chart distance must be a number')
+--     end,
+--     set_disable_crashsite = function(bool)
+--         this.disable_crashsite = bool
+--     end,
+--     get_ship_items = function()
+--         return this.crashed_ship_items
+--     end,
+--     set_ship_items = function(map)
+--         this.crashed_ship_items = map or error("Remote call parameter to freeplay set created items can't be nil.")
+--     end,
+--     get_debris_items = function()
+--         return this.crashed_debris_items
+--     end,
+--     set_debris_items = function(map)
+--         this.crashed_debris_items = map or error("Remote call parameter to freeplay set respawn items can't be nil.")
+--     end
+-- }
+
+local freeplay_interface =
+{
     set_created_items = function(map)
-        this.created_items = map or error("Remote call parameter to freeplay set created items can't be nil.")
-    end,
-    get_respawn_items = function()
-        return this.respawn_items
+        global.created_items = map or error("Remote call parameter to freeplay set created items can't be nil.")
     end,
     set_respawn_items = function(map)
-        this.respawn_items = map or error("Remote call parameter to freeplay set respawn items can't be nil.")
+        global.respawn_items = map or error("Remote call parameter to freeplay set respawn items can't be nil.")
     end,
     set_skip_intro = function(bool)
-        this.skip_intro = bool
+        global.skip_intro = bool
     end,
-    set_chart_distance = function(value)
-        this.chart_distance = tonumber(value) or error('Remote call parameter to freeplay set chart distance must be a number')
+    get_skip_intro = function()
+        return global.skip_intro
     end,
     set_disable_crashsite = function(bool)
-        this.disable_crashsite = bool
+        global.disable_crashsite = bool
     end,
-    get_ship_items = function()
-        return this.crashed_ship_items
-    end,
-    set_ship_items = function(map)
-        this.crashed_ship_items = map or error("Remote call parameter to freeplay set created items can't be nil.")
-    end,
-    get_debris_items = function()
-        return this.crashed_debris_items
-    end,
-    set_debris_items = function(map)
-        this.crashed_debris_items = map or error("Remote call parameter to freeplay set respawn items can't be nil.")
-    end
 }
 
-if not remote.interfaces['freeplay'] then
-    remote.add_interface('freeplay', freeplay_interface)
+if not remote.interfaces["freeplay"] then
+    remote.add_interface("freeplay", freeplay_interface)
+else
+    remote.remove_interface("freeplay")
+    remote.add_interface("freeplay", freeplay_interface)
 end
 
 Event.on_init(
