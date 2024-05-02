@@ -29,7 +29,7 @@ local car_name={
 }
 
 local car_items = {
-  ['uranium-fuel-cel'] = 1000, -- 
+  ['uranium-fuel-cell'] = 1000, -- 
   ['rubber-wood'] = 1000, -- 橡树
   ['diamond-gem'] = 500,  -- 钻石
   ['ruby-gem'] = 500,     -- 红宝石
