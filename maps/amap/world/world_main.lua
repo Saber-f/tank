@@ -63,7 +63,7 @@ local function build_base(surface,maxs,event,position)
 
   if x>=240 and x<=260 then
     if y>=-50 and y<=50 then
-      surface.set_tiles({{name = "lab-white", position = position}})
+      surface.set_tiles({{name = "sand-1", position = position}})
       return
     end
   end
@@ -72,7 +72,7 @@ local function build_base(surface,maxs,event,position)
 
   if x>=80 and x<=400 then
     if y>-300 and y<300 then
-      surface.set_tiles({{name = "sand-1", position = position}})
+      surface.set_tiles({{name = "lab-dark-2", position = position}})
       return
     end
   end
