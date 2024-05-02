@@ -64,9 +64,12 @@ local car_items = {
   ['steam-engine'] = 40, -- 蒸汽机
   ['solar-panel'] = 2, -- 太阳能板
   ['coal'] = 500,
-  ['wood'] = 1000, -- 木头
-  ['iron-plate'] = 1000,
-  ['copper-plate'] = 600,
+  ['wood'] = 1000, -- 木头 ingot
+  ['tin-ingot'] = 1000, -- 锡板
+  ['tin-plate'] = 1000, -- 锡板
+  -- ['iron-plate'] = 1000,
+  ['copper-ingot'] = 1000,
+  ['copper-plate'] = 1000,
   ['power-armor'] = 1, -- 模块装甲
   -- ['mk3-generator-rampant-arsenal'] = 10, -- 聚变模块
   ['fusion-reactor-equipment'] = 10, -- 聚变模块
@@ -142,6 +145,7 @@ local function item_build_car(player)
     game.forces.player.set_turret_attack_modifier("laser-turret", global.RPG_POINT.total * 0.01)
 
     game.forces.player.worker_robots_speed_modifier = 20
+    game.forces.player.worker_robots_storage_bonus = 200
     game.forces.player.worker_robots_battery_modifier = 20
     game.forces.player.character_running_speed_modifier = 2
 
