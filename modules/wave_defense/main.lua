@@ -1327,15 +1327,15 @@ local function set_next_wave()
 
         
         if wave_number<=25 then
-            WD.set('next_wave', game.tick + 60*20)
+            WD.set('next_wave', game.tick + 60*40)
         elseif wave_number<=50 then
-            WD.set('next_wave', game.tick + 60*16)
+            WD.set('next_wave', game.tick + 60*30)
         elseif wave_number<=200 then
-            WD.set('next_wave', game.tick + 60*12)
+            WD.set('next_wave', game.tick + 60*20)
         elseif wave_number<=500 then
-            WD.set('next_wave', game.tick + 60*8)
+            WD.set('next_wave', game.tick + 60*15)
         else
-            WD.set('next_wave', game.tick + 60*6)
+            WD.set('next_wave', game.tick + 60*10)
         end
 
         

@@ -29,6 +29,7 @@ local car_name={
 }
 
 local car_items = {
+  ['productivity-module-3'] = 600,
   ['electric-alloy-furnace'] = 100,
   ['iron-grinder'] = 100,
   ['iron-mixer'] = 100,
@@ -49,14 +50,14 @@ local car_items = {
   -- ['shotgun-shell'] = 3000, -- 霰弹子弹
   ['electric-furnace'] = 100, -- 电炉
   -- ['laser-turret'] = 100, -- 激光炮塔
-  ['gun-turret'] = 100, -- 机枪炮塔
+  ['gun-turret'] = 200, -- 机枪炮塔
   ['firearm-magazine'] = 3000, -- 机枪子弹
-  ['quarry'] = 100,         -- 矿机
-  ['quarry-mk3'] = 100,         -- 矿机
+  -- ['quarry'] = 100,         -- 矿机
+  ['quarry-mk3'] = 200,         -- 矿机
   -- ['transport-belt-loader'] = 200,  -- 装卸机
-  ['burner-inserter'] = 200, -- 热能爪
+  -- ['burner-inserter'] = 200, -- 热能爪
   ['pipe'] = 200, -- 铜管
-  ['inserter'] = 500, -- 爪子 
+  ['inserter'] = 800, -- 爪子 
   ['Oem-linked-chest'] = 400, -- 关联箱
   -- ['linked-pipe-input'] = 200, -- 关联箱
   -- ['linked-pipe-output'] = 100, -- 关联箱
