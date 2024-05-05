@@ -617,7 +617,9 @@ local on_research_finished = function(event)
   end
 
   local force = event.research.force
-  if event.research.name == "physical-projectile-damage-7" or event.research.name == "energy-weapons-damage-7" then
+  if event.research.name == "physical-projectile-damage-7" 
+  or event.research.name == "energy-weapons-damage-7"
+  or event.research.name == "ir-photon-turret-damage-4" then
     if #force.research_queue == 0  then
       force.research_queue = {event.research}
     end
