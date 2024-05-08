@@ -144,9 +144,10 @@ local function item_build_car(player)
     local rpg_t = RPG.get('rpg_t')
     rpg_t[player.index].points_left = rpg_t[player.index].points_left + point + 10
     
-    game.print("机枪炮塔和激光炮塔伤害+"..global.RPG_POINT.total .. "%",{r=0,g=1,b=0})
+    game.print("所有炮塔伤害+"..global.RPG_POINT.total .. "%",{r=0,g=1,b=0})
     game.forces.player.set_turret_attack_modifier("gun-turret", global.RPG_POINT.total * 0.01)
     game.forces.player.set_turret_attack_modifier("laser-turret", global.RPG_POINT.total * 0.01)
+    game.forces.player.set_turret_attack_modifier("photon-turret", global.RPG_POINT.total * 0.01)
 
     game.forces.player.worker_robots_speed_modifier = 20
     game.forces.player.worker_robots_storage_bonus = 200
