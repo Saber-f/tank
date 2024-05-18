@@ -1397,7 +1397,7 @@ local tick_tasks = {
     [150] = ThreatEvent.build_nest,
     [180] = ThreatEvent.build_worm,
     [1200] = give_side_commands_to_group,
-    [3600] = time_out_biters,
+    -- [3600] = time_out_biters,
     [7200] = refresh_active_unit_threat
 }
 

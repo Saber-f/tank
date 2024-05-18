@@ -37,17 +37,20 @@ local car_items = {
   ['firearm-magazine'] = 3000, -- 机枪子弹
   ['burner-inserter'] = 200, -- 热能爪
   ['pipe'] = 200, -- 铜管
-  ['inserter'] = 500, -- 爪子 
+  ['inserter'] = 800, -- 爪子 
   ['Oem-linked-chest'] = 400, -- 关联箱
   ['raw-fish'] = 200, -- 鱼
   ['water-well-pump'] = 10,
-  ['boiler'] = 20,         -- 锅炉
-  ['steam-engine'] = 40, -- 蒸汽机
+  ['boiler'] = 200,         -- 锅炉
+  ['steam-engine'] = 400, -- 蒸汽机
   ['solar-panel'] = 2, -- 太阳能板
   ['coal'] = 500,
-  ['wood'] = 1000, -- 木头
-  ['iron-plate'] = 1000,
-  ['copper-plate'] = 600,
+  ['wood'] = 1000, -- 木头 ingot
+  ['tin-ingot'] = 1000, -- 锡板
+  ['tin-plate'] = 1000, -- 锡板
+  -- ['iron-plate'] = 1000,
+  ['copper-ingot'] = 1000,
+  ['copper-plate'] = 1000,
   ['power-armor'] = 1, -- 模块装甲
   ['fusion-reactor-equipment'] = 10, -- 聚变模块
   ['battery-equipment'] = 10, -- 电池
@@ -95,11 +98,13 @@ local function item_build_car(player)
     local rpg_t = RPG.get('rpg_t')
     rpg_t[player.index].points_left = rpg_t[player.index].points_left + point + 10
     
-    game.print("机枪炮塔和激光炮塔伤害+"..global.RPG_POINT.total .. "%",{r=0,g=1,b=0})
+    game.print("所有炮塔伤害+"..global.RPG_POINT.total .. "%",{r=0,g=1,b=0})
     game.forces.player.set_turret_attack_modifier("gun-turret", global.RPG_POINT.total * 0.01)
     game.forces.player.set_turret_attack_modifier("laser-turret", global.RPG_POINT.total * 0.01)
+    game.forces.player.set_turret_attack_modifier("photon-turret", global.RPG_POINT.total * 0.01)
 
     game.forces.player.worker_robots_speed_modifier = 20
+    game.forces.player.worker_robots_storage_bonus = 200
     game.forces.player.worker_robots_battery_modifier = 20
     game.forces.player.character_running_speed_modifier = 2
 

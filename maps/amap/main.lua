@@ -261,7 +261,7 @@ function Public.reset_map()
   -- game.forces.player.technologies["rampant-arsenal-technology-rocket-turret-damage-7"].enabled = false  -- 火箭
 
   game.forces.player.character_trash_slot_count = 200           -- 回收区
-  game.forces.player.character_inventory_slots_bonus = 100     -- 背包
+  game.forces.player.character_inventory_slots_bonus = 500     -- 背包
 
   -- 高爆
   -- game.forces.player.technologies["rampant-arsenal-technology-he-bullets"].enabled = false
@@ -617,7 +617,9 @@ local on_research_finished = function(event)
   end
 
   local force = event.research.force
-  if event.research.name == "physical-projectile-damage-7" or event.research.name == "energy-weapons-damage-7" then
+  if event.research.name == "physical-projectile-damage-7" 
+  or event.research.name == "energy-weapons-damage-7"
+  or event.research.name == "ir-photon-turret-damage-4" then
     if #force.research_queue == 0  then
       force.research_queue = {event.research}
     end
