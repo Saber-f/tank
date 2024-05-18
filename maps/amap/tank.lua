@@ -29,9 +29,9 @@ local car_name={
 }
 -- [special-item=internal_1] [special-item=internal_3]
 local car_items = {
-  ['locomotive'] = 50,
-  ['cargo-wagon'] = 100,
-  ['fluid-wagon'] = 50,
+  ['locomotive'] = 50,    -- 机车头
+  ['cargo-wagon'] = 100,  -- 货车
+  ['fluid-wagon'] = 50,  -- 液体车
   ['rail'] = 2000,
   ['rail-signal'] = 200,
   ['train-stop'] = 100,
@@ -271,7 +271,7 @@ local function on_player_build_entity(event)
       end
 
 
-      if this.start_game~=2 then
+      if this.start_game~=2 and this.start_game~=3 then
 
         game.print({'amap.start_game'})
         this.start_game=2
@@ -897,6 +897,7 @@ local function on_player_changed_position(event)
     end
     this.reset_time=this.reset_time-60
   end
+
 
   Event.on_nth_tick(72000, choois_target)
   Event.on_nth_tick(1200, car_pollute)
