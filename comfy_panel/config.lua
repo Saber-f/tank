@@ -92,7 +92,7 @@ local function spaghett()
         end
     else
         for _, f in pairs(game.forces) do
-            f.technologies['logistic-system'].enabled = true
+            -- f.technologies['logistic-system'].enabled = true
             if spaghetti.undo[f.index] then
                 f.technologies['logistic-system'].researched = true
                 spaghetti.undo[f.index] = nil

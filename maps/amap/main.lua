@@ -247,41 +247,18 @@ function Public.reset_map()
   setting()
 
   game.forces.player.set_gun_speed_modifier('capsule', 2) --设置胶囊速度
-  -- local world_number=require 'maps.amap.diff'.get("world")
-  -- if world_number == 3 or true then
   game.forces.player.technologies['landfill'].enabled = true  -- 填海材料可用
   game.forces.player.maximum_following_robot_count = 100000000 -- 跟随数量
   game.forces.player.technologies["follower-robot-count-1"].researched = true -- 跟随机器人数量
-  -- game.forces.player.technologies["follower-robot-count-7"].enabled = false -- 跟随机器人数量
-  -- game.forces.player.technologies["mining-productivity-4"].enabled = false -- 采矿生产力
-  -- game.forces.player.technologies["rampant-arsenal-technology-gun-turret-damage-7"].enabled = false -- 机枪炮塔伤害
-  -- game.forces.player.technologies["rampant-arsenal-technology-shotgun-turret-damage-7"].enabled = false -- 霰弹炮塔伤害
-  -- game.forces.player.technologies["rampant-arsenal-technology-capsule-turret-damage-7"].enabled = false  -- 胶囊
-  -- game.forces.player.technologies["rampant-arsenal-technology-cannon-turret-damage-7"].enabled = false  -- 加农
-  -- game.forces.player.technologies["rampant-arsenal-technology-rocket-turret-damage-7"].enabled = false  -- 火箭
-
+  game.forces.player.technologies["logistic-system"].enabled = false -- 逻辑系统
+  game.forces.player.technologies["logistic-robotics"].researched = true -- 逻辑机器人
   game.forces.player.character_trash_slot_count = 200           -- 回收区
   game.forces.player.character_inventory_slots_bonus = 500     -- 背包
 
-  -- 高爆
-  -- game.forces.player.technologies["rampant-arsenal-technology-he-bullets"].enabled = false
-  -- game.forces.player.technologies["rampant-arsenal-technology-he-rockets"].enabled = false
-  -- game.forces.player.technologies["rampant-arsenal-technology-he-shotgun-shells"].enabled = false
-
-  -- game.forces.player.technologies["rampant-arsenal-technology-turrets-2"].enabled = false -- MK2机枪
-  -- game.forces.player.technologies["rampant-arsenal-technology-cannon-turret-2"].enabled = false  -- 加农2
-  -- game.forces.player.technologies["rampant-arsenal-technology-rocket-turret-2"].enabled = false   -- 火箭2
-
-
-  -- game.forces.player.technologies["kr-creep-virus"].enabled = false  -- 反触手
-  -- game.forces.player.technologies["radar-efficiency"].enabled = false  -- 雷达扫扫描
 
   
   
-  game.forces.player.recipes["Oem-linked-chest"].enabled = true
-  -- game.forces.player.recipes["linked-pipe-input"].enabled = true 
-  -- game.forces.player.recipes["linked-pipe-output"].enabled = true 
-  -- game.forces.player.technologies["modules-combine"].researched = true -- 天空插
+  game.forces.player.recipes["Oem-linked-chest"].enabled = false
 
 
   game.forces.player.set_spawn_position({0, 0}, surface)
@@ -630,6 +607,7 @@ local on_research_finished = function(event)
   end
 
   game.forces.player.recipes["rocket-silo"].enabled = false -- 火箭发射台不可用
+  game.forces.player.recipes["beacon"].enabled = false -- 插件塔不可用
 end
 
 -- 第一次建立关联箱时清理

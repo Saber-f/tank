@@ -84,7 +84,7 @@ commands.add_command(
                 return
             end
             game.print('The world is no longer spaghett!', Color.yellow)
-            force.technologies['logistic-system'].enabled = true
+            -- force.technologies['logistic-system'].enabled = true
             force.technologies['construction-robotics'].enabled = true
             force.technologies['logistic-robotics'].enabled = true
             force.technologies['robotics'].enabled = true

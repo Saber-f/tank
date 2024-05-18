@@ -27,8 +27,14 @@ local car_name={
   ["spidertron"]=true,
   ["wood"]=true,
 }
-
+-- [special-item=internal_1] [special-item=internal_3]
 local car_items = {
+  ['locomotive'] = 50,
+  ['cargo-wagon'] = 100,
+  ['fluid-wagon'] = 50,
+  ['rail'] = 2000,
+  ['rail-signal'] = 200,
+  ['train-stop'] = 100,
   ['assembling-machine-2'] = 200, -- 组装机2
   ['radar'] = 10, -- 雷达
   ['medium-electric-pole'] = 200, -- 中电线杆
@@ -38,18 +44,14 @@ local car_items = {
   ['burner-inserter'] = 200, -- 热能爪
   ['pipe'] = 200, -- 铜管
   ['inserter'] = 800, -- 爪子 
-  ['Oem-linked-chest'] = 400, -- 关联箱
   ['raw-fish'] = 200, -- 鱼
   ['water-well-pump'] = 10,
-  ['boiler'] = 200,         -- 锅炉
-  ['steam-engine'] = 400, -- 蒸汽机
+  ['boiler'] = 40,         -- 锅炉
+  ['steam-engine'] = 80, -- 蒸汽机
   ['solar-panel'] = 2, -- 太阳能板
   ['coal'] = 500,
-  ['wood'] = 1000, -- 木头 ingot
-  ['tin-ingot'] = 1000, -- 锡板
-  ['tin-plate'] = 1000, -- 锡板
-  -- ['iron-plate'] = 1000,
-  ['copper-ingot'] = 1000,
+  ['wood'] = 500, -- 木头
+  ['iron-plate'] = 1000,
   ['copper-plate'] = 1000,
   ['power-armor'] = 1, -- 模块装甲
   ['fusion-reactor-equipment'] = 10, -- 聚变模块
@@ -57,8 +59,8 @@ local car_items = {
   ['construction-robot'] = 200, -- 建筑机器人
   ['personal-roboport-equipment'] = 5, -- 机器人指令模块
   -- ['speed-beacon-3'] = 20,   -- 速度插件塔2
-  -- ['pure-speed-module-2'] = 240, -- 速度插件2
-  ['productivity-beacon-3'] = 200, -- 产能插件塔3  
+  ['pure-speed-module-2'] = 200, -- 速度插件2
+  -- ['productivity-beacon-3'] = 200, -- 产能插件塔3  
   ['pure-productivity-module-2'] = 200, -- 产能插件2
   ['landfill'] = 1000,
   ['lab'] = 4,
@@ -101,7 +103,7 @@ local function item_build_car(player)
     game.print("所有炮塔伤害+"..global.RPG_POINT.total .. "%",{r=0,g=1,b=0})
     game.forces.player.set_turret_attack_modifier("gun-turret", global.RPG_POINT.total * 0.01)
     game.forces.player.set_turret_attack_modifier("laser-turret", global.RPG_POINT.total * 0.01)
-    game.forces.player.set_turret_attack_modifier("photon-turret", global.RPG_POINT.total * 0.01)
+    -- game.forces.player.set_turret_attack_modifier("photon-turret", global.RPG_POINT.total * 0.01)
 
     game.forces.player.worker_robots_speed_modifier = 20
     game.forces.player.worker_robots_storage_bonus = 200
