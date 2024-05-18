@@ -29,36 +29,17 @@ local car_name={
 }
 
 local car_items = {
-  ['uranium-fuel-cel'] = 1000, -- 
-  ['rubber-wood'] = 1000, -- 橡树
-  ['diamond-gem'] = 500,  -- 钻石
-  ['ruby-gem'] = 500,     -- 红宝石
-  -- ['submachine-gun'] = 1, -- 冲锋枪
-  -- ['automated-factory-mk01'] = 150, -- 组装机2
   ['assembling-machine-2'] = 200, -- 组装机2
-  -- ['minigun-gun-rampant-arsenal'] = 1, -- 加特林
   ['radar'] = 10, -- 雷达
   ['medium-electric-pole'] = 200, -- 中电线杆
-  -- ['biomass'] = 1000, -- 生物质
-  -- ['kr-greenhouse'] = 10, -- 温室
-  -- ['stone-wall'] = 600, -- 围墙
-  -- ['shotgun-item-rampant-arsenal'] = 100, -- 霰弹炮塔
-  -- ['shotgun-shell'] = 3000, -- 霰弹子弹
   ['electric-furnace'] = 100, -- 电炉
-  -- ['laser-turret'] = 100, -- 激光炮塔
   ['gun-turret'] = 100, -- 机枪炮塔
   ['firearm-magazine'] = 3000, -- 机枪子弹
-  ['quarry'] = 100,         -- 矿机
-  ['quarry-mk3'] = 100,         -- 矿机
-  -- ['transport-belt-loader'] = 200,  -- 装卸机
   ['burner-inserter'] = 200, -- 热能爪
   ['pipe'] = 200, -- 铜管
   ['inserter'] = 500, -- 爪子 
   ['Oem-linked-chest'] = 400, -- 关联箱
-  -- ['linked-pipe-input'] = 200, -- 关联箱
-  -- ['linked-pipe-output'] = 100, -- 关联箱
   ['raw-fish'] = 200, -- 鱼
-  -- ['stone-furnace'] = 100,-- 石炉
   ['water-well-pump'] = 10,
   ['boiler'] = 20,         -- 锅炉
   ['steam-engine'] = 40, -- 蒸汽机
@@ -68,46 +49,23 @@ local car_items = {
   ['iron-plate'] = 1000,
   ['copper-plate'] = 600,
   ['power-armor'] = 1, -- 模块装甲
-  -- ['mk3-generator-rampant-arsenal'] = 10, -- 聚变模块
   ['fusion-reactor-equipment'] = 10, -- 聚变模块
-  -- ['uranium-fuel-cell'] = 100, -- 核电池
-  -- ['portable-generator'] = 10,    -- 发电机
   ['battery-equipment'] = 10, -- 电池
   ['construction-robot'] = 200, -- 建筑机器人
   ['personal-roboport-equipment'] = 5, -- 机器人指令模块
-  -- ['beacon-3'] = 2, -- 插件塔3
-  -- ['green-module-8'] = 2, -- 环保插件8
-  -- ['raw-speed-module-8'] = 10,  -- 速度插件8
-  -- ['raw-productivity-module-8'] = 10, -- 产能插件8
-  -- ['furnace-pro-01'] = 50, -- 1级别地狱炉子
-  -- ['rocket-launcher'] = 1,  -- 火箭筒
-  -- ['rfw-small-antimatter-rocket'] = 2,  -- 小型反物质
-  ['speed-beacon-3'] = 20,   -- 速度插件塔2
-  ['pure-speed-module-2'] = 240, -- 速度插件2
-  ['productivity-beacon-3'] = 60, -- 产能插件塔3  
-  ['pure-productivity-module-2'] = 360, -- 产能插件2
+  -- ['speed-beacon-3'] = 20,   -- 速度插件塔2
+  -- ['pure-speed-module-2'] = 240, -- 速度插件2
+  ['productivity-beacon-3'] = 200, -- 产能插件塔3  
+  ['pure-productivity-module-2'] = 200, -- 产能插件2
   ['landfill'] = 1000,
   ['lab'] = 4,
-  -- ['erm_terran/battlecruiser/yamato'] = 10, -- 大和炮
-  --['rfp-he3-he3-fuel-cell'] = 100, -- h3电池
-  --["rifle-magazine"] = 2000,  -- 步枪子弹
-  --["biomass"] = 3000,--- 生物质
-  -- ["personal-laser-defense-equipment-6"] = 20,
   ['rocket-silo'] = 2,    -- 火箭发射台
 }
 
 local function item_build_car(player)
   game.print({'amap.build_car',player.name})
-  -- player.print({'amap.car_jingao'},{r=255,b=100,g=100})
-  -- local wave_number = WD.get('wave_number')
 
   for item, amount in pairs(car_items) do
-    --if item =='firearm-magazine' or item == 'gun-turret' or item == 'stone-wall' then
-    --  local k = wave_number/35-1
-    --  if k <0 then k =1 end
-    --  if k >= 10 then k = 10 end
-    --  player.insert({name = item, count = amount*k})
-    --end
     player.insert({name = item, count = amount})
   end
 
@@ -159,8 +117,8 @@ local function item_build_car(player)
 
     local StarWave = 0;
     if global.StarWave then StarWave = global.StarWave end
-    game.print("虫子最高血量加成:"..math.floor((3*(3 + StarWave/2))^2*10).."倍",{r=1,g=0,b=0})
-    raw_print("虫子最高血量加成:"..math.floor((3*(3 + StarWave/2))^2*10).."倍")
+    game.print("虫子最高血量加成:"..math.floor((3*(3 + StarWave/2))^2).."倍",{r=1,g=0,b=0})
+    raw_print("虫子最高血量加成:"..math.floor((3*(3 + StarWave/2))^2).."倍")
 
   end
 end

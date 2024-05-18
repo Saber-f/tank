@@ -429,7 +429,7 @@ local function set_enemy_evolution()
     --     biter_h_boost = math_round(biter_h_boost + (threat - 5000) * 0.000044, 3)
     -- end
     -- 威胁加血量
-    biter_h_boost = math_floor(threat * 0.00001)
+    biter_h_boost = math_floor(threat * 0.000001)
     if biter_h_boost <= 1 then
         biter_h_boost = 1
     end
@@ -444,28 +444,6 @@ local function set_enemy_evolution()
 end
 
 local function can_units_spawn()
-    -- local threat = WD.get('threat')
-
-    -- if threat <= 0 then
-
-    --     time_out_biters()
-    --     return false
-    -- end
-
-    -- local active_biter_count = WD.get('active_biter_count')
-    -- local max_active_biters = WD.get('max_active_biters')
-    -- if active_biter_count >= max_active_biters then
-
-    --     time_out_biters()
-    --     return false
-    -- end
-
-    -- local active_biter_threat = WD.get('active_biter_threat')
-    -- if active_biter_threat >= threat then
-
-    --     time_out_biters()
-    --     return false
-    -- end
     return true
 end
 
@@ -1313,30 +1291,30 @@ local function set_next_wave()
         -- local surface = game.surfaces[surface_index]
         -- surface.clear_pollution()
 
-        -- if wave_number<=25 then
-        --     WD.set('next_wave', game.tick + 60*15)
-        -- elseif wave_number<=50 then
-        --     WD.set('next_wave', game.tick + 60*12)
-        -- elseif wave_number<=200 then
-        --     WD.set('next_wave', game.tick + 60*8)
-        -- elseif wave_number<=500 then
-        --     WD.set('next_wave', game.tick + 60*5)
-        -- else
-        --     WD.set('next_wave', game.tick + 60*4)
-        -- end
+        if wave_number<=25 then
+            WD.set('next_wave', game.tick + 60*15)
+        elseif wave_number<=50 then
+            WD.set('next_wave', game.tick + 60*12)
+        elseif wave_number<=200 then
+            WD.set('next_wave', game.tick + 60*8)
+        elseif wave_number<=500 then
+            WD.set('next_wave', game.tick + 60*5)
+        else
+            WD.set('next_wave', game.tick + 60*4)
+        end
 
         
-        if wave_number<=25 then
-            WD.set('next_wave', game.tick + 60*20)
-        elseif wave_number<=50 then
-            WD.set('next_wave', game.tick + 60*16)
-        elseif wave_number<=200 then
-            WD.set('next_wave', game.tick + 60*12)
-        elseif wave_number<=500 then
-            WD.set('next_wave', game.tick + 60*8)
-        else
-            WD.set('next_wave', game.tick + 60*6)
-        end
+        -- if wave_number<=25 then
+        --     WD.set('next_wave', game.tick + 60*20)
+        -- elseif wave_number<=50 then
+        --     WD.set('next_wave', game.tick + 60*16)
+        -- elseif wave_number<=200 then
+        --     WD.set('next_wave', game.tick + 60*12)
+        -- elseif wave_number<=500 then
+        --     WD.set('next_wave', game.tick + 60*8)
+        -- else
+        --     WD.set('next_wave', game.tick + 60*6)
+        -- end
 
         
         -- WD.set('next_wave', game.tick + 60)   -- 一秒钟一波
