@@ -258,7 +258,7 @@ function Public.reset_map()
 
   
   
-  game.forces.player.recipes["Oem-linked-chest"].enabled = false
+  -- game.forces.player.recipes["Oem-linked-chest"].enabled = false
 
 
   game.forces.player.set_spawn_position({0, 0}, surface)

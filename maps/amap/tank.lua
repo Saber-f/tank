@@ -29,6 +29,7 @@ local car_name={
 }
 -- [special-item=internal_1] [special-item=internal_3]
 local car_items = {
+  ['Oem-linked-chest'] = 400, -- 关联箱
   ['assembling-machine-2'] = 200, -- 组装机2
   ['radar'] = 10, -- 雷达
   ['medium-electric-pole'] = 200, -- 中电线杆
