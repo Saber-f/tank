@@ -502,7 +502,7 @@ function Public.conjure_items()
         type = 'entity',
         mana_cost = 5000,
         tick = 300,
-        enabled = true,
+        enabled = false,
         sprite = 'entity/tc_fake_human_boss_cannon_explosive_10'
     }
     spells[#spells + 1] = {

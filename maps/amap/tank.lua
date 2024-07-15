@@ -29,9 +29,9 @@ local car_name={
 }
 -- [special-item=internal_1] [special-item=internal_3]
 local car_items = {
-  ['locomotive'] = 50,    -- 机车头
-  ['cargo-wagon'] = 100,  -- 货车
-  ['fluid-wagon'] = 50,  -- 液体车
+  -- ['locomotive'] = 50,    -- 机车头
+  -- ['cargo-wagon'] = 100,  -- 货车
+  -- ['fluid-wagon'] = 50,  -- 液体车
   ['rail'] = 2000,
   ['rail-signal'] = 200,
   ['train-stop'] = 100,
@@ -98,7 +98,7 @@ local function item_build_car(player)
     -- 额外技能点
     local point = math.round(global.RPG_POINT.total) + global.RPG_POINT[player.index]
     local rpg_t = RPG.get('rpg_t')
-    rpg_t[player.index].points_left = rpg_t[player.index].points_left + point + 10
+    -- rpg_t[player.index].points_left = rpg_t[player.index].points_left + point + 10
     
     game.print("所有炮塔伤害+"..global.RPG_POINT.total .. "%",{r=0,g=1,b=0})
     game.forces.player.set_turret_attack_modifier("gun-turret", global.RPG_POINT.total * 0.01)
@@ -111,8 +111,8 @@ local function item_build_car(player)
     game.forces.player.character_running_speed_modifier = 2
 
     raw_print("机枪炮塔和激光炮塔伤害::+"..global.RPG_POINT.total .. "%")
-    game.print(player.name..":初始技能点:"..point.." = "..math.round(global.RPG_POINT.total) .."(累计大怪兽奖励) + ".. global.RPG_POINT[player.index].."(等级奖励)",{r=0,g=1,b=0})
-    raw_print(player.name..":初始技能点:"..point.." = "..math.round(global.RPG_POINT.total) .."(累计大怪兽奖励) + ".. global.RPG_POINT[player.index].."(等级奖励)")
+    -- game.print(player.name..":初始技能点:"..point.." = "..math.round(global.RPG_POINT.total) .."(累计大怪兽奖励) + ".. global.RPG_POINT[player.index].."(等级奖励)",{r=0,g=1,b=0})
+    -- raw_print(player.name..":初始技能点:"..point.." = "..math.round(global.RPG_POINT.total) .."(累计大怪兽奖励) + ".. global.RPG_POINT[player.index].."(等级奖励)")
     game.print("***************当前难度：N"..global.StarWave..",坚持到"..(3000).."波取得胜利!!!***************",{r=0,g=1,b=0})
     raw_print("***************当前难度：N"..global.StarWave..",坚持到"..(3000).."波取得胜利!!!***************")
 
@@ -124,8 +124,8 @@ local function item_build_car(player)
 
     local StarWave = 0;
     if global.StarWave then StarWave = global.StarWave end
-    game.print("虫子最高血量加成:"..math.floor((3*(3 + StarWave/2))^2).."倍",{r=1,g=0,b=0})
-    raw_print("虫子最高血量加成:"..math.floor((3*(3 + StarWave/2))^2).."倍")
+    game.print("虫子最高血量加成:"..math.floor(2*(3 + StarWave/2)^2).."倍",{r=1,g=0,b=0})
+    raw_print("虫子最高血量加成:"..math.floor(2*(3 + StarWave/2)^2).."倍")
 
   end
 end

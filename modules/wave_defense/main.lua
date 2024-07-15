@@ -1155,7 +1155,7 @@ local function spawn_unit_group()
 
 
 
-        game.print('第'..N..'波大怪兽来袭！[gps=' .. position.x .. ',' .. position.y .. ',' .. surface.name .. ']全体开局技能点+1,炮塔伤害+1%')
+        game.print('第'..N..'波大怪兽来袭！[gps=' .. position.x .. ',' .. position.y .. ',' .. surface.name .. '],炮塔伤害+1%')
 
         global.RPG_POINT.total = global.RPG_POINT.total + 1
 
@@ -1251,7 +1251,7 @@ local function set_next_wave()
     -- 设置威胁值
     local StarWave = 0;
     if global.StarWave then StarWave = global.StarWave end
-    local threat_gain = (wave_number*(3 + StarWave/2))^2
+    local threat_gain = 2*(wave_number/3*(3 + StarWave/2))^2
     local map=diff.get()
     local boss_interval = 25
     if wave_number>=2000 then boss_interval = 5 end
@@ -1292,15 +1292,15 @@ local function set_next_wave()
         -- surface.clear_pollution()
 
         if wave_number<=25 then
-            WD.set('next_wave', game.tick + 60*15)
+            WD.set('next_wave', game.tick + 60*16)
         elseif wave_number<=50 then
             WD.set('next_wave', game.tick + 60*12)
         elseif wave_number<=200 then
             WD.set('next_wave', game.tick + 60*8)
         elseif wave_number<=500 then
-            WD.set('next_wave', game.tick + 60*5)
-        else
             WD.set('next_wave', game.tick + 60*4)
+        else
+            WD.set('next_wave', game.tick + 60*2)
         end
 
         

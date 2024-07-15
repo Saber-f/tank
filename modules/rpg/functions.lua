@@ -337,7 +337,8 @@ function Public.lightning_chain(position, surface,player,times)
   electric = math.floor(electric * 10) * 0.1
   local damage = (1 + lastNum*0.01) * (1 + t2) * t3 * (1+electric)*100     -- 闪电链伤害
   player.print("次数:"..times.." 伤害:"..(1+lastNum*0.01).."(永久加加成)x"..((1+t2)*t3).."(本局加成)x"..(1+electric).."(能量武器伤害)x100="..damage.."电击伤害")
-
+  util.insert_safe(player,{['raw-fish'] = 1})
+  
   local biter = get_nearest_biter(biters, position)
   local data = {
     source = position,
