@@ -1291,9 +1291,9 @@ local function set_next_wave()
         -- local surface = game.surfaces[surface_index]
         -- surface.clear_pollution()
 
-        if wave_number<=25 then
+        if wave_number<=50 then
             WD.set('next_wave', game.tick + 60*16)
-        elseif wave_number<=50 then
+        elseif wave_number<=100 then
             WD.set('next_wave', game.tick + 60*12)
         elseif wave_number<=200 then
             WD.set('next_wave', game.tick + 60*8)
