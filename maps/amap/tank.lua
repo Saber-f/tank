@@ -30,16 +30,17 @@ local car_name={
 -- [special-item=internal_1] [special-item=internal_3]
 local car_items = {
   ['Oem-linked-chest'] = 400, -- 关联箱
-  ['assembling-machine-2'] = 200, -- 组装机2
+  ['quarry-mk3'] = 100, -- 矿机3
+  ['assembling-machine-3'] = 200, -- 组装机2
   ['radar'] = 10, -- 雷达
   ['medium-electric-pole'] = 200, -- 中电线杆
-  ['electric-furnace'] = 100, -- 电炉
+  ['electric-furnace'] = 500, -- 电炉
   ['gun-turret'] = 100, -- 机枪炮塔
   ['firearm-magazine'] = 3000, -- 机枪子弹
   -- ['burner-inserter'] = 200, -- 热能爪
   ['pipe'] = 200, -- 铜管
   ['inserter'] = 1000, -- 爪子 
-  ['raw-fish'] = 200, -- 鱼
+  ['raw-fish'] = 100, -- 鱼
   ['water-well-pump'] = 10,
   ['boiler'] = 40,         -- 锅炉
   ['steam-engine'] = 80, -- 蒸汽机
@@ -115,6 +116,7 @@ local function item_build_car(player)
     game.permissions.get_group('Default').set_allows_action(defines.input_action.open_blueprint_library_gui, false)
     game.permissions.get_group('Default').set_allows_action(defines.input_action.import_blueprint_string, false)
     game.print("蓝图已禁用-蓝图已禁用-蓝图已禁用",{r=1,g=0,b=0})
+    game.print("插件塔已禁用-插件塔已禁用-插件塔已禁用",{r=1,g=0,b=0})
     raw_print("蓝图已禁用-蓝图已禁用-蓝图已禁用")
 
     local StarWave = 0;
