@@ -532,14 +532,14 @@ add_toolbar = function(player, remove)
             tooltip = tooltip
         }
     )
-    player.gui.top.add(
-        {
-            type = 'sprite-button',
-            sprite = 'item/logistic-chest-storage',
-            name = cool,
-            tooltip = {'amap.openchest'}
-        }
-    )
+    -- player.gui.top.add(
+    --     {
+    --         type = 'sprite-button',
+    --         sprite = 'item/logistic-chest-storage',
+    --         name = cool,
+    --         tooltip = {'amap.openchest'}
+    --     }
+    -- )
 
 if not this.ore_record[index] then
   this.ore_record[index]=0
