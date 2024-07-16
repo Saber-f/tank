@@ -58,7 +58,7 @@ local function enemy_weapon_damage()
         ['grenade'] = 0.24,
         ['landmine'] = 0.08,
       --  ['melee'] = 0.08,
-        ['rocket'] = 0.24,
+        ['rocket'] = 0.04,
         --['shotgun-shell'] = 0.08
     }
 
