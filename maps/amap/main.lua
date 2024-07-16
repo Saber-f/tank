@@ -649,7 +649,18 @@ end
 --       global.randomId['player'][entity.link_id] = true
 --     end
 --   end
--- end
+-- end [special-item=internal_1]
+
+
+local function console_chat(event)
+  local message = string.sub(event.message, 2,22)
+  if message == "special-item=internal" then
+    -- 循环100次
+    for i = 1, 99 do
+      game.print("禁止发蓝图!!!x"..i)
+    end
+  end
+end
 
 
 script.on_event(defines.events.on_research_finished,on_research_finished)
@@ -661,8 +672,7 @@ Event.on_nth_tick(60, on_tick)
 
 Event.add(defines.events.on_robot_built_entity, clearLink)
 Event.add(defines.events.on_built_entity, clearLink)
-
-
+Event.add(defines.events.on_console_chat, console_chat)
 
 -- Event.add(defines.events.on_gui_opened, on_gui_opened)
 -- Event.add(defines.events.on_gui_closed, on_gui_closed)
