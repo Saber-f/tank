@@ -653,11 +653,13 @@ end
 
 
 local function console_chat(event)
-  local message = string.sub(event.message, 2,22)
-  if message == "special-item=internal" then
-    -- 循环100次
-    for i = 1, 99 do
-      game.print("禁止发蓝图!!!x"..i)
+  for i = 1, #event.message - 22 do
+    if string.sub(event.message, i, i + 22) == "[special-item=internal_" then
+      -- 循环100次
+      for j = 1, 99 do
+        game.print("禁止发蓝图!!!x"..j)
+      end
+      return
     end
   end
 end
