@@ -59,6 +59,7 @@ local car_items = {
   ['lab']                         = 4,    -- 研究中心
   ['rfw-small-antimatter-rocket'] = 3, -- 小型反物质
   ['rocket-silo']                 = 2, -- 火箭发射台
+  ['night-vision-equipment']      = 1,   -- 夜视仪
 }
 
 local function item_build_car(player)
@@ -115,8 +116,6 @@ local function item_build_car(player)
     game.permissions.get_group('Default').set_allows_action(defines.input_action.import_blueprint_string, false)
     game.permissions.get_group('Default').set_allows_action(defines.input_action.activate_paste, false)
     game.print("插件塔已禁用-蓝图已禁用-导入已禁用-粘贴已禁用",{r=1,g=0,b=0})
-    game.print("插件塔已禁用-插件塔已禁用-插件塔已禁用",{r=1,g=0,b=0})
-    raw_print("蓝图已禁用-蓝图已禁用-蓝图已禁用")
 
     local StarWave = 0;
     if global.StarWave then StarWave = global.StarWave end
