@@ -113,7 +113,8 @@ local function item_build_car(player)
     
     game.permissions.get_group('Default').set_allows_action(defines.input_action.open_blueprint_library_gui, false)
     game.permissions.get_group('Default').set_allows_action(defines.input_action.import_blueprint_string, false)
-    game.print("蓝图已禁用-蓝图已禁用-蓝图已禁用",{r=1,g=0,b=0})
+    game.permissions.get_group('Default').set_allows_action(defines.input_action.activate_paste, false)
+    game.print("插件塔已禁用-蓝图已禁用-导入已禁用-粘贴已禁用",{r=1,g=0,b=0})
     game.print("插件塔已禁用-插件塔已禁用-插件塔已禁用",{r=1,g=0,b=0})
     raw_print("蓝图已禁用-蓝图已禁用-蓝图已禁用")
 
