@@ -587,7 +587,7 @@ local on_research_finished = function(event)
 
   for k, player in pairs(gain_player) do
       local get_coin=100
-      local get_point=2
+      local get_point=5
       rpg_t[player.index].points_left = rpg_t[player.index].points_left+get_point
       player.insert{name='coin', count = get_coin}
       Alert.alert_player(player, 1, {'amap.science',get_point,get_coin})
