@@ -574,11 +574,13 @@ remove_toolbar = function(player)
 
     if player.gui.top[main_toolbar_name] then
         player.gui.top[main_toolbar_name].destroy()
-        player.gui.top[cool].destroy()
+        if player.gui.top[cool] then
+            player.gui.top[cool].destroy()
+        end
         -- player.gui.top[buyxp].destroy()
         -- player.gui.top[gambel].destroy()
         if player.gui.top[stop_wave] then
-  player.gui.top[stop_wave].destroy()
+            player.gui.top[stop_wave].destroy()
         end
         return
     end
