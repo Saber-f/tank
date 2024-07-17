@@ -174,7 +174,7 @@ local function on_rocket_launched()
   end
   if this.goal==1 and this.times==2 then
     this.goal=2
-    game.print {'amap.goal_1'}
+    -- game.print {'amap.goal_1'}
   end
   -- 发射火箭奖励金币
 

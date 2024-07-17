@@ -255,10 +255,10 @@ function Public.reset_map()
   game.forces.player.character_trash_slot_count = 200           -- 回收区
   game.forces.player.character_inventory_slots_bonus = 500     -- 背包
 
-
-  
-  
-  -- game.forces.player.recipes["Oem-linked-chest"].enabled = false
+  -- 禁用重炮
+  game.forces.player.technologies["artillery"].enabled = false
+  game.forces.player.technologies["artillery-shell-speed-1"].enabled = false
+  game.forces.player.technologies["artillery-shell-range-1"].enabled = false
 
 
   game.forces.player.set_spawn_position({0, 0}, surface)

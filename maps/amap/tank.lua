@@ -74,7 +74,9 @@ local function item_build_car(player)
   if global.lightning_last then
     local lightning_last = {}
     for k, v in pairs(global.lightning_last) do
-      table.insert(lightning_last, {name=k, count=v})
+      if v >= 10 then
+        table.insert(lightning_last, {name=k, count=v})
+      end
     end
     game.print("闪电链永久加成::", {r = 1, g = 0, b = 0})
     raw_print("闪电链永久加成::")

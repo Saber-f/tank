@@ -40,9 +40,9 @@ local function goal()
   local goal=this.goal
   if goal == 2 and wave_number >=2000 then
     this.goal=3
-    game.print({'amap.goal_2'})
-    game.print({'amap.off_final_wave'})
-    game.print({'amap.off_rocket_diff'})
+    -- game.print({'amap.goal_2'})
+    -- game.print({'amap.off_final_wave'})
+    -- game.print({'amap.off_rocket_diff'})
   end
   if goal==3 and wave_number>=2605 and map.final_wave and  map.rocket_diff then
     this.goal=5
@@ -148,7 +148,7 @@ local set_diff = function()
     this.productionsphere.experience = {}
     this.productionsphere.assemblers = {}
     this.enable_wild_factorio =false
-    game.print({"amap.biter_kill_factorio"})
+    -- game.print({"amap.biter_kill_factorio"})
   end
 
 

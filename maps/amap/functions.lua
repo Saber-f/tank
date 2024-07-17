@@ -125,11 +125,11 @@ end
 
 local function out_info(player)
   local map = diff.get()
-  player.print({'amap.game_shuju',map.sum,map.win,map.gg,map.diff})
-  player.print({'amap.map_shuju',world_name[map.world],map.final_wave_record[map.world],map.max_world,map.world_number})
+  -- player.print({'amap.game_shuju',map.sum,map.win,map.gg,map.diff})
+  -- player.print({'amap.map_shuju',world_name[map.world],map.final_wave_record[map.world],map.max_world,map.world_number})
   local best_record = map.map_record[map.world]
   if best_record == nil then best_record=0 end
-  player.print({'amap.best_record',best_record})
+  -- player.print({'amap.best_record',best_record})
   for i=1,map.record_number do
     -- player.print({'amap.game_record',map.record[i].wave_number,map.record[i].name,map.record[i].pass_number})
   end

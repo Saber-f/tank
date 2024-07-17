@@ -84,7 +84,7 @@ local on_player_created = function(event)
 
     util.insert_safe(player,created_items)
     -- util.insert_safe(player, this.created_items)
-    player.print('Welcome to the server!')
+    -- player.print('欢迎来到要你命3000!')
     if not this.init_ran then
         --This is so that other mods and scripts have a chance to do remote calls before we do things like charting the starting area, creating the crash site, etc.
         this.init_ran = true
