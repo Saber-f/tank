@@ -126,14 +126,15 @@ local function init_enemy_weapon_damage()
 end
 
 local function enemy_weapon_damage()
-    local e = game.forces.enemy
+    -- local e = game.forces.enemy
 
-    local ef = e.evolution_factor
+    -- local ef = e.evolution_factor
 
     for k, v in pairs(enemy_ammo_evolution_modifiers()) do
         local base = enemy_ammo_starting_modifiers()[k]
 
-        local new = base + v * ef
+        -- local new = base + v * ef
+        local new = base + v
         e.set_ammo_damage_modifier(k, new)
     end
 end
@@ -176,7 +177,7 @@ local function research_finished(event)
     end
 end
 
-Event.on_init(init_player_weapon_damage)
+-- Event.on_init(init_player_weapon_damage)
 Event.on_init(init_enemy_weapon_damage)
-Event.on_nth_tick(18000, enemy_weapon_damage)
-Event.add(defines.events.on_research_finished, research_finished)
+-- Event.on_nth_tick(60*60*10, enemy_weapon_damage)
+-- Event.add(defines.events.on_research_finished, research_finished)
