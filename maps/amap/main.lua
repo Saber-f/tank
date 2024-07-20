@@ -606,7 +606,7 @@ local on_research_finished = function(event)
     raw_print(event.research.name.."研究完成")
   end
 
-  game.forces.player.recipes["rocket-silo"].enabled = false -- 火箭发射台不可用
+  -- game.forces.player.recipes["rocket-silo"].enabled = false -- 火箭发射台不可用
   game.forces.player.recipes["beacon"].enabled = false -- 插件塔不可用
 end
 

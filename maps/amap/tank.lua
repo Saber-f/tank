@@ -58,7 +58,6 @@ local car_items = {
   ['productivity-module-3']       = 100,  -- 产能插件3
   ['lab']                         = 4,    -- 研究中心
   ['rfw-small-antimatter-rocket'] = 10,   -- 小型反物质
-  ['rocket-silo']                 = 2,    -- 火箭发射台
   ['night-vision-equipment']      = 1,    -- 夜视仪
 }
 
