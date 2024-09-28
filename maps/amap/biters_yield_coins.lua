@@ -86,7 +86,7 @@ local function on_entity_died(event)
   if cause then
     if cause.valid then
       if (cause and cause.name == 'character' and cause.player) then
-        p = cause.player
+        -- p = cause.player
         if game.forces.enemy.evolution_factor >= 0.2 then
           local index = cause.player.index
           local this=WPT.get()
@@ -101,7 +101,7 @@ local function on_entity_died(event)
         reward_has_been_given = true
       end
 
-      if wave_number > 1250 then   -- 不掉金币
+      if wave_number > 0 then   -- 不掉金币
         return
       end
 
@@ -182,7 +182,7 @@ local function removeTurrent(event)
   end
 end
 
-Event.add(defines.events.on_entity_died, on_entity_died)
+-- Event.add(defines.events.on_entity_died, on_entity_died)
 -- Event.add(defines.events.on_built_entity, addTurrent)    -- 玩家建造
 -- Event.add(defines.events.on_robot_built_entity, addTurrent)  -- 机器人建造
 -- Event.add(defines.events.on_robot_mined_entity, removeTurrent)    -- 机器人挖矿

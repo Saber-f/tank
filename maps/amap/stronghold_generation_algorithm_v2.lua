@@ -39,19 +39,9 @@ end
 local player_build = {
   'small-electric-pole', -- 小电杆
   'medium-electric-pole', -- 中电杆
-  'medium-electric-pole-2', -- 中电杆2
-  'medium-electric-pole-3', -- 中电杆3
-  'medium-electric-pole-4', -- 中电杆4
   'big-electric-pole', -- 大电杆
-  'big-electric-pole-2', -- 大电杆2
-  'big-electric-pole-3', -- 大电杆3
-  'big-electric-pole-4', -- 大电杆4
   'substation', -- 变电站
-  'substation-2', -- 变电站2
-  'substation-3', -- 变电站3
-  'substation-4', -- 变电站4
   'stone-wall', -- 石墙
-  'reinforced-wall', -- 钢筋墙
   'Oem-linked-chest', -- 关联箱
 }
 
@@ -134,7 +124,8 @@ function Public.find_available_stronghold_position(car_pos, sh_dis,surface,car)
   local sh_radius = sh_dis
   -- 堡垒角度
   local this=WPT.get()
-  local sh_theta =this.theta_times*pi_12
+  -- local sh_theta =this.theta_times*pi_12
+  local sh_theta = math.random(0,40000) / 1000 * pi_12
   --  local sh_theta = 0
 
   local sh_pos_x = car_pos.x + sh_radius * math.cos(sh_theta)
@@ -186,7 +177,7 @@ function Public.find_available_stronghold_position(car_pos, sh_dis,surface,car)
     -- 计算堡垒位置
     if is_sh_conflict(sh_pos,surface) then
       this.theta_times=this.theta_times+1
-      if this.theta_times >= 25 then
+      if this.theta_times >= 250 then
         this.theta_times=0
       end
       
@@ -194,10 +185,10 @@ function Public.find_available_stronghold_position(car_pos, sh_dis,surface,car)
       local BLnum = WD.get('BLnum')   -- 堡垒数量 [item=rfw-antimatter-bomb]
       BLnum = BLnum + 1
       WD.set('BLnum', BLnum)
-      if BLnum > 10 then
+      if BLnum > 20 then
         local name = "atomic-rocket"
         local name2 = "核弹"
-        if BLnum > 20 then
+        if BLnum > 30 then
           name = "rfw-antimatter-bomb"
           name2 = "反物质炸弹"
         else
@@ -207,23 +198,22 @@ function Public.find_available_stronghold_position(car_pos, sh_dis,surface,car)
 
         surface.create_entity {
           name = name,
-          position = car.position,
-          target = car,
+          position = {x=0,y=0},
           force = 'enemy',
           speed = 0.5
         }
         table.rocket_silo=nil
-        game.print({'amap.enemy_atomic_rocket'..name2,car.position.x,car.position.y,surface.name})
-        raw_print('amap.enemy_atomic_rocket'..name2..car.position.x..","..car.position.y)
+        game.print({'amap.enemy_atomic_rocket'..name2,0,0,surface.name})
+        raw_print('amap.enemy_atomic_rocket'..name2.."0,0"..0)
 
         
-        if BLnum == 20 then
+        if BLnum == 30 then
           game.print("下一次堡垒建立将发射反物质炸弹！！！", {r=1,g=0,b=0})
           raw_print("下一次堡垒建立将发射反物质炸弹！！！")
         end
       else
-        game.print("虫子小型反物质发射进度: " .. BLnum .. "/" .. 10, {r=1,g=0,b=0})
-        raw_print("虫子小型反物质发射进度: " .. BLnum .. "/" .. 10)
+        game.print("虫子小型反物质发射进度: " .. BLnum .. "/" .. 20, {r=1,g=0,b=0})
+        raw_print("虫子小型反物质发射进度: " .. BLnum .. "/" .. 20)
         if BLnum == 10 then
           game.print("下一次堡垒建立将发射小型反物质！！！", {r=1,g=0,b=0})
           raw_print("下一次堡垒建立将发射小型反物质！！！")

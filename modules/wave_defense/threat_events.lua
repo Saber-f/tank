@@ -175,9 +175,9 @@ end
 
 local function shred_simple_entities(entity)
   local threat = WD.get('threat')
-  if threat < 25000 then
-    return
-  end
+  -- if threat < 25000 then
+  --   return
+  -- end
   local simple_entities =
   entity.surface.find_entities_filtered(
   {
@@ -218,9 +218,9 @@ local function shred_simple_entities(entity)
     threat_cost = 1
   end
   -- WD.set('threat', threat - threat_cost)
-  end
+ end
 
-  local function spawn_unit_spawner_inhabitants(entity)
+local function spawn_unit_spawner_inhabitants(entity)
   if entity.type ~= 'unit-spawner' then
     return
   end
@@ -263,207 +263,17 @@ local function shred_simple_entities(entity)
 
   if math.random() > produceBig then return end
 
+  wave_number = wave_number + 200
+  local N = math.floor(wave_number / 50)
 
-  local N = math.floor(wave_number / 50) 
-  if N < 1 then N = 1 end
-
-  -- 靓仔和魔王
-  local liangzai = {
-      [1] = 'tc_fake_human_machine_gunner_',
-      [2] = 'tc_fake_human_melee_',
-      [3] = 'tc_fake_human_pistol_gunner_',
-      [4] = 'tc_fake_human_sniper_',
-      [5] = 'tc_fake_human_laser_',
-      [6] = 'tc_fake_human_electric_',
-      [7] = 'tc_fake_human_erocket_',
-      [8] = 'tc_fake_human_rocket_',
-      [9] = 'tc_fake_human_grenade_',
-      [10] = 'tc_fake_human_cluster_grenade_',
-      [11] = 'tc_fake_human_nuke_rocket_',
-      [12] = 'tc_fake_human_cannon_',
-      [13] = 'tc_fake_human_cannon_explosive_',
-
-  }
   
-  local mowang = {
-    [1] = 'tc_fake_human_boss_machine_gunner_',
-    [2] = 'tc_fake_human_boss_pistol_gunner_',
-    [3] = 'tc_fake_human_boss_sniper_',
-    [4] = 'tc_fake_human_boss_laser_',
-    [5] = 'tc_fake_human_boss_electric_',
-    [6] = 'tc_fake_human_boss_erocket_',
-    [7] = 'tc_fake_human_boss_rocket_',
-    [8] = 'tc_fake_human_boss_grenade_',
-    [9] = 'tc_fake_human_boss_cluster_grenade_',
-    [10] = 'tc_fake_human_boss_nuke_rocket_',
-    [11] = 'tc_fake_human_boss_cannon_explosive_',
-  }
-
-
-  local function func(name)
-      if entity and entity.valid then
-        local p = entity.surface.find_non_colliding_position(name, entity.position, 6, 1)
-        if p then
-            entity.surface.create_entity {name = name, position = p, force = entity.force.name}
-        end
-      end
-  end
-
-  local rd = 1
-
-  -- 人类
-  local function get_hm(lv,fg)
-      -- 4个靓仔
-      if not fg then
-          rd = math_random(1, 13)
-          func(liangzai[rd]..lv)
-      end
-
-      -- 1个魔王
-      if fg then
-          rd = math_random(1, 12)
-          func(mowang[rd]..lv)
-      end
-  end
-
-
-  if N == 1 then
-      func('maf-boss-biter-1') 
-  elseif N == 2 then
-      func('maf-boss-acid-spitter-1') 
-  elseif N == 3 then
-      func('maf-boss-biter-2') 
-  elseif N == 4 then
-      func('maf-boss-acid-spitter-2') 
-  elseif N == 5 then
-      func('maf-boss-biter-3')         
-  elseif N == 6 then
-      func('maf-boss-acid-spitter-3')
-  elseif N == 7 then
-      func('maf-boss-biter-4')  
-  elseif N == 8 then
-      func('maf-boss-acid-spitter-4')
-  elseif N == 9 then
-      func('maf-boss-biter-5') 
-  elseif N == 10 then
-      func('maf-boss-acid-spitter-5')
-  elseif N == 11 then
-      func('maf-boss-biter-6')
-  elseif N == 12 then
-      func('maf-boss-acid-spitter-6')
-  elseif N == 13 then
-      func('maf-boss-biter-7')
-  elseif N == 14 then
-      func('maf-boss-acid-spitter-7')
-  elseif N == 15 then
-      func('maf-boss-biter-8')
-  elseif N == 16 then
-      func('maf-boss-acid-spitter-8')
-  elseif N == 17 then
-      func('maf-boss-biter-9')
-  elseif N == 18 then
-      func('maf-boss-acid-spitter-9')
-  elseif N == 19 then
-      func('maf-boss-biter-10')
-  elseif N == 20 then
-      func('maf-boss-acid-spitter-10')
-  elseif N == 21 then
-      func('biterzilla21')
-  elseif N == 22 then
-      func('biterzilla22')
-  elseif N == 23 then
-      func('biterzilla11')
-  elseif N == 24 then
-      func('biterzilla23')
-  elseif N == 25 then
-      func('biterzilla12')
-  elseif N == 26 then
-      func('biterzilla31')
-  elseif N == 27 then
-      func('biterzilla24')
-  elseif N == 28 then
-      func('biterzilla13')
-  elseif N == 29 then
-      get_hm('1',false)
-      func('biterzilla32')
-  elseif N == 30 then
-      get_hm('2',false)
-      func('biterzilla25')
-  elseif N == 31 then
-      get_hm('3',false)
-      func('biterzilla14')
-  elseif N == 32 then
-      get_hm('4',false)
-      func('biterzilla33')
-  elseif N == 33 then
-      get_hm('5',false)
-      func('biterzilla15')
-  elseif N == 34 then
-      get_hm('6',false)
-      func('biterzilla34')
-  elseif N == 35 then
-      get_hm('7',false)
-      func('biterzilla35')
-  elseif N == 36 then
-      get_hm('8',false)
-      func('maf-giant-acid-spitter1')
-  elseif N == 37 then
-      get_hm('9',false)
-      func('bm-motherbiterzilla1')
-  elseif N == 38 then
-      get_hm('10',false)
-      func('maf-giant-fire-spitter1')
-  elseif N == 39 then
-      get_hm('1',true)
-      func('maf-giant-acid-spitter2')
-  elseif N == 40 then
-      get_hm('2',true)
-      func('bm-motherbiterzilla2')
-  elseif N == 41 then
-      get_hm('3',true)
-      func('maf-giant-fire-spitter2')
-  elseif N == 42 then
-      get_hm('4',true)
-      func('maf-giant-acid-spitter3')
-  elseif N == 43 then
-      get_hm('5',true)
-      func('bm-motherbiterzilla3')
-  elseif N == 44 then
-      get_hm('6',true)
-      func('maf-giant-fire-spitter3')
-  elseif N == 45 then
-      get_hm('6',true)
-      func('maf-giant-acid-spitter4')
-  elseif N == 46 then
-      get_hm('7',true)
-      func('bm-motherbiterzilla4')
-  elseif N == 47 then
-      get_hm('8',true)
-      func('maf-giant-fire-spitter4')
-  elseif N == 48 then
-      get_hm('9',true)
-      func('maf-giant-acid-spitter5')
-  elseif N == 49 then
-      get_hm('10',true)
-      func('bm-motherbiterzilla5')
-  elseif N == 50 then
-      func('maf-giant-fire-spitter5')
-      func('tc_fake_human_ultimate_boss_cannon_20')
-  elseif N > 50 then
-      -- N = N-50
-      -- N = N * N
-      -- game.print("挑战开始！大怪兽倍数:"..N,{r = 1, g = 0, b = 0})
-      -- for i = 1, N do
-          get_hm('10',true)
-          func('maf-boss-biter-10')
-          func('maf-boss-acid-spitter-10')
-          func('biterzilla15')
-          func('biterzilla25')
-          func('biterzilla35')
-          func('bm-motherbiterzilla5')
-          func('maf-giant-fire-spitter5')
-          func('tc_fake_human_ultimate_boss_cannon_20')
-      -- end
+  local name = GetBiterName(N)
+  
+  
+  local position = {entity.position.x + (-4 + math.random(0, 8)), entity.position.y + (-4 + math.random(0, 8))}
+  local biter = entity.surface.create_entity({name = name, position = position, force = 'enemy'})
+  if biter then
+    unit_group.add_member(biter)
   end
 
 end
@@ -565,16 +375,16 @@ local function on_entity_died(event)
   end
 
   -- 边缘虫巢无限重生
-  if entity.type == 'unit-spawner' then
-    local width = global.MapWidth / 2 - 127
-    if entity.position.x > width or entity.position.x < -width then
-      local data = {}
-      data.surface = entity.surface
-      data.name = entity.name
-      data.position = entity.position
-      Task.set_timeout_in_ticks(120, getSpawner, data)
-    end
-  end
+  -- if entity.type == 'unit-spawner' then
+  --   local width = global.MapWidth / 2 - 127
+  --   if entity.position.x > width or entity.position.x < -width then
+  --     local data = {}
+  --     data.surface = entity.surface
+  --     data.name = entity.name
+  --     data.position = entity.position
+  --     Task.set_timeout_in_ticks(120, getSpawner, data)
+  --   end
+  -- end
 
   local disable_threat_below_zero = WD.get('disable_threat_below_zero')
   local biter_health_boost = BiterHealthBooster.get('biter_health_boost')
@@ -584,10 +394,10 @@ local function on_entity_died(event)
 
     if global.BigDieThreat == nil then global.BigDieThreat = 10000 end
 
-    if entity.prototype.max_health > global.BigDieThreat then
-      local threat = WD.get('threat')
-      -- WD.set('threat', math.round(threat - entity.prototype.max_health / global.BigDieThreat, 2))
-    end
+    -- if entity.prototype.max_health > global.BigDieThreat then
+    --   local threat = WD.get('threat')
+    --   WD.set('threat', math.round(threat - entity.prototype.max_health / global.BigDieThreat, 2))
+    -- end
 
 
     --acid_nova(entity)
@@ -691,5 +501,26 @@ local function on_entity_died(event)
 end
 
 Event.add(defines.events.on_entity_died, on_entity_died)
+
+local function on_entity_spawned(event)
+  local entity = event.entity
+  
+  local wave_number = WD.get('wave_number')
+  local k =game.forces.enemy.evolution_factor^4*1600
+  if k > wave_number then
+    wave_number=k
+  end
+  wave_number = wave_number - 100
+  local N = math.floor(wave_number / 50)
+
+  local name = GetBiterName(N)
+
+  local position = {entity.position.x, entity.position.y}
+  entity.surface.create_entity({name = name, position = position, force = 'enemy'})
+  entity.destroy()
+
+end
+
+Event.add(defines.events.on_entity_spawned, on_entity_spawned)
 
 return Public

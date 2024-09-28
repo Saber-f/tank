@@ -274,17 +274,16 @@ local enemy_turret={
   [6]={name='flamethrower-turret',worth=10,wave_number=150},
   [7]={name='big-worm-turret',worth=20,wave_number=150},
   [8]={name='behemoth-worm-turret',worth=40,wave_number=400},
-  [9]={name='artillery-turret',worth=400,wave_number=1300},
-  [10]={name='maf-behemoth-worm-turret',worth=50,wave_number=600},      -- 鲲鹏
-  [11]={name='maf-colossal-worm-turret',worth=100,wave_number=1000},      -- 鸿蒙
-  [12]={name='bm-worm-boss-acid-shooter',worth=150,wave_number=1200},      -- 玄武1
-  [13]={name='bm-worm-boss-fire-shooter',worth=200,wave_number=1300},      -- 玄武2
+  [9]={name='artillery-turret',worth=50,wave_number=1300},
+  [10]={name='maf-behemoth-worm-turret',worth=60,wave_number=600},      -- 鲲鹏
+  [11]={name='maf-colossal-worm-turret',worth=70,wave_number=1000},      -- 鸿蒙
+  [12]={name='bm-worm-boss-acid-shooter',worth=80,wave_number=1200},      -- 玄武1
+  [13]={name='bm-worm-boss-fire-shooter',worth=90,wave_number=1300},      -- 玄武2
 }
 function Public.get_new_arty()
-
   local wave_number = WD.get('wave_number')
   local NN = 300
-  if wave_number < NN then return end    -- 300波之前不生成堡垒
+  if wave_number < NN then return end    -- NN波之前不生成堡垒
   local wave_defense_table = WD.get_table()
   if not wave_defense_table.target  then return end
   if not wave_defense_table.target.valid  then return end

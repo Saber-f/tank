@@ -175,62 +175,39 @@ end
 
 end
 
+local player_build = {
+    'small-electric-pole', -- 小电杆
+    'medium-electric-pole', -- 中电杆
+    'substation', -- 变电站
+    'stone-wall', -- 石墙
+    'Oem-linked-chest', -- 关联箱
+  }
+
+  function Get_spawn_pos(radius)
+    -- return {x = 250 + math.random(-10, 10), y = math.random(-30, 30)}
+
+    local a = math_random(-1000, 1000) / 1000
+    local b = math_random(-1000, 1000) / 1000
+
+    local c = 160
+
+    local surface_index = WD.get('surface_index')
+    local surface = game.surfaces[surface_index]
+
+    while true do
+        local temp_pos = {x = a * c, y = b * c}
+        local entities = surface.find_entities_filtered{position = temp_pos, radius = radius, name = player_build , force = game.forces.player,limit =1}
+        if #entities == 0 then
+            return temp_pos
+        end
+        c = c + 10
+    end
+end
+
+
 -- 获取虫子生成点
 local function get_spawn_pos()
-    return {x = 250 + math.random(-10, 10), y = math.random(-30, 30)}
-
-
-    -- local surface_index = WD.get('surface_index')
-    -- local surface = game.surfaces[surface_index]
-    -- if not surface then
-
-    -- end
-
-    -- local c = 0
-
-    -- ::retry::
-
-    -- local initial_position = WD.get('spawn_position')
-
-    -- local located_position = find_initial_spot(surface, initial_position)
-    -- local valid_position = surface.find_non_colliding_position('behemoth-biter', located_position, 32, 1)
-    -- local debug = WD.get('debug')
-    -- if debug then
-    --     if valid_position then
-    --         local x = valid_position.x
-    --         local y = valid_position.y
-    --         game.print('[gps=' .. x .. ',' .. y .. ',' .. surface.name .. ']')
-    --     end
-    -- end
-
-    -- if not valid_position then
-    --     local remove_entities = WD.get('remove_entities')
-    --     if remove_entities then
-    --         c = c + 1
-    --         valid_position = WD.get('spawn_position')
-
-    --         remove_trees({surface = surface, position = valid_position, valid = true})
-    --         remove_rocks({surface = surface, position = valid_position, valid = true})
-    --         fill_tiles({surface = surface, position = valid_position, valid = true})
-    --         WD.set('spot', 'nil')
-    --         if c == 5 then
-    --             return
-    --         end
-    --         goto retry
-    --     else
-    --         return
-    --     end
-    -- end
-
-
-    -- if valid_position.x < -9000 then
-    --     valid_position.x = -9000
-    -- end
-    -- if valid_position.x > 9000 then
-    --     valid_position.x = 9000
-    -- end
-
-    -- return valid_position
+    return Get_spawn_pos(160)
 end
 
 local function is_unit_valid(biter)
@@ -782,7 +759,7 @@ local all_enemies = {
 }
 
 -- N = 1- 60
-local function getBiterName(N)
+function GetBiterName(N)
     if N > 60 then N = 60 end
     if N < 1 then N = 1 end
     local index
@@ -796,7 +773,13 @@ local function getBiterName(N)
         if index > 303 then index = 303 end
         local name = all_enemies[index]
         if name == "tc_fake_human_ultimate_boss_cannon_20" or string.sub(name, 1, 2) ~= "tc" or math_random(1,100) <= 10 then
-            return name
+            if string.find(name, "nuke_rocket") then
+                if math_random(1,100) <= 10 then
+                    return name
+                end
+            else
+                return name
+            end
         end
     end
 end
@@ -811,20 +794,21 @@ local function spawn_big_biter(surface, N, unit_group)
     else
         N = N + 10
     end
-    local name = getBiterName(N)
+    local name = GetBiterName(N)
 
-    if (surface ~= nil and unit_group ~= nil) then
-        for i = 1,M  do
-            local position = get_spawn_pos()
-            local biter = surface.create_entity({name = name, position = position, force = 'enemy'})
-            biter.ai_settings.allow_destroy_when_commands_fail = false
-            biter.ai_settings.allow_try_return_to_spawner = true
-            biter.ai_settings.do_separation = true
+    -- if (surface ~= nil and unit_group ~= nil) then
 
-            BiterHealthBooster.add_boss_unit(biter, 0.1*N + 2, 0.55)
-            unit_group.add_member(biter)
-        end
-    end
+    --     for i = 1,M  do
+    --         local position = get_spawn_pos()
+    --         local biter = surface.create_entity({name = name, position = position, force = 'enemy'})
+    --         biter.ai_settings.allow_destroy_when_commands_fail = false
+    --         biter.ai_settings.allow_try_return_to_spawner = true
+    --         biter.ai_settings.do_separation = true
+
+    --         BiterHealthBooster.add_boss_unit(biter, 0.1*N + 2, 0.55)
+    --         unit_group.add_member(biter)
+    --     end
+    -- end
 
 
     return name
@@ -832,7 +816,7 @@ end
 
 
 
-local function spawn_biter(surface, is_boss_biter)
+local function spawn_biter(surface, is_boss_biter, spawn_position , is_big)
     if not is_boss_biter then
         if not can_units_spawn() then
             return
@@ -842,9 +826,12 @@ local function spawn_biter(surface, is_boss_biter)
 
     local wave_number = WD.get("wave_number");
     local N = math_floor(wave_number/ 50) + 1
-    local name = spawn_big_biter(nil, -N, nil)
+    if is_big then
+        N = N + 10
+    end
+    local name = GetBiterName(N)
 
-    local position = get_spawn_pos()
+    local position = {x = spawn_position.x + math.random(-4,4), y = spawn_position.y + math.random(-4,4)}
 
     -- print("生成虫子::"..name)
     local biter = surface.create_entity({name = name, position = position, force = 'enemy'})
@@ -1086,6 +1073,7 @@ local function give_main_command_to_group()
     end
 end
 
+local spawn_list = nil
 local function spawn_unit_group()
     -- if not can_units_spawn() then
 
@@ -1128,7 +1116,7 @@ local function spawn_unit_group()
 
     local position = spawn_position
 
-    local unit_group_pos = WD.get('unit_group_pos')
+    -- local unit_group_pos = WD.get('unit_group_pos')
 
     if WN < 4 then
         game.print('虫子出现了！[gps=' .. position.x .. ',' .. position.y .. ',' .. surface.name .. ']')
@@ -1137,6 +1125,23 @@ local function spawn_unit_group()
     -- 每50波加入大怪兽
     local N = math.floor(WN / 50) 
     -- N = 60
+
+    
+    local info = {}
+    local unit_group = surface.create_unit_group({position = {0,0}, force = 'enemy'})
+    info.group = unit_group
+    info.biter_count = 16;
+    info.boss_count = 8;
+    info.big_count = 0;
+    info.spawn_position = spawn_position
+    info.surface = surface
+    
+    if spawn_list then
+        info.biter_count = spawn_list.biter_count + 16
+        info.boss_count = spawn_list.boss_count + 8
+        info.big_count = spawn_list.big_count
+    end
+
     if WD.get("BigWave") < N and WN > 40 then
         WD.set("BigWave", WD.get("BigWave") + 1)
         local M = 1
@@ -1164,65 +1169,19 @@ local function spawn_unit_group()
             game.print('挑战开始！大怪兽倍速'..M)
         end
         
-        local unit_groups = WD.get('unit_groups')
-        for i = 1, M do
-            local unit_group = surface.create_unit_group({position = {0, 0}, force = 'enemy'})
-            spawn_big_biter(surface, N, unit_group)
-            unit_group_pos.positions[unit_group.group_number] = {position = unit_group.position, index = 0}
-            unit_groups[unit_group.group_number] = unit_group
-        end
+        info.big_count = info.big_count + M * 8
+        -- local unit_groups = WD.get('unit_groups')
+        -- for i = 1, M do
+        --     local unit_group = surface.create_unit_group({position = {0, 0}, force = 'enemy'})
+        --     spawn_big_biter(surface, N, unit_group)
+            -- unit_group_pos.positions[unit_group.group_number] = {position = unit_group.position, index = 0}
+            -- unit_groups[unit_group.group_number] = unit_group
+        -- end
     end
     
-    local unit_group = surface.create_unit_group({position = {0,0 }, force = 'enemy'})
-    unit_group_pos.positions[unit_group.group_number] = {position = unit_group.position, index = 0}
-    -- local average_unit_group_size = WD.get('average_unit_group_size')
-    -- local group_size = math_floor(average_unit_group_size * group_size_modifier_raffle[math_random(1, group_size_modifier_raffle_size)])
-    local group_size = 16;
-    for _ = 1, group_size, 1 do
-        local biter = spawn_biter(surface)
-        if not biter then
-            break
-        end
-        unit_group.add_member(biter)
+    -- unit_group_pos.positions[unit_group.group_number] = {position = unit_group.position, index = 0}
 
-        -- command_to_side_target(unit_group)
-    end
-
-    local boss_wave = WD.get('boss_wave')
-    if boss_wave then
-        local count = 8
-        -- local count = math_random(1, math_floor(wave_number * 0.01) + 2)
-        -- if count > 8 then
-        --     count = 8
-        -- end
-        -- if count <= 1 then
-        --     count = 4
-        -- end
-        -- local map=diff.get()
-        -- if map.final_wave and count <= 12 then
-        --   count=12
-        -- end
-        for _ = 1, count, 1 do
-            local biter = spawn_biter(surface, true)
-            if not biter then
-
-                break
-            end
-            unit_group.add_member(biter)
-        end
-
-
-        WD.set('boss_wave', false)
-    end
-
- 
-    local unit_groups = WD.get('unit_groups')
-    unit_groups[unit_group.group_number] = unit_group
-    if math_random(1, 2) == 1 then
-        WD.set('random_group', unit_group.group_number)
-    end
-    WD.set('spot', 'nil')
-    return true
+    spawn_list = info
 end
 
 local function set_next_wave()
@@ -1251,7 +1210,7 @@ local function set_next_wave()
     -- 设置威胁值
     local StarWave = 0;
     if global.StarWave then StarWave = global.StarWave end
-    local threat_gain = 2*(wave_number/3*(3 + StarWave/2))^2
+    local threat_gain = 2*wave_number*((3 + StarWave/2)/3)^2
     local map=diff.get()
     local boss_interval = 25
     if wave_number>=2000 then boss_interval = 5 end
@@ -1287,20 +1246,23 @@ local function set_next_wave()
         
         -- WD.set('next_wave', game.tick + 60*30)-- 30s一波
 
-        -- local surface_index = WD.get('surface_index')
-        -- local surface = game.surfaces[surface_index]
+        local surface_index = WD.get('surface_index')
+        local surface = game.surfaces[surface_index]
         -- surface.clear_pollution()
+        -- 生成污染
+        local pos = {x = 0, y = 0}
+        surface.pollute(pos, wave_number / 10)
 
-        if wave_number<=50 then
-            WD.set('next_wave', game.tick + 60*16)
-        elseif wave_number<=100 then
-            WD.set('next_wave', game.tick + 60*12)
-        elseif wave_number<=200 then
-            WD.set('next_wave', game.tick + 60*8)
-        elseif wave_number<=500 then
-            WD.set('next_wave', game.tick + 60*4)
+        if wave_number<=60 then
+            WD.set('next_wave', game.tick + 60*15)  -- 15min
+        elseif wave_number<=180 then
+            WD.set('next_wave', game.tick + 60*10)  -- 20min
+        elseif wave_number<=540 then
+            WD.set('next_wave', game.tick + 60*5)   -- 30min
+        elseif wave_number<=1620 then
+            WD.set('next_wave', game.tick + 60*3)   -- 54min
         else
-            WD.set('next_wave', game.tick + 60*2)
+            WD.set('next_wave', game.tick + 60*2)   -- 46min
         end
 
         
@@ -1344,37 +1306,37 @@ end
 Public.set_next_wave = set_next_wave
 
 local function check_group_positions()
-    local unit_groups = WD.get('unit_groups')
-    local unit_group_pos = WD.get('unit_group_pos')
-    local target = WD.get('target')
-    if not valid(target) then
-        return
-    end
+    -- local unit_groups = WD.get('unit_groups')
+    -- local unit_group_pos = WD.get('unit_group_pos')
+    -- local target = WD.get('target')
+    -- if not valid(target) then
+    --     return
+    -- end
 
-    for k, group in pairs(unit_groups) do
-        if group.valid then
-            local ugp = unit_group_pos.positions
-            if group.state == defines.group_state.finished then
-                return command_to_main_target(group, true)
-            end
-            if ugp[group.group_number] then
-                local success = is_position_near(group.position, ugp[group.group_number].position)
-                if success then
-                    ugp[group.group_number].index = ugp[group.group_number].index + 1
-                    if ugp[group.group_number].index >= 2 then
-                        command_to_main_target(group, true)
-                        fill_tiles(group, 50)
-                        remove_rocks(group)
-                        remove_trees(group)
-                        if ugp[group.group_number].index >= 4 then
-                            unit_group_pos.positions[group.group_number] = nil
-                            reform_group(group)
-                        end
-                    end
-                end
-            end
-        end
-    end
+    -- for k, group in pairs(unit_groups) do
+    --     if group.valid then
+    --         local ugp = unit_group_pos.positions
+    --         if group.state == defines.group_state.finished then
+    --             return command_to_main_target(group, true)
+    --         end
+    --         if ugp[group.group_number] then
+    --             local success = is_position_near(group.position, ugp[group.group_number].position)
+    --             if success then
+    --                 ugp[group.group_number].index = ugp[group.group_number].index + 1
+    --                 if ugp[group.group_number].index >= 2 then
+    --                     command_to_main_target(group, true)
+    --                     fill_tiles(group, 50)
+    --                     remove_rocks(group)
+    --                     remove_trees(group)
+    --                     if ugp[group.group_number].index >= 4 then
+    --                         unit_group_pos.positions[group.group_number] = nil
+    --                         reform_group(group)
+    --                     end
+    --                 end
+    --             end
+    --         end
+    --     end
+    -- end
 end
 
 local function log_threat()
@@ -1437,5 +1399,54 @@ local function on_tick()
 end
 
 Event.on_nth_tick(30, on_tick)
+
+
+local function one_tick()
+    if spawn_list == nil then
+        return
+    end
+    local info = spawn_list
+    if info.biter_count > 0 then
+        local biter = spawn_biter(info.surface, false, info.spawn_position, false)
+        if biter then
+            if info.group.valid then
+                info.group.add_member(biter)
+            end
+            info.biter_count = info.biter_count - 1
+        end
+    elseif info.boss_count > 0 then
+        local biter = spawn_biter(info.surface, true, info.spawn_position, false)
+        if biter then
+            if info.group.valid then
+                info.group.add_member(biter)
+            end
+            info.boss_count = info.boss_count - 1
+            if info.boss_count == 0 then
+                WD.set('boss_wave', false)
+            end
+        end
+    elseif info.big_count > 0 then
+        local biter = spawn_biter(info.surface, true, info.spawn_position, true)
+        if biter then
+            if info.group.valid then
+                info.group.add_member(biter)
+            end
+            info.big_count = info.big_count - 1
+        end
+    else
+        -- local unit_group = info.group
+        -- local unit_groups = WD.get('unit_groups')
+        -- unit_groups[unit_group.group_number] = unit_group
+        -- if math_random(1, 2) == 1 then
+        --     WD.set('random_group', unit_group.group_number)
+        -- end
+        -- WD.set('spot', 'nil')
+
+        spawn_list = nil
+    end
+
+end
+
+Event.on_nth_tick(2, one_tick)
 
 return Public

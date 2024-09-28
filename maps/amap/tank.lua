@@ -195,11 +195,11 @@ local function on_player_robot_built_entity(event)
 
 
   -- 不能在横坐标100-350放置建筑
-  if entity.position.x >= 80 and entity.position.x <= 400 and entity.position.y > -300 and entity.position.y < 300 then
-    entity.destroy()
-    player.print('不能在该区域放置建筑')
-    return
-  end
+  -- if entity.position.x >= 80 and entity.position.x <= 400 and entity.position.y > -300 and entity.position.y < 300 then
+  --   entity.destroy()
+  --   player.print('不能在该区域放置建筑')
+  --   return
+  -- end
 
 end
 
@@ -214,21 +214,21 @@ local function on_player_build_entity(event)
   local player = game.players[event.player_index]
 
   -- 不能在横坐标100-350放置建筑
-  if entity.position.x >= 80 and entity.position.x <= 400 and entity.position.y > -300 and entity.position.y < 300 then
-    if entity.type~='entity-ghost' and entity.name~='tile-ghost' then
-      local health = entity.health
-      local name = entity.name
+  -- if entity.position.x >= 80 and entity.position.x <= 400 and entity.position.y > -300 and entity.position.y < 300 then
+  --   if entity.type~='entity-ghost' and entity.name~='tile-ghost' then
+  --     local health = entity.health
+  --     local name = entity.name
 
 
-      if name == "straight-rail" or name == "curved-rail" then
-        name = "rail"
-      end
-      player.insert{name=name, count =1,health=health}
-    end
-    entity.destroy()
-    player.print('不能在该区域放置建筑')
-    return
-  end
+  --     if name == "straight-rail" or name == "curved-rail" then
+  --       name = "rail"
+  --     end
+  --     player.insert{name=name, count =1,health=health}
+  --   end
+  --   entity.destroy()
+  --   player.print('不能在该区域放置建筑')
+  --   return
+  -- end
 
 
   local this=WPT.get()
@@ -294,12 +294,12 @@ local function on_player_build_entity(event)
           -- elseif wave_number > 300 then
           --   name = "medium-worm-turret"
           -- end
-          surface.create_entity({name = name, position = {x=-15,y=0}, force = 'neutral'})
-          game.print('跳波沙虫已生成，击杀跳25波[gps=' .. -15 .. ',' .. 0 .. ',' .. surface.name .. ']',{r=1,g=0,b=0})
+          -- surface.create_entity({name = name, position = {x=-15,y=0}, force = 'neutral'})
+          -- game.print('跳波沙虫已生成，击杀跳25波[gps=' .. -15 .. ',' .. 0 .. ',' .. surface.name .. ']',{r=1,g=0,b=0})
           this.worm = surface.create_entity({name = "small-worm-turret", position = {x=16,y=0}, force = 'player'})
           WD.set('target',this.worm);
           game.print('我方保卫沙虫已生成，被击杀游戏失败[gps=' .. 16 .. ',' .. 0 .. ',' .. surface.name .. ']',{r=1,g=0,b=0})
-          player.character.teleport({250,0})
+          -- player.character.teleport({250,0})
           -- WD.set().next_wave = game.tick +world_time[number]   --波防时间s
           WD.set().next_wave = game.tick + 60 * 1 * 5     --    3s准备时间
 
