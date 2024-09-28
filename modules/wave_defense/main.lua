@@ -1210,7 +1210,7 @@ local function set_next_wave()
     -- 设置威胁值
     local StarWave = 0;
     if global.StarWave then StarWave = global.StarWave end
-    local threat_gain = 2*wave_number*((3 + StarWave/2)/3)^2
+    local threat_gain = 2*wave_number^2*((3 + StarWave/2)/3)^2
     local map=diff.get()
     local boss_interval = 25
     if wave_number>=2000 then boss_interval = 5 end
