@@ -1405,8 +1405,11 @@ local function one_tick()
     if spawn_list == nil then
         return
     end
+    
     local info = spawn_list
-    if info.biter_count > 0 then
+    if not info.surface.valid then
+        spawn_list = nil
+    elseif info.biter_count > 0 then
         local biter = spawn_biter(info.surface, false, info.spawn_position, false)
         if biter then
             if info.group.valid then
