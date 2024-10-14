@@ -1194,9 +1194,9 @@ local function upgrade_lianxu(player,object_entityName,print_name,up)
   end
   upgrade=base+bonus_time*bonus
 
-  if up then
-  player.print({'itam_spells.rpg_lianxu',print_name,times,need_times,bonus_time*bonus})
-  end
+  -- if up then
+  -- player.print({'itam_spells.rpg_lianxu',print_name,times,need_times,bonus_time*bonus})
+  -- end
 
   return upgrade
 end
@@ -1244,9 +1244,9 @@ end
   end
 
   upgrade=get_upgrade_list[spell_index]
-  if up then
-  player.print({'itam_spells.rpg_upgread',print_name,times,need_times,spell_index})
-end
+--   if up then
+--   player.print({'itam_spells.rpg_upgread',print_name,times,need_times,spell_index})
+-- end
 
 
   return upgrade
