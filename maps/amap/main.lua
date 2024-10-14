@@ -48,6 +48,7 @@ local player_build = {
   'stone-wall', -- 石墙
   'reinforced-wall', -- 钢筋墙
   'Oem-linked-chest', -- 关联箱
+  'gun-turret', -- 炮塔
 }
 
 require 'maps.amap.mining'
@@ -246,13 +247,13 @@ function Public.reset_map()
   global.linkBug = false
   setting()
 
-  game.forces.player.set_gun_speed_modifier('capsule', 2) --设置胶囊速度
+  game.forces.player.set_gun_speed_modifier('capsule', 10) --设置胶囊速度
   game.forces.player.technologies['landfill'].enabled = true  -- 填海材料可用
   game.forces.player.maximum_following_robot_count = 100000000 -- 跟随数量
   game.forces.player.technologies["follower-robot-count-1"].researched = true -- 跟随机器人数量
   game.forces.player.technologies["logistic-system"].enabled = false -- 逻辑系统
   game.forces.player.technologies["logistic-robotics"].researched = true -- 逻辑机器人
-  game.forces.player.character_trash_slot_count = 200           -- 回收区
+  game.forces.player.character_trash_slot_count = 2000           -- 回收区
   game.forces.player.character_inventory_slots_bonus = 500     -- 背包
 
   -- 禁用重炮
