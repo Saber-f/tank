@@ -1123,7 +1123,7 @@ local function spawn_unit_group()
     end
     
     -- 每50波加入大怪兽
-    local N = math.floor(WN / 50) 
+    local N = math.floor((WN+1) / 50) 
     -- N = 60
 
     
@@ -1251,19 +1251,26 @@ local function set_next_wave()
         -- surface.clear_pollution()
         -- 生成污染
         local pos = {x = 0, y = 0}
-        surface.pollute(pos, wave_number / 10)
+        surface.pollute(pos, wave_number)
 
-        if wave_number<=60 then
-            WD.set('next_wave', game.tick + 60*15)  -- 15min
-        elseif wave_number<=180 then
-            WD.set('next_wave', game.tick + 60*10)  -- 20min
-        elseif wave_number<=540 then
-            WD.set('next_wave', game.tick + 60*5)   -- 30min
-        elseif wave_number<=1620 then
-            WD.set('next_wave', game.tick + 60*3)   -- 54min
+
+        if wave_number < 2999 then
+            WD.set('next_wave', game.tick + 105)  -- 87.5分
         else
-            WD.set('next_wave', game.tick + 60*2)   -- 46min
+            WD.set('next_wave', game.tick + 150)
         end
+
+        -- if wave_number<=60 then
+        --     WD.set('next_wave', game.tick + 60*15)  -- 15min
+        -- elseif wave_number<=180 then
+        --     WD.set('next_wave', game.tick + 60*10)  -- 20min
+        -- elseif wave_number<=540 then
+        --     WD.set('next_wave', game.tick + 60*5)   -- 30min
+        -- elseif wave_number<=1620 then
+        --     WD.set('next_wave', game.tick + 60*3)   -- 54min
+        -- else
+        --     WD.set('next_wave', game.tick + 60*2)   -- 46min
+        -- end
 
         
         -- if wave_number<=25 then
