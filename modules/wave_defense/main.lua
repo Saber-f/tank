@@ -1254,47 +1254,17 @@ local function set_next_wave()
         surface.pollute(pos, wave_number)
 
 
-        if wave_number < 2999 then
-            WD.set('next_wave', game.tick + 105)  -- 87.5分
+        if wave_number == 2999 then
+            WD.set('next_wave', game.tick + 120*60)
         else
-            WD.set('next_wave', game.tick + 150)
+            WD.set('next_wave', game.tick + 105)  -- 87.5分
         end
-
-        -- if wave_number<=60 then
-        --     WD.set('next_wave', game.tick + 60*15)  -- 15min
-        -- elseif wave_number<=180 then
-        --     WD.set('next_wave', game.tick + 60*10)  -- 20min
-        -- elseif wave_number<=540 then
-        --     WD.set('next_wave', game.tick + 60*5)   -- 30min
-        -- elseif wave_number<=1620 then
-        --     WD.set('next_wave', game.tick + 60*3)   -- 54min
-        -- else
-        --     WD.set('next_wave', game.tick + 60*2)   -- 46min
-        -- end
-
-        
-        -- if wave_number<=25 then
-        --     WD.set('next_wave', game.tick + 60*20)
-        -- elseif wave_number<=50 then
-        --     WD.set('next_wave', game.tick + 60*16)
-        -- elseif wave_number<=200 then
-        --     WD.set('next_wave', game.tick + 60*12)
-        -- elseif wave_number<=500 then
-        --     WD.set('next_wave', game.tick + 60*8)
-        -- else
-        --     WD.set('next_wave', game.tick + 60*6)
-        -- end
-
-        
-        -- WD.set('next_wave', game.tick + 60)   -- 一秒钟一波
-        
-    -- end WD.get('game_lost')
 
     if wave_number >= 3000 then
         game.print("*****************恭喜！挑战成功！*****************",{r = 1, g = 0, b = 0})
-        game.print("*****************60s后开始下一局*****************",{r = 1, g = 0, b = 0})
+        game.print("*****************10s后开始下一局*****************",{r = 1, g = 0, b = 0})
         global.StarWave = -global.StarWave - 1       -- 难度+1
-        WD.set('next_wave', game.tick + 60*60)-- 60s
+        WD.set('next_wave', game.tick + 60*10)-- 10s
         -- game.forces["enemy"].kill_all_units()
     end
 

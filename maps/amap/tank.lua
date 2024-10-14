@@ -35,8 +35,8 @@ local car_items = {
   ['radar']                       = 10,   -- 雷达
   ['medium-electric-pole']        = 200,  -- 中电线杆
   ['electric-furnace']            = 500,  -- 电炉
-  ['gun-turret']                  = 100,  -- 机枪炮塔
-  ['firearm-magazine']            = 3000, -- 机枪子弹
+  ['gun-turret']                  = 200,  -- 机枪炮塔
+  ['piercing-rounds-magazine']    = 5000, -- 机枪子弹
   ['pipe']                        = 200,  -- 铜管
   ['inserter']                    = 1000, -- 爪子
   ['raw-fish']                    = 100,  -- 鱼
@@ -59,6 +59,8 @@ local car_items = {
   ['lab']                         = 4,    -- 研究中心
   ['rfw-small-antimatter-rocket'] = 10,   -- 小型反物质
   ['night-vision-equipment']      = 1,    -- 夜视仪
+  ['personal-laser-defense-equipment'] = 9, -- 个人激光防御
+  ['rocket-launcher'] = 1,                -- 火箭筒
 }
 
 local function item_build_car(player)
@@ -92,9 +94,9 @@ local function item_build_car(player)
     local k = BigWave
 
     -- 额外技能点
-    local point = math.round(global.RPG_POINT.total) + global.RPG_POINT[player.index]
+    -- local point = math.round(global.RPG_POINT.total) + global.RPG_POINT[player.index]
     local rpg_t = RPG.get('rpg_t')
-    -- rpg_t[player.index].points_left = rpg_t[player.index].points_left + point + 10
+    rpg_t[player.index].points_left = rpg_t[player.index].points_left + 200
     
     game.print("所有炮塔伤害+"..global.RPG_POINT.total .. "%",{r=0,g=1,b=0})
     game.forces.player.set_turret_attack_modifier("gun-turret", global.RPG_POINT.total * 0.01)
@@ -301,7 +303,7 @@ local function on_player_build_entity(event)
           game.print('我方保卫沙虫已生成，被击杀游戏失败[gps=' .. 16 .. ',' .. 0 .. ',' .. surface.name .. ']',{r=1,g=0,b=0})
           -- player.character.teleport({250,0})
           -- WD.set().next_wave = game.tick +world_time[number]   --波防时间s
-          WD.set().next_wave = game.tick + 60 * 1 * 5     --    3s准备时间
+          WD.set().next_wave = game.tick + 60 * 30     --    30s准备时间
 
           
           local wave_defense_table = WD.get_table()
