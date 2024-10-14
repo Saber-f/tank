@@ -278,13 +278,13 @@ local lightning_func = function(data)
     end
 
     if #biters < 2 then
-      biters = player.surface.find_entities_filtered{position = target_pos, radius = 64, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.enemy}
+      biters = player.surface.find_entities_filtered{position = target_pos, radius = 32, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.enemy}
     end
 
     biters = removeElement(biters, target) 
     
     if #biters < 1 then
-      biters = player.surface.find_entities_filtered{position = target_pos, radius = 64, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.enemy}
+      biters = player.surface.find_entities_filtered{position = target_pos, radius = 32, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.enemy}
     end
 
 
@@ -308,10 +308,7 @@ Public.lightning = Token.register(lightning_func)   -- 注册闪电链函数
 -- 闪电链函数
 function Public.lightning_chain(position, surface,player,times)
 
-  local biters = surface.find_entities_filtered{position = position, radius = 128, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.enemy}
-  -- if #biters == 0 then
-  --   biters= surface.find_entities_filtered{position = position, radius = 128, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.neutral}
-  -- end
+  local biters = surface.find_entities_filtered{position = position, radius = 60, type={'unit','unit-spawner', 'turret', 'wall' } , force = game.forces.enemy}
 
   -- 没有虫子,直接返回
   if #biters == 0 then
