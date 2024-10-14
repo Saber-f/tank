@@ -230,132 +230,104 @@ local function spawn_unit_spawner_inhabitants(entity)
   if k > wave_number then
     wave_number=k
   end
-  local count = 4 + math.floor(wave_number / 400)
+  local count = 4 + math.floor(wave_number / 600)
   if count > 12 then
     count = 12
   end
   -- game.print("触发虫巢死亡:"..count.."只")
 
   BiterRolls.wave_defense_set_unit_raffle(wave_number)
+  wave_number = wave_number + 200
+  local N = math.floor(wave_number / 50)
   local unit_group = entity.surface.create_unit_group({position = {0,0}, force = 'enemy'})
   for _ = 1, count, 1 do
+    local name = GetBiterName(N)
     local position = {entity.position.x + (-4 + math.random(0, 8)), entity.position.y + (-4 + math.random(0, 8))}
-    local biter = nil
-    if math.random(1, 4) == 1 then
-      biter=entity.surface.create_entity({name = BiterRolls.wave_defense_roll_spitter_name(), position = position, force = 'enemy'})
-    else
-      biter=  entity.surface.create_entity({name = BiterRolls.wave_defense_roll_biter_name(), position = position, force = 'enemy'})
-    end
+    local biter = entity.surface.create_entity({name = name, position = position, force = 'enemy'})
     if biter then
       unit_group.add_member(biter)
     end
   end
-
-
-  wave_number = WD.get('wave_number')
-  k =game.forces.enemy.evolution_factor^4*1600
-  if k > wave_number then
-    wave_number=k
-  end
-
-
-  local produceBig = 0.1 + 0.8 * (wave_number / 3000)
-
-  if math.random() > produceBig then return end
-
-  wave_number = wave_number + 200
-  local N = math.floor(wave_number / 50)
-
-  
-  local name = GetBiterName(N)
-  
-  
-  local position = {entity.position.x + (-4 + math.random(0, 8)), entity.position.y + (-4 + math.random(0, 8))}
-  local biter = entity.surface.create_entity({name = name, position = position, force = 'enemy'})
-  if biter then
-    unit_group.add_member(biter)
-  end
-
 end
 
 local function kill_master(entity)
-  if entity.type ~= 'unit-spawner' then
-    return
-  end
-  local wave_number = WD.get('wave_number')
-  local k =game.forces.enemy.evolution_factor*1000
-  if k >wave_number then
-    wave_number=k
-  end
-  local count = 32 + math.floor(wave_number * 0.1)
-  if count > 64 then
-    count = 64
-  end
-  BiterRolls.wave_defense_set_unit_raffle(wave_number)
+--   if entity.type ~= 'unit-spawner' then
+--     return
+--   end
+--   local wave_number = WD.get('wave_number')
+--   local k =game.forces.enemy.evolution_factor*1000
+--   if k >wave_number then
+--     wave_number=k
+--   end
+--   local count = 32 + math.floor(wave_number * 0.1)
+--   if count > 64 then
+--     count = 64
+--   end
+--   BiterRolls.wave_defense_set_unit_raffle(wave_number)
 
-  local unit_group = entity.surface.create_unit_group({position = entity.position, force = 'enemy'})
-  for _ = 1, count, 1 do
-    local position = {entity.position.x + (-4 + math.random(0, 8)), entity.position.y + (-4 + math.random(0, 8))}
-    local biter
-    if math.random(1, 4) == 1 then
-      biter=entity.surface.create_entity({name = BiterRolls.wave_defense_roll_spitter_name(), position = position, force = 'enemy'})
-    else
-      biter=entity.surface.create_entity({name = BiterRolls.wave_defense_roll_biter_name(), position = position, force = 'enemy'})
-    end
-    if biter then
-      biter.ai_settings.allow_destroy_when_commands_fail = true
-      biter.ai_settings.allow_try_return_to_spawner = true
-      --biter.ai_settings.do_separation = true
-      unit_group.add_member(biter)
+--   local unit_group = entity.surface.create_unit_group({position = entity.position, force = 'enemy'})
+--   for _ = 1, count, 1 do
+--     local position = {entity.position.x + (-4 + math.random(0, 8)), entity.position.y + (-4 + math.random(0, 8))}
+--     local biter
+--     if math.random(1, 4) == 1 then
+--       biter=entity.surface.create_entity({name = BiterRolls.wave_defense_roll_spitter_name(), position = position, force = 'enemy'})
+--     else
+--       biter=entity.surface.create_entity({name = BiterRolls.wave_defense_roll_biter_name(), position = position, force = 'enemy'})
+--     end
+--     if biter then
+--       biter.ai_settings.allow_destroy_when_commands_fail = true
+--       biter.ai_settings.allow_try_return_to_spawner = true
+--       --biter.ai_settings.do_separation = true
+--       unit_group.add_member(biter)
 
-    end
-  end
+--     end
+--   end
 
-  if #unit_group.members == 0 then return end
-  local target
-  local entities = entity.surface.find_entities_filtered{position = entity.position, radius =25, name = "character", force = game.forces.player}
+--   if #unit_group.members == 0 then return end
+--   local target
+--   local entities = entity.surface.find_entities_filtered{position = entity.position, radius =25, name = "character", force = game.forces.player}
 
-  if #entities == 0 then
-    local this=WPT.get()
-    if this.tank[this.car_index] then
-      target=this.tank[this.car_index]
-      --game.print("攻击主车")
-    else
-      local characters = {}
-      local p = game.connected_players
-      for _, player in pairs(p) do
-        if player.character then
-          if player.character.valid then
-            if player.character.surface== entity.surface then
-              characters[#characters + 1] = player.character
-            end
-          end
-        end
-      end
-      if #characters ~=0 then
-        target=math_random(1, #characters)
-        --  game.print("随机全体玩家")
-      else
-        for k,v in pairs(unit_group.members) do
-          v.destroy()
-        end
-        unit_group.destroy()
-        --game.print("摧毁组织")
-        return
-      end
-    end
-  else
-    target=entities[math.random(#entities)]
-  end
+--   if #entities == 0 then
+--     local this=WPT.get()
+--     if this.tank[this.car_index] then
+--       target=this.tank[this.car_index]
+--       --game.print("攻击主车")
+--     else
+--       local characters = {}
+--       local p = game.connected_players
+--       for _, player in pairs(p) do
+--         if player.character then
+--           if player.character.valid then
+--             if player.character.surface== entity.surface then
+--               characters[#characters + 1] = player.character
+--             end
+--           end
+--         end
+--       end
+--       if #characters ~=0 then
+--         target=math_random(1, #characters)
+--         --  game.print("随机全体玩家")
+--       else
+--         for k,v in pairs(unit_group.members) do
+--           v.destroy()
+--         end
+--         unit_group.destroy()
+--         --game.print("摧毁组织")
+--         return
+--       end
+--     end
+--   else
+--     target=entities[math.random(#entities)]
+--   end
 
-  unit_group.set_command(
-  {
-    type = defines.command.attack_area,
-    destination = target.position,
-    radius = 8,
-    distraction = defines.distraction.by_anything
-  }
-)
+--   unit_group.set_command(
+--   {
+--     type = defines.command.attack_area,
+--     destination = target.position,
+--     radius = 8,
+--     distraction = defines.distraction.by_anything
+--   }
+-- )
 
 end
 
@@ -374,6 +346,8 @@ local function on_entity_died(event)
     return
   end
 
+  spawn_unit_spawner_inhabitants(entity)
+
   -- 边缘虫巢无限重生
   -- if entity.type == 'unit-spawner' then
   --   local width = global.MapWidth / 2 - 127
@@ -386,118 +360,118 @@ local function on_entity_died(event)
   --   end
   -- end
 
-  local disable_threat_below_zero = WD.get('disable_threat_below_zero')
-  local biter_health_boost = BiterHealthBooster.get('biter_health_boost')
+  -- local disable_threat_below_zero = WD.get('disable_threat_below_zero')
+  -- local biter_health_boost = BiterHealthBooster.get('biter_health_boost')
 
-  if entity.type == 'unit' then
-    -- 大虫子死亡减少威胁值
+  -- if entity.type == 'unit' then
+  --   -- 大虫子死亡减少威胁值
 
-    if global.BigDieThreat == nil then global.BigDieThreat = 10000 end
+  --   if global.BigDieThreat == nil then global.BigDieThreat = 10000 end
 
-    -- if entity.prototype.max_health > global.BigDieThreat then
-    --   local threat = WD.get('threat')
-    --   WD.set('threat', math.round(threat - entity.prototype.max_health / global.BigDieThreat, 2))
-    -- end
+  --   -- if entity.prototype.max_health > global.BigDieThreat then
+  --   --   local threat = WD.get('threat')
+  --   --   WD.set('threat', math.round(threat - entity.prototype.max_health / global.BigDieThreat, 2))
+  --   -- end
 
 
-    --acid_nova(entity)
-    if not threat_values[entity.name] then
-      return
-    end
-
-    
+  --   --acid_nova(entity)
+  --   if not threat_values[entity.name] then
+  --     return
+  --   end
 
     
-    if disable_threat_below_zero then
-      local threat = WD.get('threat')
-      if threat <= 0 then
-        WD.set('threat', 0)
-        remove_unit(entity)
-        return
-      end
-      -- WD.set('threat', math.round(threat - threat_values[entity.name] * biter_health_boost, 2))
-      remove_unit(entity)
-    else
-      local threat = WD.get('threat')
-      -- WD.set('threat', math.round(threat - threat_values[entity.name] * biter_health_boost, 2))
-      remove_unit(entity)
-    end
-  else
-    if entity.force.index == 2 then
-      if entity.health then
-        if threat_values[entity.name] then
-          local threat = WD.get('threat')
-          -- WD.set('threat', math.round(threat - threat_values[entity.name] * biter_health_boost, 2))
-        end
-        local cause = event.cause
-        if not cause then
-          kill_master(entity)
-        else
-          if cause.last_user then
-            local this=WPT.get()
-            local  player = cause.last_user
-            local index =player.index
-            if not this.nest_wegiht[index] then
-              this.nest_wegiht[index]=0
-            end
-            this.nest_wegiht[index]=this.nest_wegiht[index]+1
-          end
-          if cause.name =="artillery-turret" or cause.name =="artillery-wagon"  then
-            local this=WPT.get()
-            local unit_number=cause.unit_number
-            if not this.water_arty[unit_number] then
-              local water_count =entity.surface.count_tiles_filtered{position=cause.position, radius=30, name='water'}
-              --game.print(water_count)
-              if water_count == 0 then
-                this.water_arty[unit_number]=1
-              else
-                this.water_arty[unit_number]=2
-              end
-            end
 
-            if this.water_arty[unit_number]==2 then
+    
+  --   if disable_threat_below_zero then
+  --     local threat = WD.get('threat')
+  --     if threat <= 0 then
+  --       WD.set('threat', 0)
+  --       remove_unit(entity)
+  --       return
+  --     end
+  --     -- WD.set('threat', math.round(threat - threat_values[entity.name] * biter_health_boost, 2))
+  --     remove_unit(entity)
+  --   else
+  --     local threat = WD.get('threat')
+  --     -- WD.set('threat', math.round(threat - threat_values[entity.name] * biter_health_boost, 2))
+  --     remove_unit(entity)
+  --   end
+  -- else
+  --   if entity.force.index == 2 then
+  --     if entity.health then
+  --       if threat_values[entity.name] then
+  --         local threat = WD.get('threat')
+  --         -- WD.set('threat', math.round(threat - threat_values[entity.name] * biter_health_boost, 2))
+  --       end
+  --       local cause = event.cause
+  --       if not cause then
+  --         kill_master(entity)
+  --       else
+  --         if cause.last_user then
+  --           local this=WPT.get()
+  --           local  player = cause.last_user
+  --           local index =player.index
+  --           if not this.nest_wegiht[index] then
+  --             this.nest_wegiht[index]=0
+  --           end
+  --           this.nest_wegiht[index]=this.nest_wegiht[index]+1
+  --         end
+  --         if cause.name =="artillery-turret" or cause.name =="artillery-wagon"  then
+  --           local this=WPT.get()
+  --           local unit_number=cause.unit_number
+  --           if not this.water_arty[unit_number] then
+  --             local water_count =entity.surface.count_tiles_filtered{position=cause.position, radius=30, name='water'}
+  --             --game.print(water_count)
+  --             if water_count == 0 then
+  --               this.water_arty[unit_number]=1
+  --             else
+  --               this.water_arty[unit_number]=2
+  --             end
+  --           end
 
-              kill_master(entity)
-            else
-              spawn_unit_spawner_inhabitants(entity)
+  --           if this.water_arty[unit_number]==2 then
 
-            end
-          end
+  --             kill_master(entity)
+  --           else
+  --             spawn_unit_spawner_inhabitants(entity)
+
+  --           end
+  --         end
 
 
-          if cause.name ~="artillery-turret" and cause.name ~="artillery-wagon" then
-        if cause.destructible==false then
-          kill_master(entity)
-        else
-            spawn_unit_spawner_inhabitants(entity)
-          end
-            if cause.valid then
-              local this=WPT.get()
-              if (cause.name == 'character' and cause.player) then
-                local  player = cause.player
-                local index =player.index
-                if not this.nest_wegiht[index] then
-                  this.nest_wegiht[index]=0
-                end
-                this.nest_wegiht[index]=this.nest_wegiht[index]+1
-              end
-            end
-          end
+  --         if cause.name ~="artillery-turret" and cause.name ~="artillery-wagon" then
+  --       if cause.destructible==false then
+  --         kill_master(entity)
+  --       else
+  --           spawn_unit_spawner_inhabitants(entity)
+  --         end
+  --           if cause.valid then
+  --             local this=WPT.get()
+  --             if (cause.name == 'character' and cause.player) then
+  --               local  player = cause.player
+  --               local index =player.index
+  --               if not this.nest_wegiht[index] then
+  --                 this.nest_wegiht[index]=0
+  --               end
+  --               this.nest_wegiht[index]=this.nest_wegiht[index]+1
+  --             end
+  --           end
+  --         end
 
-        end
-      end
-    end
-  end
+  --       end
+  --     end
+  --   end
+  -- end
 
-  if entity.force.index == 3 then
-    if event.cause then
-      if event.cause.valid then
-        if event.cause.force.index == 2 then
-          shred_simple_entities(entity)
-        end
-      end
-    end
-  end
+  -- if entity.force.index == 3 then
+  --   if event.cause then
+  --     if event.cause.valid then
+  --       if event.cause.force.index == 2 then
+  --         shred_simple_entities(entity)
+  --       end
+  --     end
+  --   end
+  -- end
 end
 
 Event.add(defines.events.on_entity_died, on_entity_died)

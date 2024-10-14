@@ -44,4 +44,4 @@ local function on_entity_died(event)
 
 end
 
-Event.add(defines.events.on_entity_died, on_entity_died)
+-- Event.add(defines.events.on_entity_died, on_entity_died)
