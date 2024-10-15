@@ -147,6 +147,12 @@ function Public.create_surface()
     end
     map_gen_settings.height= global.MapHeight
 
+    -- 禁用污染
+    game.map_settings.pollution.enabled = false
+
+    -- 禁用虫巢
+    game.map_settings.enemy_expansion.enabled = false
+
 	-- map_gen_settings.autoplace_controls =world_autoplace_controls[map.world]   -- 天使报错
     if not this.active_surface_index then
         this.active_surface_index = game.create_surface(surface_name, map_gen_settings).index

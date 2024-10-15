@@ -207,29 +207,9 @@ end
 
 -- 获取虫子生成点
 local function get_spawn_pos()
-    return Get_spawn_pos(160)
+    return Get_spawn_pos(100)
 end
 
-local function is_unit_valid(biter)
-    local max_biter_age = WD.get('max_biter_age')
-    if not biter.entity then
-
-        return false
-    end
-    if not biter.entity.valid then
-
-        return false
-    end
-    if not biter.entity.unit_group then
-
-        return false
-    end
-    if biter.spawn_tick + max_biter_age < game.tick then
-
-        return false
-    end
-    return true
-end
 
 local function refresh_active_unit_threat()
     -- 清理虫子蓝图
@@ -239,49 +219,8 @@ local function refresh_active_unit_threat()
         ghost.destroy()
     end
 
-    -- local active_biter_threat = WD.get('active_biter_threat')
-    -- local active_biters = WD.get('active_biters')
-
-    -- local biter_threat = 0
-    -- for k, biter in pairs(active_biters) do
-    --     if valid(biter.entity) then
-    --         biter_threat = biter_threat + threat_values[biter.entity.name]
-    --     else
-    --         active_biters[k] = nil
-    --     end
-    -- end
-    -- local biter_health_boost = BiterHealthBooster.get('biter_health_boost')
-    -- WD.set('active_biter_threat', math_round(biter_threat * biter_health_boost, 2))
-
 end
 
-local function time_out_biters()
-    local active_biters = WD.get('active_biters')
-    local active_biter_count = WD.get('active_biter_count')
-    local active_biter_threat = WD.get('active_biter_threat')
-
-    if active_biter_count >= 100 and #active_biters <= 10 then
-        WD.set('active_biter_count', 50)
-    end
-
-    local biter_health_boost = BiterHealthBooster.get('biter_health_boost')
-
-    for k, biter in pairs(active_biters) do
-        if not is_unit_valid(biter) then
-            WD.set('active_biter_count', active_biter_count - 1)
-            if biter.entity then
-                if biter.entity.valid then
-                    WD.set('active_biter_threat', active_biter_threat - math_round(threat_values[biter.entity.name] * biter_health_boost, 2))
-                    if biter.entity.force.index == 2 then
-                        biter.entity.destroy()
-                    end
-
-                end
-            end
-            active_biters[k] = nil
-        end
-    end
-end
 
 local function get_random_close_spawner()
     local nests = WD.get('nests')
@@ -784,38 +723,6 @@ function GetBiterName(N)
     end
 end
 
--- 生成大怪兽
-local function spawn_big_biter(surface, N, unit_group)
-    
-    local M = 8
-
-    if N < 0 then 
-        N = -N;
-    else
-        N = N + 10
-    end
-    local name = GetBiterName(N)
-
-    -- if (surface ~= nil and unit_group ~= nil) then
-
-    --     for i = 1,M  do
-    --         local position = get_spawn_pos()
-    --         local biter = surface.create_entity({name = name, position = position, force = 'enemy'})
-    --         biter.ai_settings.allow_destroy_when_commands_fail = false
-    --         biter.ai_settings.allow_try_return_to_spawner = true
-    --         biter.ai_settings.do_separation = true
-
-    --         BiterHealthBooster.add_boss_unit(biter, 0.1*N + 2, 0.55)
-    --         unit_group.add_member(biter)
-    --     end
-    -- end
-
-
-    return name
-end
-
-
-
 local function spawn_biter(surface, is_boss_biter, spawn_position , is_big)
     if not is_boss_biter then
         if not can_units_spawn() then
@@ -1122,31 +1029,31 @@ local function spawn_unit_group()
         game.print('虫子出现了！[gps=' .. position.x .. ',' .. position.y .. ',' .. surface.name .. ']')
     end
     
-    -- 每50波加入大怪兽
-    local N = math.floor((WN+1) / 50) 
+    -- 每100波加入大怪兽
+    local N = math.floor((WN+1) / 100) 
     -- N = 60
 
     
     local info = {}
     local unit_group = surface.create_unit_group({position = {0,0}, force = 'enemy'})
     info.group = unit_group
-    info.biter_count = 16;
-    info.boss_count = 8;
+    info.biter_count = 8;
+    info.boss_count = 4;
     info.big_count = 0;
     info.spawn_position = spawn_position
     info.surface = surface
     
     if spawn_list then
-        info.biter_count = spawn_list.biter_count + 16
-        info.boss_count = spawn_list.boss_count + 8
+        info.biter_count = spawn_list.biter_count + 8
+        info.boss_count = spawn_list.boss_count + 4
         info.big_count = spawn_list.big_count
     end
 
     if WD.get("BigWave") < N and WN > 40 then
         WD.set("BigWave", WD.get("BigWave") + 1)
         local M = 1
-        if N > 50 then
-            M = N - 50
+        if N > 25 then
+            M = N - 24
         end
 
         game.forces.enemy.set_ammo_damage_modifier("rocket",N*N*0.05)
@@ -1169,18 +1076,8 @@ local function spawn_unit_group()
             game.print('挑战开始！大怪兽倍速'..M)
         end
         
-        info.big_count = info.big_count + M * 8
-        -- local unit_groups = WD.get('unit_groups')
-        -- for i = 1, M do
-        --     local unit_group = surface.create_unit_group({position = {0, 0}, force = 'enemy'})
-        --     spawn_big_biter(surface, N, unit_group)
-            -- unit_group_pos.positions[unit_group.group_number] = {position = unit_group.position, index = 0}
-            -- unit_groups[unit_group.group_number] = unit_group
-        -- end
+        info.big_count = info.big_count + M * 4
     end
-    
-    -- unit_group_pos.positions[unit_group.group_number] = {position = unit_group.position, index = 0}
-
     spawn_list = info
 end
 
@@ -1212,9 +1109,9 @@ local function set_next_wave()
     if global.StarWave then StarWave = global.StarWave end
     local threat_gain = 2*wave_number^2*((3 + StarWave/2)/3)^2
     local map=diff.get()
-    local boss_interval = 25
-    if wave_number>=2000 then boss_interval = 5 end
-    if wave_number>=2500 and map.final_wave then boss_interval = 3 end
+    local boss_interval = 50
+    if wave_number>=1000 then boss_interval = 25 end
+    if wave_number>=2000 and map.final_wave then boss_interval = 10 end
     if wave_number % boss_interval == 0 then
         WD.set('boss_wave', true)
         WD.set('boss_wave_warning', true)
@@ -1246,12 +1143,12 @@ local function set_next_wave()
         
         -- WD.set('next_wave', game.tick + 60*30)-- 30s一波
 
-        local surface_index = WD.get('surface_index')
-        local surface = game.surfaces[surface_index]
+        -- local surface_index = WD.get('surface_index')
+        -- local surface = game.surfaces[surface_index]
         -- surface.clear_pollution()
         -- 生成污染
-        local pos = {x = 0, y = 0}
-        surface.pollute(pos, wave_number)
+        -- local pos = {x = 0, y = 0}
+        -- surface.pollute(pos, wave_number)
 
 
         if wave_number == 2999 then
@@ -1333,9 +1230,9 @@ local tick_tasks = {
     [60] = set_enemy_evolution,
     -- [90] = spawn_unit_group,
     [120] = give_main_command_to_group,
-    [150] = ThreatEvent.build_nest,
-    [180] = ThreatEvent.build_worm,
-    [1200] = give_side_commands_to_group,
+    -- [150] = ThreatEvent.build_nest,
+    -- [180] = ThreatEvent.build_worm,
+    -- [1200] = give_side_commands_to_group,
     -- [3600] = time_out_biters,
     [7200] = refresh_active_unit_threat
 }

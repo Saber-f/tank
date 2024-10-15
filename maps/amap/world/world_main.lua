@@ -58,12 +58,18 @@ local function build_base(surface,maxs,event,position)
   -- end
 
 
-  -- if x>=-128 and x<80 then
-  --   if y>=-64 and y<64 then
-  --     surface.set_tiles({{name = "grass-1", position = position}})
-  --     return
-  --   end
-  -- end
+  local x = position.x
+  local y = position.y
+  if x>=-128 and x<128 then
+    if y>=-128 and y<128 then
+      -- 如果是水面则改为填海材料
+      local name = surface.get_tile(position.x, position.y).name
+      if name == "water" or name == "deepwater" then
+        surface.set_tiles({{name = "grass-1", position = position}})
+      end
+      return
+    end
+  end
 
   
   -- surface.set_tiles({{name = "grass-1", position = position}})
