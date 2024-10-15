@@ -696,6 +696,8 @@ local all_enemies = {
     [302] = "maf-giant-acid-spitter5",
     [303] = "maf-boss-biter-10",
 }
+--29
+local keyIndex = {1,2,3,4,5,6,7,8,9,10,24,262,37,51,64,77,90,103,116,129,145,156,170,187,199,211,223,240,251,304}
 
 -- N = 1- 60
 function GetBiterName(N)
@@ -704,12 +706,15 @@ function GetBiterName(N)
     local index
 
     while  true do
-        if N < 3 then   
-            index = math_random(2*N - 1, 2*N)
-        else
-            index = math_random(4.9*N - 9.7,4.9*N+9)
+        local min = keyIndex[math_floor(N+1)/2]
+        local max = keyIndex[math_floor(N+4)/2]
+        if min > 29 then
+            min = 29
         end
-        if index > 303 then index = 303 end
+        if max > 30 then
+            max = 30
+        end
+        index = math_random(keyIndex[min],keyIndex[max]-1)
         local name = all_enemies[index]
         if name == "tc_fake_human_ultimate_boss_cannon_20" or string.sub(name, 1, 2) ~= "tc" or math_random(1,100) <= 10 then
             if string.find(name, "nuke_rocket") then
@@ -734,7 +739,7 @@ local function spawn_biter(surface, is_boss_biter, spawn_position , is_big)
     local wave_number = WD.get("wave_number");
     local N = math_floor(wave_number/ 50) + 1
     if is_big then
-        N = N + 10
+        N = N + 8
     end
     local name = GetBiterName(N)
 
