@@ -705,9 +705,9 @@ function GetBiterName(N)
     if N < 1 then N = 1 end
     local index
 
-    while  true do
-        local min = math_floor(N+1)/2
-        local max = math_floor(N+4)/2
+    while true do
+        local min = math_floor((N+1) / 2)
+        local max = math_floor((N+4) / 2)
         if min > 29 then
             min = 29
         end
@@ -718,7 +718,7 @@ function GetBiterName(N)
         local name = all_enemies[index]
         if name == "tc_fake_human_ultimate_boss_cannon_20" or string.sub(name, 1, 2) ~= "tc" or math_random(1,100) <= 10 then
             if string.find(name, "nuke_rocket") then
-                if math_random(1,100) <= 10 then
+                if math_random(1,100) <= 20 then
                     return name
                 end
             else
