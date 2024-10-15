@@ -706,8 +706,8 @@ function GetBiterName(N)
     local index
 
     while  true do
-        local min = keyIndex[math_floor(N+1)/2]
-        local max = keyIndex[math_floor(N+4)/2]
+        local min = math_floor(N+1)/2
+        local max = math_floor(N+4)/2
         if min > 29 then
             min = 29
         end
