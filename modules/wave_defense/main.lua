@@ -706,10 +706,11 @@ function GetBiterName(N)
     if N > 60 then N = 60 end
     if N < 1 then N = 1 end
 
+    local name = "small-biter"
     for i = 1, 3 do
         local index = math_floor((N + 1) / 2)
         index = math_random(starIndex[index],endIndex[index]-1)
-        local name = all_enemies[index]
+        name = all_enemies[index]
         if name == "tc_fake_human_ultimate_boss_cannon_20" or string.sub(name, 1, 2) ~= "tc" or math_random(1,100) <= 10 then
             if string.find(name, "nuke_rocket") then
                 if math_random(1,100) <= 20  then
@@ -720,6 +721,7 @@ function GetBiterName(N)
             end
         end
     end
+    return name
 end
 
 local function spawn_biter(surface, is_boss_biter, spawn_position , is_big)
