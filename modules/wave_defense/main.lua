@@ -697,31 +697,22 @@ local all_enemies = {
     [303] = "maf-boss-biter-10",
 }
 
---24
-local keyIndex = {1,3,5,8,10,24,37,51,64,77,90,103,116,129,145,156,170,187,199,211,223,240,251,304}
+-- 21
+local starIndex = {1,5 ,10,24,37,51,64,77, 90,103,116,116,129,129,145,145,156,156,170,170,187,187,199,199,211,211,223,223,240,251}
+local endIndex =  {5,10,24,37,51,64,77,90,103,116,129,129,145,145,156,156,170,170,187,187,199,199,211,211,223,223,240,240,251,304}
 
 -- N = 1- 60
 function GetBiterName(N)
     if N > 60 then N = 60 end
     if N < 1 then N = 1 end
-    local index
 
-    while true do
-        local min = math_floor((N+1) / 2)
-        local max = math_floor((N+4) / 2)
-        local fix = 1
-        if min > 23 then
-            fix = min - 23
-            min = 23
-        end
-        if max > 24 then
-            max = 24
-        end
-        index = math_random(keyIndex[min],keyIndex[max]-1)
+    for i = 1, 3 do
+        local index = math_floor((N + 1) / 2)
+        index = math_random(starIndex[index],endIndex[index]-1)
         local name = all_enemies[index]
         if name == "tc_fake_human_ultimate_boss_cannon_20" or string.sub(name, 1, 2) ~= "tc" or math_random(1,100) <= 10 then
             if string.find(name, "nuke_rocket") then
-                if math_random(1,100) <= 20 * fix then
+                if math_random(1,100) <= 20  then
                     return name
                 end
             else
@@ -1074,11 +1065,11 @@ local function spawn_unit_group()
 
 
 
-        game.print('第'..N..'波大怪兽来袭！[gps=' .. position.x .. ',' .. position.y .. ',' .. surface.name .. '],炮塔伤害+1%')
+        game.print('第'..N..'波大怪兽来袭！炮塔伤害+1%')
 
         global.RPG_POINT.total = global.RPG_POINT.total + 1
 
-        raw_print('第'..N..'波大怪兽来袭！'.. position.x .. ',' .. position.y )
+        raw_print('第'..N..'波大怪兽来袭！' )
         if N > 50 then
             game.print('挑战开始！大怪兽倍速'..M)
         end
@@ -1146,8 +1137,6 @@ local function set_next_wave()
     -- local wave_interval = WD.get('wave_interval')
     -- if not wave_enforced then
         WD.set('last_wave', next_wave)
-        raw_print("当前波次:"..wave_number.."/"..(3000))
-        
         -- WD.set('next_wave', game.tick + 60*30)-- 30s一波
 
         -- local surface_index = WD.get('surface_index')
@@ -1157,12 +1146,22 @@ local function set_next_wave()
         -- local pos = {x = 0, y = 0}
         -- surface.pollute(pos, wave_number)
 
-
+        local time = 120
         if wave_number == 2999 then
-            WD.set('next_wave', game.tick + 120*60)
-        else
-            WD.set('next_wave', game.tick + 105)  -- 87.5分
+            time = 120 * 60
         end
+
+        -- 多人在线修正
+        local player_count = #game.connected_players
+        if not player_count then player_count = 1 end
+
+        time = time * 100 / (100 + player_count * 5)
+
+        WD.set('next_wave', game.tick + time)
+        if wave_number % 10 == 0 then
+            raw_print("当前波次:"..wave_number.."/"..(3000).."在线人数:"..player_count.."下一波时间:"..(time/60))
+        end
+
 
     if wave_number >= 3000 then
         game.print("*****************恭喜！挑战成功！*****************",{r = 1, g = 0, b = 0})
