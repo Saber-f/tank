@@ -696,8 +696,9 @@ local all_enemies = {
     [302] = "maf-giant-acid-spitter5",
     [303] = "maf-boss-biter-10",
 }
---29
-local keyIndex = {1,2,3,4,5,6,7,8,9,10,24,262,37,51,64,77,90,103,116,129,145,156,170,187,199,211,223,240,251,304}
+
+--25
+local keyIndex = {1,3,5,8,10,24,262,37,51,64,77,90,103,116,129,145,156,170,187,199,211,223,240,251,304}
 
 -- N = 1- 60
 function GetBiterName(N)
@@ -708,17 +709,19 @@ function GetBiterName(N)
     while true do
         local min = math_floor((N+1) / 2)
         local max = math_floor((N+4) / 2)
-        if min > 29 then
-            min = 29
+        local fix = 1
+        if min > 24 then
+            fix = min - 24
+            min = 24
         end
-        if max > 30 then
-            max = 30
+        if max > 25 then
+            max = 25
         end
         index = math_random(keyIndex[min],keyIndex[max]-1)
         local name = all_enemies[index]
         if name == "tc_fake_human_ultimate_boss_cannon_20" or string.sub(name, 1, 2) ~= "tc" or math_random(1,100) <= 10 then
             if string.find(name, "nuke_rocket") then
-                if math_random(1,100) <= 20 then
+                if math_random(1,100) <= 20 * fix then
                     return name
                 end
             else
@@ -758,7 +761,6 @@ local function spawn_biter(surface, is_boss_biter, spawn_position , is_big)
         BiterHealthBooster.add_unit(biter, modified_unit_health.current_value)
     end
     if is_boss_biter then
-        
         BiterHealthBooster.add_boss_unit(biter, 0.1*N+2, 0.55)
     end
 
