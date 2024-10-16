@@ -697,8 +697,8 @@ local all_enemies = {
     [303] = "maf-boss-biter-10",
 }
 
---25
-local keyIndex = {1,3,5,8,10,24,262,37,51,64,77,90,103,116,129,145,156,170,187,199,211,223,240,251,304}
+--24
+local keyIndex = {1,3,5,8,10,24,37,51,64,77,90,103,116,129,145,156,170,187,199,211,223,240,251,304}
 
 -- N = 1- 60
 function GetBiterName(N)
@@ -710,12 +710,12 @@ function GetBiterName(N)
         local min = math_floor((N+1) / 2)
         local max = math_floor((N+4) / 2)
         local fix = 1
-        if min > 24 then
-            fix = min - 24
-            min = 24
+        if min > 23 then
+            fix = min - 23
+            min = 23
         end
-        if max > 25 then
-            max = 25
+        if max > 24 then
+            max = 24
         end
         index = math_random(keyIndex[min],keyIndex[max]-1)
         local name = all_enemies[index]
