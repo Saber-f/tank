@@ -237,7 +237,7 @@ local function spawn_unit_spawner_inhabitants(entity)
   -- game.print("触发虫巢死亡:"..count.."只")
 
   BiterRolls.wave_defense_set_unit_raffle(wave_number)
-  wave_number = wave_number + 200
+  wave_number = wave_number + 500
   local N = math.floor(wave_number / 50)
   local unit_group = entity.surface.create_unit_group({position = {0,0}, force = 'enemy'})
   for _ = 1, count, 1 do
@@ -476,21 +476,9 @@ end
 
 Event.add(defines.events.on_entity_died, on_entity_died)
 
+-- 虫巢不产生虫子
 local function on_entity_spawned(event)
   local entity = event.entity
-  
-  local wave_number = WD.get('wave_number')
-  local k =game.forces.enemy.evolution_factor^4*1600
-  if k > wave_number then
-    wave_number=k
-  end
-  wave_number = wave_number - 100
-  local N = math.floor(wave_number / 50)
-
-  local name = GetBiterName(N)
-
-  local position = {entity.position.x, entity.position.y}
-  entity.surface.create_entity({name = name, position = position, force = 'enemy'})
   entity.destroy()
 
 end

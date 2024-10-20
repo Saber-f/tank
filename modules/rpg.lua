@@ -92,7 +92,7 @@ local function level_up_effects(player)
 	player.surface.create_entity({name = "flying-text", position = position, text = "+LVL ", color = level_up_floating_text_color})
 	local b = 0.75
 	for a = 1, 5, 1 do
-		local p = {(position.x + 0.4) + (b * -1 + math_random(0, b * 20) * 0.1), position.y + (b * -1 + math_random(0, b * 20) * 0.1)}
+		local p = {(position.x + 0.4) + (b * -1 + math_random(0, b * 20) * 0.1), position.y + (b * -1 + math_random(0, b * 20) * 1.0)}
 		player.surface.create_entity({name = "flying-text", position = p, text = "✚", color = {255, math_random(0, 100), 0}})
 	end
 	player.play_sound{path="utility/achievement_unlocked", volume_modifier=0.40}
@@ -100,7 +100,11 @@ end
 
 local function get_melee_modifier(player) return (rpg_t[player.index].strength - 10) * 0.10 end
 
-local function get_life_on_hit(player) return (rpg_t[player.index].vitality - 10) * 50 end
+local function get_life_on_hit(player)
+	local bullet = game.forces.player.get_ammo_damage_modifier("bullet") -- 激光伤害加成
+	local laser = game.forces.player.get_ammo_damage_modifier("laser") -- 物理伤害加成
+	return (rpg_t[player.index].vitality - 10) * 10 * (1 + bullet + laser)
+end
 
 local function get_one_punch_chance(player)
 	local chance = math.round(rpg_t[player.index].strength * 0.1, 1)
@@ -723,7 +727,6 @@ local function on_entity_damaged(event)
 	-- 		damage = damage - damage * event.entity.prototype.resistances.physical.percent
 	-- 	end
 	-- end
-	game.print("伤害1"..damage)
 	damage = math.round(damage, 3)
 	if damage < 1 then damage = 1 end
 
@@ -737,16 +740,24 @@ local function on_entity_damaged(event)
 	-- end
 
 	--Floating messages and particle effects.
+	local show_text = ""
+	if (damage > 1000000000) then
+		show_text = math_floor(damage / 1000000000 * 100)/100 .. "G"
+	elseif (damage > 1000000) then
+		show_text = math_floor(damage / 1000000 * 100)/100 .. "M"
+	elseif (damage > 1000) then
+		show_text = math_floor(damage / 1000 * 100)/100 .. "K"
+	else
+		show_text = math_floor(damage)..""
+	end
 	if math_random(0,999) < get_one_punch_chance(event.cause.player) * 10 then
 		damage = damage * math_random(250, 350) * 0.01
-		event.cause.surface.create_entity({name = "flying-text", position = event.entity.position, text = "‼" .. math.floor(damage), color = {255, 0, 0}})
+		event.cause.surface.create_entity({name = "flying-text", position = event.entity.position, text = "‼" .. show_text, color = {255, 0, 0}})
 		event.cause.surface.create_entity({name = "blood-explosion-huge", position = event.entity.position})
 	else
 		damage = damage * math_random(100, 125) * 0.01
-		event.cause.player.create_local_flying_text({text = math.floor(damage), position = event.entity.position, color = {150, 150, 150}, time_to_live = 90, speed = 2})
+		event.cause.player.create_local_flying_text({text = show_text, position = event.entity.position, color = {150, 150, 150}, time_to_live = 90, speed = 2})
 	end
-
-	game.print("伤害2"..damage)
 
 	--Handle the custom health pool of the biter health booster, if it is used in the map.
 	if global.biter_health_boost then

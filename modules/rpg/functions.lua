@@ -96,7 +96,17 @@ local last_hit = function(data)
     -- if biter.valid then
     --   biter.damage(damage, 'player', 'physical', player.character)  -- 物理
     -- end
-    player.surface.create_entity({name = "flying-text", position = biter.position, text = math.floor(damage).."!", color = {255, 0, 0}})
+    local show_text = ""
+    if (damage > 1000000000) then
+      show_text = math.floor(damage / 1000000000 * 100)/100 .. "G"
+    elseif (damage > 1000000) then
+      show_text = math.floor(damage / 1000000 * 100)/100 .. "M"
+    elseif (damage > 1000) then
+      show_text = math.floor(damage / 1000 * 100)/100 .. "K"
+    else
+      show_text = math.floor(damage)..""
+    end
+    player.surface.create_entity({name = "flying-text", position = biter.position, text = show_text, color = {255, 0, 0}})
     
     -- if biter.valid then
     --   biter.damage(damage, 'player', 'laser', player.character) -- 激光
@@ -273,6 +283,9 @@ local lightning_func = function(data)
  
 
     data.times = data.times - 1
+    if data.times > 19 then
+      data.times = 19
+    end
     if data.times <= 0 then
       return
     end
@@ -299,7 +312,7 @@ local lightning_func = function(data)
       data.source = target_pos
     end
 
-    Task.set_timeout_in_ticks(global.ssn, Public.lightning, data) -- 1帧后执行
+    Task.set_timeout_in_ticks(2, Public.lightning, data) -- 2帧后执行
 end
 
 Public.lightning = Token.register(lightning_func)   -- 注册闪电链函数
@@ -331,8 +344,7 @@ function Public.lightning_chain(position, surface,player,times)
   end
   -- times = 100
   local electric = game.forces.player.get_ammo_damage_modifier("electric") -- 激光伤害加成
-  electric = math.floor(electric * 10) * 0.1
-  local damage = (1 + lastNum*0.01) * (1 + t2) * t3 * (1+electric)*100     -- 闪电链伤害
+  local damage = (1 + lastNum*0.01) * (1 + t2) * t3 * (1+electric)*200     -- 闪电链伤害
   -- player.print("次数:"..times.." 伤害:"..(1+lastNum*0.01).."(永久加加成)x"..((1+t2)*t3).."(本局加成)x"..(1+electric).."(能量武器伤害)x100="..damage.."电击伤害")
   util.insert_safe(player,{['raw-fish'] = 1})
   
