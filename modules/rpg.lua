@@ -92,7 +92,7 @@ local function level_up_effects(player)
 	player.surface.create_entity({name = "flying-text", position = position, text = "+LVL ", color = level_up_floating_text_color})
 	local b = 0.75
 	for a = 1, 5, 1 do
-		local p = {(position.x + 0.4) + (b * -1 + math_random(0, b * 20) * 0.1), position.y + (b * -1 + math_random(0, b * 20) * 1.0)}
+		local p = {(position.x + 0.4) + (b * -1 + math_random(0, b * 20) * 0.1), position.y + (b * -1 + math_random(0, b * 20) * 0.1)}
 		player.surface.create_entity({name = "flying-text", position = p, text = "✚", color = {255, math_random(0, 100), 0}})
 	end
 	player.play_sound{path="utility/achievement_unlocked", volume_modifier=0.40}
@@ -101,9 +101,7 @@ end
 local function get_melee_modifier(player) return (rpg_t[player.index].strength - 10) * 0.10 end
 
 local function get_life_on_hit(player)
-	local bullet = game.forces.player.get_ammo_damage_modifier("bullet") -- 激光伤害加成
-	local laser = game.forces.player.get_ammo_damage_modifier("laser") -- 物理伤害加成
-	return (rpg_t[player.index].vitality - 10) * 10 * (1 + bullet + laser)
+	return (rpg_t[player.index].vitality - 10) * 1
 end
 
 local function get_one_punch_chance(player)
@@ -720,7 +718,10 @@ local function on_entity_damaged(event)
 	event.cause.health = event.cause.health + hit
 
 	--Calculate modified damage.
-	local damage = hit + hit * get_melee_modifier(event.cause.player)
+	
+	local bullet = game.forces.player.get_ammo_damage_modifier("bullet") -- 激光伤害加成
+	local laser = game.forces.player.get_ammo_damage_modifier("laser") -- 物理伤害加成
+	local damage = hit * ( 1 + get_melee_modifier(event.cause.player)) * (1 + bullet + laser) * (1 + global.RPG_POINT.total * 0.01)
 	-- if event.entity.prototype.resistances then
 	-- 	if event.entity.prototype.resistances.physical then
 	-- 		damage = damage - event.entity.prototype.resistances.physical.decrease

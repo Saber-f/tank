@@ -1000,7 +1000,7 @@ end
 
 function Public.get_life_on_hit(player)
   local rpg_t = Public.get_value_from_player(player.index)
-  return (rpg_t.vitality - 10) * 10
+  return (rpg_t.vitality - 10) * 1
 end
 
 function Public.get_one_punch_chance(player)
